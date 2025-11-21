@@ -5,6 +5,7 @@
 package com.mycompany.lab8;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  *
@@ -16,8 +17,10 @@ public class Quiz {
     private List<Question> questions;
     static private int passingScore=50;
 
-    public Quiz(String quizId, String lessonId, List<Question> questions) {
-        this.quizId = quizId;
+    public Quiz( String lessonId, List<Question> questions) {
+        
+        Random rand = new Random();
+        this.quizId = String.valueOf(rand.nextInt(10000));
         this.lessonId = lessonId;
         this.questions = questions;
     }
