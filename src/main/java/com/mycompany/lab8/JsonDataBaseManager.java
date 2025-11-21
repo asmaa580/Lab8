@@ -90,7 +90,7 @@ public class JsonDataBaseManager {
                 Studentt student = new Studentt(username, email, passwordHash);
                 student.setUserId(userId); // restore stored ID
                 return student;
-            } else {
+            } else if(role.equalsIgnoreCase("Instructor")){
                 Instructorr instructor = new Instructorr(username, email, passwordHash);
                 instructor.setUserId(userId); // restore stored ID
                 // also restore createdCourses if present
@@ -101,6 +101,11 @@ public class JsonDataBaseManager {
                     }
                 }
                 return instructor;
+            }
+            else {
+             Adminn admin= new Adminn(username,email,passwordHash);
+             admin.setUserId(userId);
+             return admin;
             }
         }
     }
@@ -118,6 +123,8 @@ public class JsonDataBaseManager {
         obj.put("instructorId", course.getInstructorId());
         obj.put("lessons", new JSONArray());
         obj.put("students", new JSONArray());
+        obj.put("approval status",course.getApproval_status());
+
         courses.put(obj);
         saveJson(COURSES_FILE, courses);
         updateInstructorCourses(course.getInstructorId(), course.getCourseId());

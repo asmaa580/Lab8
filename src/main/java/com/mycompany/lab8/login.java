@@ -61,7 +61,7 @@ public class login extends javax.swing.JFrame {
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "instructor", "student" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "instructor", "student", "admin" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -204,6 +204,14 @@ try
 
             this.dispose();  
     } 
+    else if(role.equals("Admin")&& u.equalsIgnoreCase("admin"))
+    {
+       String id=authenticatedUser.getUserId();
+            Admin adminframe = new Admin((Adminn)authenticatedUser);
+            adminframe.setVisible(true);
+            
+            this.dispose(); 
+    }
     else 
        JOptionPane.showMessageDialog(this,"Wrong choice of User");
 }

@@ -50,7 +50,7 @@ public class SignUp1 extends javax.swing.JFrame {
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Instructor", "Student" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Instructor", "Student", "Admin" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -192,6 +192,15 @@ else if(u.equalsIgnoreCase("instructor"))
         instructorFrame.setVisible(true);
         this.dispose();  
         
+}
+else if(u.equalsIgnoreCase("Admin"))
+{
+  Adminn s=new Adminn(jTextField1.getText(),jTextField2.getText(), hash.hashPassword(jTextField4.getText()));
+        db.addUser(s);
+        Admin adminframe=new Admin(s);
+        adminframe.setVisible(true);
+        this.dispose(); 
+
 }
         }
         catch(IOException e)
