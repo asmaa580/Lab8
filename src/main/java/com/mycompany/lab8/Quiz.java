@@ -15,6 +15,13 @@ public class Quiz {
     private String lessonId;
     private List<Question> questions;
     static private int passingScore=50;
+
+    public Quiz(String quizId, String lessonId, List<Question> questions) {
+        this.quizId = quizId;
+        this.lessonId = lessonId;
+        this.questions = questions;
+    }
+    
     
     public int getTotalPoints()
     {
