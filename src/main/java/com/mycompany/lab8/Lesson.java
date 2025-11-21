@@ -17,7 +17,9 @@ public class Lesson {
     private String title;
     private String content;
     private ArrayList<String> resources;
+    private Quiz quiz;
 
+    
     public Lesson(String lessonId,String title, String content,ArrayList<String> resources) {
         this.lessonId =lessonId;
         this.title = title;
@@ -44,6 +46,15 @@ public class Lesson {
     public String getTitle() { return title; }
     public String getContent() { return content; }
     public ArrayList<String> getResources() { return resources; }
+
+    public Quiz getQuiz() {
+        return quiz;
+    }
+
+    public void setQuiz(Quiz quiz) {
+        this.quiz = quiz;
+    }
+    
 
     public void addResource(String resource) { resources.add(resource); }
 }
