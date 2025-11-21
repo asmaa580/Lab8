@@ -4,6 +4,7 @@
  */
 package com.mycompany.lab8;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -14,10 +15,10 @@ import java.util.Random;
 public class Quiz {
     private String quizId;
     private String lessonId;
-    private List<Question> questions;
+    private ArrayList<Question> questions;
     static private int passingScore=50;
 
-    public Quiz( String lessonId, List<Question> questions) {
+    public Quiz( String lessonId, ArrayList<Question> questions) {
         
         Random rand = new Random();
         this.quizId = String.valueOf(rand.nextInt(10000));
@@ -34,10 +35,7 @@ public class Quiz {
     public boolean isPassingScore(int score)
     {
         double perc =(score/passingScore)*100; 
-        if(perc>=passingScore)
-            return true;
-        else 
-            return false;
+        return perc>=passingScore;
     }
     
     public void addQuestion(Question question)
@@ -65,7 +63,7 @@ public class Quiz {
         return questions;
     }
 
-    public void setQuestions(List<Question> questions) {
+    public void setQuestions(ArrayList<Question> questions) {
         this.questions = questions;
     }
 

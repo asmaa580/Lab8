@@ -4,7 +4,7 @@
  */
 package com.mycompany.lab8;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -14,10 +14,10 @@ import java.util.Random;
 public class Question {
     private String questionId;
     private String text;
-    private List<String> options;
+    private ArrayList<String> options;
     private String correctAnswer; 
 
-    public Question(String text, List<String> options, String correctAnswer) {
+    public Question(String text, ArrayList<String> options, String correctAnswer) {
         Random rand = new Random();
        this.questionId = String.valueOf(rand.nextInt(10000));
         this.text = text;
@@ -47,11 +47,11 @@ public class Question {
         this.text = text;
     }
 
-    public List<String> getOptions() {
+    public ArrayList<String> getOptions() {
         return options;
     }
 
-    public void setOptions(List<String> options) {
+    public void setOptions(ArrayList<String> options) {
         this.options = options;
     }
 

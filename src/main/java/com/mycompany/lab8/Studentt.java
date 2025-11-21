@@ -13,6 +13,7 @@ import java.util.HashMap;
 public class Studentt extends User {
     private ArrayList<String> enrolledCourses;
     private HashMap<String, ArrayList<String>> progress; // courseId -> list of completed lessonIds
+    
 
     public Studentt(String username, String email, String passwordHash) {
         super(username, email, passwordHash);
