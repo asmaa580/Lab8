@@ -2,8 +2,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.mycompany.labb7;
-import com.mycompany.labb7.login;
+package com.mycompany.lab8;
+import com.mycompany.lab8.login;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;

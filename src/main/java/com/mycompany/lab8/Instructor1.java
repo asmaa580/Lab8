@@ -2,9 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.mycompany.labb7;
+package com.mycompany.lab8;
 
-import com.mycompany.labb7.login;
+import com.mycompany.lab8.login;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;

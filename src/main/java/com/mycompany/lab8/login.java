@@ -1,8 +1,8 @@
-package com.mycompany.labb7;
+package com.mycompany.lab8;
 import javax.swing.JOptionPane;
-import com.mycompany.labb7.Student;
-import com.mycompany.labb7.Instructor1;
-import com.mycompany.labb7.SignUp1;
+import com.mycompany.lab8.Student;
+import com.mycompany.lab8.Instructor1;
+import com.mycompany.lab8.SignUp1;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
