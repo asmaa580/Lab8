@@ -206,7 +206,7 @@ try
     } 
     else if(role.equals("Admin")&& u.equalsIgnoreCase("admin"))
     {
-       String id=authenticatedUser.getUserId();
+         JOptionPane.showMessageDialog(this,"Login Successful");
             Admin adminframe = new Admin((Adminn)authenticatedUser);
             adminframe.setVisible(true);
             
