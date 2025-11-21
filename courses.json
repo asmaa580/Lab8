@@ -1,1 +1,10 @@
-[]
+[{
+    "approval status": "PENDING",
+    "approvalHistory": [],
+    "description": "math1",
+    "students": [],
+    "title": "math",
+    "courseId": "4202",
+    "instructorId": "4150",
+    "lessons": []
+}]

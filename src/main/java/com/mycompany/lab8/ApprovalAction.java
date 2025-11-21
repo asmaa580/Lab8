@@ -8,6 +8,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import org.json.JSONObject;
 
 /**
  *
@@ -27,7 +28,15 @@ public class ApprovalAction {
         this.time = now.format(formatter);
         this.reason = reason;
     }
-
+    
+    public JSONObject toJson() {
+        JSONObject obj = new JSONObject();
+        obj.put("action", action);
+        obj.put("adminId", adminId);
+        obj.put("timestamp", time);
+        obj.put("reason", reason);
+        return obj;}
+    
     public String getReason() {
         return reason;
     }

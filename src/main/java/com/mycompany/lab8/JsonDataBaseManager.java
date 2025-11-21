@@ -124,7 +124,11 @@ public class JsonDataBaseManager {
         obj.put("lessons", new JSONArray());
         obj.put("students", new JSONArray());
         obj.put("approval status",course.getApproval_status());
-
+        JSONArray historyArray = new JSONArray();
+        for (ApprovalAction action : course.getApprovalHistory()) {
+        historyArray.put(action.toJson());
+        }
+        obj.put("approvalHistory", historyArray);
         courses.put(obj);
         saveJson(COURSES_FILE, courses);
         updateInstructorCourses(course.getInstructorId(), course.getCourseId());
