@@ -10,11 +10,7 @@
     },
     {
         "role": "Instructor",
-        "createdCourses": [
-            "3254",
-            "714",
-            "4202"
-        ],
+        "createdCourses": ["3063"],
         "userId": "4150",
         "email": "malak@mail.com",
         "passwordHash": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
@@ -44,5 +40,5 @@
         "email": "malakk@gmail.com",
         "passwordHash": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
         "username": "malak"
-    }
+    },
 ]

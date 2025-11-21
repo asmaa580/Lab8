@@ -71,9 +71,15 @@ public class Instructor1 extends javax.swing.JFrame {
         studentsTable.setModel(studentsModel);
 
         boolean found = false;
-
+        boolean u=false;
         for (Course c : allCourses) {
-            if(c.getCourseId().equals(courseId)&&c.getInstructorId().equals(cu.getUserId())) {
+           // if(c.getCourseId().equals(courseId)&&c.getInstructorId().equals(cu.getUserId()))
+        if(c.getCourseId().equals(courseId))
+        {if(!c.getInstructorId().equals(cu.getUserId()))
+           { JOptionPane.showMessageDialog(this, "You don't have this course id.");
+            u=true;
+           break;}
+           {
                 found = true;
                 for(String studentId : c.getStudents()) {
                     studentsModel.addRow(new Object[]{ studentId });
@@ -81,10 +87,10 @@ public class Instructor1 extends javax.swing.JFrame {
                 break; // stop after finding the course
             }
         }
-
-        if (!found) {
+        }
+        if (!found&&!u) {
             JOptionPane.showMessageDialog(this, "Course ID not found.");
-        } else if (studentsTable.getRowCount() == 0) {
+        } else if (studentsTable.getRowCount() == 0&&!u) {
             JOptionPane.showMessageDialog(this, "No students enrolled in this course.");
         }
 
@@ -201,7 +207,7 @@ public class Instructor1 extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Title", "Description", "Course Id", "status"
             }
         ));
         jScrollPane2.setViewportView(jTable1);
@@ -499,7 +505,7 @@ public class Instructor1 extends javax.swing.JFrame {
                 course.getTitle(),
                 course.getDescription(),
                 course.getCourseId(),
-                course.getInstructorId()
+                course.getApproval_status()
             });
             displayedCourses.add(course);
         }}
@@ -536,7 +542,12 @@ public class Instructor1 extends javax.swing.JFrame {
             obj.put("description", c.getDescription());
             obj.put("courseId", c.getCourseId());
             obj.put("instructorId", c.getInstructorId());
-
+            obj.put("approval status",c.getApproval_status());
+        JSONArray historyArray = new JSONArray();
+        for (ApprovalAction action : c.getApprovalHistory()) {
+        historyArray.put(action.toJson());
+        }
+        obj.put("approvalHistory", historyArray);
             // lessons
             JSONArray lessonsArr = new JSONArray();
             if (c.getLessons() != null) {

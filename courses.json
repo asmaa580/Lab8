@@ -1,10 +1,33 @@
-[{
-    "approval status": "PENDING",
-    "approvalHistory": [],
-    "description": "math1",
-    "students": [],
-    "title": "math",
-    "courseId": "4202",
-    "instructorId": "4150",
-    "lessons": []
-}]
+[
+    {
+        "approval status": "PENDING",
+        "approvalHistory": [],
+        "description": "digital",
+        "title": "Logic",
+        "courseId": "3063",
+        "instructorId": "4150",
+        "lessons": []
+    },
+    {
+        "approval status": "PENDING",
+        "approvalHistory": [],
+        "description": "intro",
+        "title": "math",
+        "courseId": "7544",
+        "instructorId": "4151",
+        "lessons": [
+            {
+                "lessonId": "L001",
+                "resources": [],
+                "title": "intro",
+                "content": "basics"
+            },
+            {
+                "lessonId": "L002",
+                "resources": [],
+                "title": "a",
+                "content": "basics 2"
+            }
+        ]
+    }
+]
