@@ -25,6 +25,9 @@ public class Quiz {
         this.lessonId = lessonId;
         this.questions = questions;
     }
+    public Quiz(){
+        questions=new ArrayList<>();
+    }
     
     
     public int getTotalPoints()
