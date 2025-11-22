@@ -1,52 +1,87 @@
 [
-    {
-        "approval status": "PENDING",
-        "approvalHistory": [],
-        "description": "Learn the basics of Java",
-        "title": "Java Programming",
-        "courseId": "C001",
-        "instructorId": "U002",
-        "lessons": [
-            {
-                "lessonId": "L001",
-                "resources": [],
-                "title": "Introduction to Java",
-                "content": "Java is a programming language..."
-            },
-            {
-                "lessonId": "L002",
-                "resources": [],
-                "title": "Variables and Data Types",
-                "content": "Variables store data..."
-            }
-        ]
-    },
-    {
-        "approval status": "PENDING",
-        "approvalHistory": [],
-        "description": "Learn Python from scratch",
-        "title": "Python Programming",
-        "courseId": "C002",
-        "instructorId": "U003",
-        "lessons": [{
-            "lessonId": "L003",
-            "resources": [],
-            "title": "Introduction to Python",
-            "content": "Python is a programming language..."
-        }]
-    },
-    {
-        "approval status": "PENDING",
-        "approvalHistory": [],
-        "description": "learn maths",
-        "title": "maths",
-        "courseId": "1366",
-        "instructorId": "8013",
-        "lessons": [{
-            "lessonId": "9329",
-            "resources": [],
-            "title": "algebra",
-            "content": "learnalgebra"
-        }]
-    }
+  {
+    "approval status": "APPROVED",
+    "approvalHistory": [
+      {
+        "action": "APPROVED",
+        "adminId": "Admin001",
+        "timestamp": "22-11-2025 11:35:00",
+        "reason": "Course content complete and clear"
+      }
+    ],
+    "description": "Learn the basics of Java",
+    "title": "Java Programming",
+    "courseId": "C001",
+    "instructorId": "U002",
+    "lessons": [
+      {
+        "lessonId": "L001",
+        "resources": [],
+        "title": "Introduction to Java",
+        "content": "Java is a programming language..."
+      },
+      {
+        "lessonId": "L002",
+        "resources": [],
+        "title": "Variables and Data Types",
+        "content": "Variables store data..."
+      }
+    ]
+  },
+  {
+    "approval status": "REJECTED",
+    "approvalHistory": [
+      {
+        "action": "REJECTED",
+        "adminId": "Admin002",
+        "timestamp": "22-11-2025 11:36:00",
+        "reason": "Insufficient lesson details"
+      }
+    ],
+    "description": "Learn Python from scratch",
+    "title": "Python Programming",
+    "courseId": "C002",
+    "instructorId": "U003",
+    "lessons": [
+      {
+        "lessonId": "L003",
+        "resources": [],
+        "title": "Introduction to Python",
+        "content": "Python is a programming language..."
+      }
+    ]
+  },
+  {
+    "approval status": "APPROVED",
+    "approvalHistory": [
+      {
+        "action": "APPROVED",
+        "adminId": "Admin003",
+        "timestamp": "22-11-2025 11:37:00",
+        "reason": "Basic maths course accepted"
+      }
+    ],
+    "description": "learn maths",
+    "title": "maths",
+    "courseId": "1366",
+    "instructorId": "8013",
+    "lessons": [
+      {
+        "lessonId": "9329",
+        "resources": [],
+        "title": "algebra",
+        "content": "learnalgebra"
+      }
+    ]
+  },
+  {
+    "approval status": "PENDING",
+    "approvalHistory": [],
+    "description": "q",
+    "students": ["7202"],
+    "title": "q",
+    "courseId": "6611",
+    "instructorId": "4646",
+    "lessons": []
+  }
 ]

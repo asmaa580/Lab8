@@ -26,8 +26,19 @@ public class Course {
     
     
 
+    public Course(String courseId, String title, String description, String instructorId,
+              ArrayList<String> students, ArrayList<Lesson> lessons, String approval_status) {
+    this.courseId = courseId;
+    this.title = title;
+    this.description = description;
+    this.instructorId = instructorId;
+    this.lessons = lessons;
+    this.students = students;
+    this.approval_status = approval_status != null ? approval_status : PENDING;
+    this.approvalHistory = new ArrayList<>();
+}
 
-    public Course(String courseId,String title, String description, String instructorId,ArrayList<String> students,ArrayList<Lesson> lessons) {
+    /*public Course(String courseId,String title, String description, String instructorId,ArrayList<String> students,ArrayList<Lesson> lessons) {
         this.courseId = courseId;
         this.title = title;
         this.description = description;
@@ -50,7 +61,20 @@ public class Course {
         this.approval_status=PENDING;
         this.approvalHistory= new ArrayList<>();
     }
+*/
+    public Course(String title, String description, String instructorId) {
+    Random rand = new Random();
+    this.courseId = String.valueOf(rand.nextInt(10000));
+    this.title = title;
+    this.description = description;
+    this.instructorId = instructorId;
+    this.lessons = new ArrayList<>();
+    this.students = new ArrayList<>();
+    this.approval_status = PENDING; // only new courses default to pending
+    this.approvalHistory = new ArrayList<>();
+}
 
+    
     
     public ArrayList<ApprovalAction> getApprovalHistory() {
         return approvalHistory;

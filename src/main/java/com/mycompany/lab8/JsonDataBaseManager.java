@@ -88,7 +88,7 @@ if (obj.has("lessons")) {
         }*/
         lessons.add(lesson);}
            }          
-            Course course = new Course(courseId, title, description, instructorId, students, lessons);
+            Course course = new Course(courseId, title, description, instructorId, students, lessons,"PENDING");
             pendingCourses.add(course);
         }}
         return pendingCourses;
@@ -269,6 +269,23 @@ public static ArrayList<Course> getAllCourses1() throws IOException {
             );
             lessons.add(lesson);
         }
+         ArrayList<ApprovalAction> approvalHistory = new ArrayList<>();
+        if (obj.has("approvalHistory")) {
+            JSONArray historyArray = obj.getJSONArray("approvalHistory");
+            for (int j = 0; j < historyArray.length(); j++) {
+                JSONObject actionObj = historyArray.getJSONObject(j);
+                String action = actionObj.getString("action");
+                String adminId = actionObj.getString("adminId");
+                String timestamp = actionObj.getString("timestamp");
+                String reason = actionObj.getString("reason");
+
+                // You may want a constructor in ApprovalAction that accepts timestamp
+                ApprovalAction actionObjParsed = new ApprovalAction(action, adminId, reason);
+                // If you want to preserve timestamp from JSON, add a constructor like:
+                // new ApprovalAction(action, adminId, reason, timestamp);
+                approvalHistory.add(actionObjParsed);
+            }
+        }
 
         // Course object
         Course course = new Course(
@@ -277,8 +294,10 @@ public static ArrayList<Course> getAllCourses1() throws IOException {
             obj.getString("description"), 
             obj.getString("instructorId"),
             students,
-            lessons
+            lessons,
+            obj.getString("approval status")    
         );
+        course.getApprovalHistory().addAll(approvalHistory);
         courses.add(course);
     }
 

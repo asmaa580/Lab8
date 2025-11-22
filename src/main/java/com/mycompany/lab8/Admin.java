@@ -30,6 +30,27 @@ public class Admin extends javax.swing.JFrame {
      this.cu=u;
       initComponents();
     }
+    private void loadAllCoursesIntoTable(JsonDataBaseManager db) {
+    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    model.setRowCount(0); // clear old rows
+
+    try
+    {
+    ArrayList<Course> allCourses = db.getAllCourses1();
+
+    for (Course c : allCourses) {
+        model.addRow(new Object[]{
+            c.getCourseId(),
+            c.getTitle(),
+            c.getInstructorId(),
+            c.getApproval_status()
+        });
+    }
+    }
+    catch(IOException e){
+     JOptionPane.showMessageDialog(this,"Error loading courses");
+    }
+}
     private void loadPendingCoursesIntoTable(JsonDataBaseManager db) {
     DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
     model.setRowCount(0); // clear old rows
@@ -55,9 +76,10 @@ public class Admin extends javax.swing.JFrame {
     // Find the course by ID from your database
     JsonDataBaseManager db = new JsonDataBaseManager();
     try{
-    ArrayList<Course> pendingCourses = db.loadpendingcourses();
+   // ArrayList<Course> pendingCourses = db.loadpendingcourses();
+     ArrayList<Course> allCourses = db.getAllCourses1();
 
-    for (Course c : pendingCourses) {
+    for (Course c : allCourses) {
         if (c.getCourseId().equals(courseId)) {
             // Now you can display lessons in another table, panel, or dialog
             for (Lesson lesson : c.getLessons()) {
@@ -100,7 +122,8 @@ private void refreshTable(ArrayList<Course> courses) {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -125,12 +148,14 @@ private void refreshTable(ArrayList<Course> courses) {
             }
         });
 
-        jButton3.setText("pending courses");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All courses", "Pending courses" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                jComboBox1ActionPerformed(evt);
             }
         });
+
+        jLabel1.setText("filter");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -138,23 +163,27 @@ private void refreshTable(ArrayList<Course> courses) {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(29, 29, 29)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton2)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(82, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addGap(10, 10, 10)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton2)
                 .addContainerGap(40, Short.MAX_VALUE))
         );
 
@@ -206,9 +235,26 @@ private void refreshTable(ArrayList<Course> courses) {
         
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
+        String u= jComboBox1.getSelectedItem().toString();
         JsonDataBaseManager db= new JsonDataBaseManager();
+        if(u.equalsIgnoreCase("All courses"))
+        {
+          loadAllCoursesIntoTable(db);
+          jTable1.getSelectionModel().addListSelectionListener(event -> {
+            if (!event.getValueIsAdjusting()) {
+                int selectedRow = jTable1.getSelectedRow();
+                if (selectedRow != -1) {
+                 String courseId = (String) jTable1.getValueAt(selectedRow, 0); 
+                loadLessonsForCourse(courseId);
+                }
+            }
+ });
+        }                 
+        if(u.equalsIgnoreCase("Pending courses"))
+        {
+         //JsonDataBaseManager db= new JsonDataBaseManager();
         loadPendingCoursesIntoTable(db);
         jTable1.getSelectionModel().addListSelectionListener(event -> {
             if (!event.getValueIsAdjusting()) {
@@ -219,7 +265,8 @@ private void refreshTable(ArrayList<Course> courses) {
                 }
             }
  });
-    }//GEN-LAST:event_jButton3ActionPerformed
+        } 
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -249,7 +296,8 @@ private void refreshTable(ArrayList<Course> courses) {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
