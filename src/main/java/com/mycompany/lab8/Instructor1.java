@@ -619,31 +619,12 @@ new QuizBuilderFrame(lesson).setVisible(true);
     String id = JOptionPane.showInputDialog("Lesson ID:");
     String title = JOptionPane.showInputDialog("Lesson Title:");
     String content = JOptionPane.showInputDialog("Lesson Content:");
-
-    ArrayList<Question> questions=new ArrayList<>();
-    String n = JOptionPane.showInputDialog("Number of questions you want in the quiz:");
-    for(int i=0;i<Integer.parseInt(n);i++)
-    {
-        String text = JOptionPane.showInputDialog("Question"+(i+1)+":");
-         ArrayList<String> options=new ArrayList<>();
-        for(int y=0;y<4;y++)
-        {
-            String option = JOptionPane.showInputDialog("Option"+(y+1)+":");
-            options.add(option);
-        }
-        String correctAnswer = JOptionPane.showInputDialog("Correct Answer:");
-        Question quest=new Question(text,options,correctAnswer);
-        questions.add(quest);
-        
-    }
-    Quiz quiz= new Quiz(id,questions);
-    
     if(id==null||id.isEmpty()||title==null||title.isEmpty()||content==null||content.isEmpty()){
     JOptionPane.showMessageDialog(this, "can't be added");
 
     }
     else{
-    Lesson lesson = new Lesson(quiz,id, title, content, new ArrayList<>());
+    Lesson lesson = new Lesson(id, title, content, new ArrayList<>());
 
     course.getLessons().add(lesson);
 
