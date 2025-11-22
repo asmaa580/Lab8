@@ -1,14 +1,9 @@
 [
     {
-        "approval status": "REJECTED",
-        "approvalHistory": [{
-            "reason": "bad",
-            "adminId": "7419",
-            "action": "REJECTED",
-            "timestamp": "22-11-2025 23:48:17"
-        }],
+        "approval status": "PENDING",
+        "approvalHistory": [],
         "description": "digital ",
-        "students": ["4852"],
+        "students": [],
         "title": "Logic",
         "courseId": "3063",
         "instructorId": "4150",
@@ -78,7 +73,7 @@
             "timestamp": "22-11-2025 14:24:22"
         }],
         "description": "c",
-        "students": ["4852"],
+        "students": [],
         "title": "control",
         "courseId": "8558",
         "instructorId": "4646",
@@ -125,12 +120,12 @@
         }]
     },
     {
-        "approval status": "APPROVED",
+        "approval status": "REJECTED",
         "approvalHistory": [{
             "reason": "Rejected via dialog",
             "adminId": "48",
             "action": "REJECTED",
-            "timestamp": "22-11-2025 22:45:11"
+            "timestamp": "22-11-2025 14:27:46"
         }],
         "description": "q",
         "students": ["7202"],
@@ -140,13 +135,8 @@
         "lessons": []
     },
     {
-        "approval status": "REJECTED",
-        "approvalHistory": [{
-            "reason": "no",
-            "adminId": "7419",
-            "action": "REJECTED",
-            "timestamp": "22-11-2025 23:54:59"
-        }],
+        "approval status": "PENDING",
+        "approvalHistory": [],
         "description": "art and fun",
         "students": [],
         "title": "art",

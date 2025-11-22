@@ -13,10 +13,12 @@ com\mycompany\lab8\Student$4.class
 com\mycompany\lab8\Instructor1$12.class
 com\mycompany\lab8\Instructor1$2.class
 com\mycompany\lab8\Admin.class
+com\mycompany\lab8\QuizBuilderFrame$3.class
 com\mycompany\lab8\SignUp1$5.class
 com\mycompany\lab8\Instructor1$9.class
 com\mycompany\lab8\Student$8.class
 com\mycompany\lab8\Question.class
+com\mycompany\lab8\QuizFrame$3.class
 com\mycompany\lab8\SignUp1$2.class
 com\mycompany\lab8\Student$1.class
 com\mycompany\lab8\User.class
@@ -56,5 +58,6 @@ com\mycompany\lab8\Instructor1$11.class
 com\mycompany\lab8\Instructor1$1.class
 com\mycompany\lab8\SignUp1$1.class
 com\mycompany\lab8\SignUp1$4.class
+com\mycompany\lab8\QuizFrame$2.class
 com\mycompany\lab8\Lab8.class
 com\mycompany\lab8\SecurityHashing.class

@@ -1,21 +1,43 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package com.mycompany.lab8;
 
-/**
- *
- * @author USER
- */
-public class QuizFrame extends javax.swing.JFrame {
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
-    /**
-     * Creates new form QuizFrame
-     */
+
+
+public class QuizFrame extends javax.swing.JFrame {
+    private Quiz quiz;
+    private int score;
+    private int currentIndex;
+
+QuizFrame(Quiz quiz)
+{
+    this.quiz=quiz;
+    initComponents();
+    
+   showQuestion();
+   
+}
+    
     public QuizFrame() {
         initComponents();
     }
+    
+    public void showQuestion()
+{
+    feedback.setText("");
+    scoreLabel.setText("");
+    buttonGroup1.clearSelection();
+    
+     ArrayList<Question> questions=quiz.getQuestions();
+     ArrayList<String> options=questions.get(currentIndex).getOptions();
+    text.setText(questions.get(currentIndex).getText());
+    option1.setText(options.get(0));
+    option2.setText(options.get(1));
+    option3.setText(options.get(2));
+    option4.setText(options.get(3));
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -26,22 +48,171 @@ public class QuizFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        jPanel1 = new javax.swing.JPanel();
+        option1 = new javax.swing.JRadioButton();
+        option2 = new javax.swing.JRadioButton();
+        option4 = new javax.swing.JRadioButton();
+        option3 = new javax.swing.JRadioButton();
+        text = new javax.swing.JLabel();
+        next = new javax.swing.JButton();
+        feedback = new javax.swing.JLabel();
+        scoreLabel = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        buttonGroup1.add(option1);
+        option1.setText("option1");
+
+        buttonGroup1.add(option2);
+        option2.setText("jRadioButton1");
+
+        buttonGroup1.add(option4);
+        option4.setText("jRadioButton1");
+
+        buttonGroup1.add(option3);
+        option3.setText("jRadioButton1");
+        option3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                option3ActionPerformed(evt);
+            }
+        });
+
+        text.setText("jLabel1");
+
+        next.setText("Next");
+        next.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nextActionPerformed(evt);
+            }
+        });
+
+        feedback.setText("jLabel1");
+
+        scoreLabel.setText("jLabel1");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(144, 144, 144)
+                        .addComponent(next))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(option4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(feedback, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(scoreLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(option3)
+                                    .addComponent(option1)
+                                    .addComponent(text)
+                                    .addComponent(option2))
+                                .addGap(0, 44, Short.MAX_VALUE)))))
+                .addGap(48, 48, 48))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(text)
+                .addGap(14, 14, 14)
+                .addComponent(scoreLabel)
+                .addGap(18, 18, 18)
+                .addComponent(option1)
+                .addGap(18, 18, 18)
+                .addComponent(option2)
+                .addGap(18, 18, 18)
+                .addComponent(option3)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(option4)
+                    .addComponent(feedback))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
+                .addComponent(next)
+                .addGap(21, 21, 21))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void option3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_option3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_option3ActionPerformed
+
+    private void nextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextActionPerformed
+        // TODO add your handling code here:
+       
+        
+        ArrayList<Question> questions=quiz.getQuestions();
+        int selectedIndex=-1;
+        
+        if(option1.isSelected())
+            selectedIndex=0;
+        if(option2.isSelected())
+            selectedIndex=1;
+        if(option3.isSelected())
+            selectedIndex=2;
+        if(option4.isSelected())
+            selectedIndex=3;
+        if(selectedIndex==-1)
+        {
+            JOptionPane.showMessageDialog(this,"Cant go the next question without choosing an option");
+            return;
+        }
+        if(selectedIndex==questions.get(currentIndex).getCorrectAnswerIndex())
+        {
+            score++;
+            feedback.setText("Correct answer");
+        }
+        else
+        {
+            int y=questions.get(0).getCorrectAnswerIndex()+1;
+            feedback.setText("Wrong answer, the correct answer is option"+y);
+        }
+        if(questions.size()-currentIndex==1)
+        {
+            next.setText("Submit");
+        }
+        if(currentIndex>=questions.size())
+        {
+            scoreLabel.setText("Your Score: " + score + "/" + questions.size());
+            hideOptions(); 
+            next.setEnabled(false); 
+            return;
+        }
+        currentIndex++;
+        showQuestion();
+    }//GEN-LAST:event_nextActionPerformed
+private void hideOptions() {
+    option1.setVisible(false);
+    option2.setVisible(false);
+    option3.setVisible(false);
+    option4.setVisible(false);
+    next.setVisible(false);
+    feedback.setVisible(false);
+    text.setVisible(false);
+}
     /**
      * @param args the command line arguments
      */
@@ -78,5 +249,15 @@ public class QuizFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JLabel feedback;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JButton next;
+    private javax.swing.JRadioButton option1;
+    private javax.swing.JRadioButton option2;
+    private javax.swing.JRadioButton option3;
+    private javax.swing.JRadioButton option4;
+    private javax.swing.JLabel scoreLabel;
+    private javax.swing.JLabel text;
     // End of variables declaration//GEN-END:variables
 }
