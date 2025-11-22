@@ -19,9 +19,12 @@ com\mycompany\lab8\Student$1.class
 com\mycompany\lab8\User.class
 com\mycompany\lab8\Student$5.class
 com\mycompany\lab8\Instructor1$6.class
+
+com\mycompany\lab8\QuizBuilderFrame.class
 com\mycompany\lab8\Admin$2.class
 com\mycompany\lab8\login$2.class
 com\mycompany\lab8\Quiz.class
+com\mycompany\lab8\QuizBuilderFrame$1.class
 com\mycompany\lab8\Instructor1$3.class
 com\mycompany\lab8\login$3.class
 com\mycompany\lab8\ApprovalAction.class
@@ -40,6 +43,8 @@ com\mycompany\lab8\Adminn.class
 com\mycompany\lab8\login$4.class
 com\mycompany\lab8\Admin$1.class
 com\mycompany\lab8\Student$3.class
+
+com\mycompany\lab8\QuizBuilderFrame$2.class
 com\mycompany\lab8\Instructor1$4.class
 com\mycompany\lab8\Studentt.class
 com\mycompany\lab8\Instructor1$11.class

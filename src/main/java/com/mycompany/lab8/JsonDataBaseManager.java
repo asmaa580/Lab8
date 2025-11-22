@@ -464,4 +464,49 @@ public static ArrayList<Course> getEnrolledCourses(String studentId) throws IOEx
     // Save the updated array back to the file
     saveJson("users.json", allUsers);
 }
+ public static void updateLessonInCourse(Lesson updatedLesson) throws IOException {
+JSONArray coursesArray = loadJson(COURSES_FILE);
+
+for (int i = 0; i < coursesArray.length(); i++) {
+JSONObject courseObj = coursesArray.getJSONObject(i);
+JSONArray lessonsArray = courseObj.has("lessons") ? courseObj.getJSONArray("lessons") : new JSONArray();
+
+for (int j = 0; j < lessonsArray.length(); j++) {
+JSONObject lessonObj = lessonsArray.getJSONObject(j);
+
+if (lessonObj.getString("lessonId").equals(updatedLesson.getLessonId())) {
+// Keep original order
+lessonObj.put("resources", updatedLesson.getResources());
+lessonObj.put("title", updatedLesson.getTitle());
+lessonObj.put("content", updatedLesson.getContent());
+
+// Add quiz if exists
+Quiz q = updatedLesson.getQuiz();
+if (q != null) {
+JSONObject quizObj = new JSONObject();
+quizObj.put("quizId", q.getQuizId());
+quizObj.put("lessonId", q.getLessonId());
+quizObj.put("passingScore", q.getPassingScore());
+
+JSONArray qList = new JSONArray();
+for (Question ques : q.getQuestions()) {
+JSONObject qJson = new JSONObject();
+qJson.put("text", ques.getText());
+qJson.put("options", ques.getOptions());
+qJson.put("correctIndex", ques.getCorrectAnswerIndex());
+qList.put(qJson);
+}
+
+quizObj.put("questions", qList);
+lessonObj.put("quiz", quizObj);
+}
+
+// Save back and return immediately
+saveJson(COURSES_FILE, coursesArray);
+return;
+}
+}
+}
+}
+
 }
