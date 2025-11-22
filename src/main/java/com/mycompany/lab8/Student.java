@@ -30,7 +30,7 @@ public class Student extends javax.swing.JFrame {
         initComponents();
         try{JsonDataBaseManager dbm=new JsonDataBaseManager();
         ArrayList <Course> allCourses = new ArrayList<>();
-        allCourses=dbm.getAllCourses1();
+        allCourses=dbm.loadapprovedcourses();
         DefaultTableModel coursesModel = new DefaultTableModel();
         coursesModel.addColumn("Course ID");
         coursesModel.addColumn("Course Name");
