@@ -28,6 +28,16 @@
     ]
   },
   {
+    "approval status": "PENDING",
+    "approvalHistory": [],
+    "description": "c",
+    "title": "control",
+    "courseId": "8558",
+    "instructorId": "4646",
+    "students": [],
+    "lessons": []
+  },
+  {
     "approval status": "REJECTED",
     "approvalHistory": [{
       "reason": "Insufficient lesson details",
@@ -75,16 +85,6 @@
     "courseId": "6611",
     "instructorId": "4646",
     "students": ["7202"],
-    "lessons": []
-  },
-  {
-    "approval status": "PENDING",
-    "approvalHistory": [],
-    "description": "c",
-    "title": "control",
-    "courseId": "8558",
-    "instructorId": "4646",
-    "students": [],
     "lessons": []
   }
 ]
