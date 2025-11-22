@@ -6,7 +6,38 @@
         "title": "Logic",
         "courseId": "3063",
         "instructorId": "4150",
-        "lessons": []
+        "lessons": [{
+            "quiz": {
+                "questions": [
+                    {
+                        "options": [
+                            "a",
+                            "b",
+                            "c",
+                            "d"
+                        ],
+                        "text": "q",
+                        "correctIndex": 0
+                    },
+                    {
+                        "options": [
+                            "a2",
+                            "b2",
+                            "c2",
+                            "d2"
+                        ],
+                        "text": "q2",
+                        "correctIndex": 1
+                    }
+                ],
+                "lessonId": "222",
+                "passingScore": 5
+            },
+            "lessonId": "222",
+            "resources": [],
+            "title": "b",
+            "content": "a"
+        }]
     },
     {
         "approval status": "PENDING",
