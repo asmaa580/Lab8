@@ -174,7 +174,11 @@ if (obj.has("lessons")) {
         obj.put("description", course.getDescription());
         obj.put("instructorId", course.getInstructorId());
         obj.put("lessons", new JSONArray());
-        obj.put("students", new JSONArray());
+        JSONArray studentsArray = new JSONArray();
+    for (String studentId : course.getStudents()) {
+        studentsArray.put(studentId);
+    }
+    obj.put("students", studentsArray);
         obj.put("approval status",course.getApproval_status());
         JSONArray historyArray = new JSONArray();
         for (ApprovalAction action : course.getApprovalHistory()) {

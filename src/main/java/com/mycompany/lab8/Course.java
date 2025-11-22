@@ -17,7 +17,7 @@ public class Course {
     private String instructorId;
     private ArrayList<Lesson> lessons;
     private ArrayList<String> students;
-    private String approval_status;
+    private String approval_status=PENDING;
     public static final String PENDING="PENDING";
     public static final String APPROVED="APPROVED";
     public static final String REJECTED="REJECTED";
@@ -34,7 +34,7 @@ public class Course {
     this.instructorId = instructorId;
     this.lessons = lessons;
     this.students = students;
-    this.approval_status = approval_status != null ? approval_status : PENDING;
+    this.approval_status = approval_status ;
     this.approvalHistory = new ArrayList<>();
 }
 
@@ -69,8 +69,7 @@ public class Course {
     this.description = description;
     this.instructorId = instructorId;
     this.lessons = new ArrayList<>();
-    this.students = new ArrayList<>();
-    this.approval_status = PENDING; // only new courses default to pending
+    this.students = new ArrayList<>(); // only new courses default to pending
     this.approvalHistory = new ArrayList<>();
 }
 
