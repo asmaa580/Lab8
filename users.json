@@ -1,44 +1,9 @@
-[
-    {
-        "role": "Student",
-        "enrolledCourses": ["3254"],
-        "progress": {},
-        "userId": "3655",
-        "email": "asmaa@gmail.com",
-        "passwordHash": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
-        "username": "asmaa"
-    },
-    {
-        "role": "Instructor",
-        "createdCourses": ["3063"],
-        "userId": "4150",
-        "email": "malak@mail.com",
-        "passwordHash": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
-        "username": "malak"
-    },
-    {
-        "role": "Student",
-        "enrolledCourses": ["3254"],
-        "progress": {},
-        "userId": "9217",
-        "email": "aseel@gmail.com",
-        "passwordHash": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
-        "username": "aseel"
-    },
-    {
-        "role": "Student",
-        "enrolledCourses": [],
-        "progress": {},
-        "userId": "529",
-        "email": "habeeba@gmail.com",
-        "passwordHash": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
-        "username": "habeeba"
-    },
-    {
-        "role": "Admin",
-        "userId": "967",
-        "email": "malakk@gmail.com",
-        "passwordHash": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
-        "username": "malak"
-    },
-]
+[{
+    "role": "Student",
+    "enrolledCourses": ["C001"],
+    "progress": {},
+    "userId": "7202",
+    "email": "asmaa@gmail.com",
+    "passwordHash": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+    "username": "asmaa"
+}]

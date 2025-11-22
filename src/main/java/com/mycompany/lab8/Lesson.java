@@ -20,7 +20,8 @@ public class Lesson {
     private Quiz quiz;
 
     
-    public Lesson(String lessonId,String title, String content,ArrayList<String> resources) {
+    public Lesson(Quiz quiz,String lessonId,String title, String content,ArrayList<String> resources) {
+        this.quiz=quiz;
         this.lessonId =lessonId;
         this.title = title;
         this.content = content;

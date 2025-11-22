@@ -2,32 +2,51 @@
     {
         "approval status": "PENDING",
         "approvalHistory": [],
-        "description": "digital ",
-        "title": "Logic",
-        "courseId": "3063",
-        "instructorId": "4150",
-        "lessons": []
-    },
-    {
-        "approval status": "PENDING",
-        "approvalHistory": [],
-        "description": "intro",
-        "title": "math",
-        "courseId": "7544",
-        "instructorId": "4151",
+        "description": "Learn the basics of Java",
+        "title": "Java Programming",
+        "courseId": "C001",
+        "instructorId": "U002",
         "lessons": [
             {
                 "lessonId": "L001",
                 "resources": [],
-                "title": "intro",
-                "content": "basics"
+                "title": "Introduction to Java",
+                "content": "Java is a programming language..."
             },
             {
                 "lessonId": "L002",
                 "resources": [],
-                "title": "a",
-                "content": "basics 2"
+                "title": "Variables and Data Types",
+                "content": "Variables store data..."
             }
         ]
+    },
+    {
+        "approval status": "PENDING",
+        "approvalHistory": [],
+        "description": "Learn Python from scratch",
+        "title": "Python Programming",
+        "courseId": "C002",
+        "instructorId": "U003",
+        "lessons": [{
+            "lessonId": "L003",
+            "resources": [],
+            "title": "Introduction to Python",
+            "content": "Python is a programming language..."
+        }]
+    },
+    {
+        "approval status": "PENDING",
+        "approvalHistory": [],
+        "description": "learn maths",
+        "title": "maths",
+        "courseId": "1366",
+        "instructorId": "8013",
+        "lessons": [{
+            "lessonId": "9329",
+            "resources": [],
+            "title": "algebra",
+            "content": "learnalgebra"
+        }]
     }
 ]
