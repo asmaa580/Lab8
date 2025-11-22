@@ -7,6 +7,8 @@ package com.mycompany.lab8;
 import java.awt.BorderLayout;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -36,6 +38,21 @@ public class Admin extends javax.swing.JFrame {
     {
      this.cu=u;
       initComponents();
+      DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    jTable1.setModel(new DefaultTableModel(
+    model.getDataVector(),
+    new Vector<>(Arrays.asList("Course Id", "Title", "Instructor Id", "Status"))
+) 
+
+{
+    @Override
+    public boolean isCellEditable(int row, int column) {
+        return false;
+    }
+});
+    JsonDataBaseManager db = new JsonDataBaseManager();
+    loadAllCoursesIntoTable(db);
+
     }
     private void loadAllCoursesIntoTable(JsonDataBaseManager db) {
     DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
@@ -240,14 +257,16 @@ private void refreshTable(ArrayList<Course> courses) {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
  
-        /*int selectedRow = jTable1.getSelectedRow();
+        int selectedRow = jTable1.getSelectedRow();
 if (selectedRow == -1) {
     JOptionPane.showMessageDialog(this, "Select a course first!");
     return;
 }
 
 DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+
 String courseId = (String) model.getValueAt(selectedRow, 0);
+
 
 JsonDataBaseManager db = new JsonDataBaseManager();
 Course selectedCourse = null;
@@ -263,8 +282,15 @@ try {
     }
 
     if (selectedCourse != null) {
-        CourseDialog dialog = new CourseDialog(this, selectedCourse, cu, db);
-        dialog.setVisible(true);
+         Review Revieww = new Review(this, true,selectedCourse,cu);  
+    Revieww.setVisible(true);
+    String selectedFilter = (String) jComboBox1.getSelectedItem();
+if ("Pending courses".equals(selectedFilter)) {
+    loadPendingCoursesIntoTable(db);
+} else {
+    loadAllCoursesIntoTable(db);
+}
+
     } else {
         JOptionPane.showMessageDialog(this, "Course not found in database!");
     }
@@ -275,14 +301,13 @@ try {
 }
 
 
-if (selectedCourse != null) {
+/*if (selectedCourse != null) {
     CourseDialog dialog = new CourseDialog(this, selectedCourse, cu, db);
     loadAllCoursesIntoTable(db);
     dialog.setVisible(true);
-}
-*/
-        Review Revieww = new Review(this, true); // 'this' = parent frame, true = modal
-    Revieww.setVisible(true);
+}*/
+
+       
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
@@ -318,165 +343,6 @@ if (selectedCourse != null) {
         } 
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
-
-public class CourseDialog extends JDialog {
-
-    public CourseDialog(JFrame parent, Course course, User currentUser, JsonDataBaseManager db) {
-        super(parent, "Course Details", true); // modal dialog
-        setSize(500, 400);
-        setLocationRelativeTo(parent);
-        setLayout(new BorderLayout());
-
-        // ✅ Course details area
-        JTextArea textArea = new JTextArea();
-        textArea.setEditable(false);
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("Course ID: ").append(course.getCourseId()).append("\n");
-        sb.append("Title: ").append(course.getTitle()).append("\n");
-        sb.append("Description: ").append(course.getDescription()).append("\n");
-        sb.append("Instructor: ").append(course.getInstructorId()).append("\n");
-        sb.append("Status: ").append(course.getApproval_status()).append("\n\n");
-
-        sb.append("Students:\n");
-        for (String student : course.getStudents()) {
-            sb.append(" - ").append(student).append("\n");
-        }
-
-        sb.append("\nLessons:\n");
-        for (Lesson lesson : course.getLessons()) {
-            sb.append(" - ").append(lesson.getTitle()).append("\n");
-        }
-
-        textArea.setText(sb.toString());
-        add(new JScrollPane(textArea), BorderLayout.CENTER);
-
-        // ✅ Buttons panel
-        JPanel buttonPanel = new JPanel();
-        JButton approveBtn = new JButton("Approve");
-        JButton rejectBtn = new JButton("Reject");
-
-        approveBtn.addActionListener(e -> {
-            try {
-                course.approve(currentUser, "Approved via dialog");
-                db.updateCourse(course); // persist changes
-                JOptionPane.showMessageDialog(this, "Course approved!");
-                dispose();
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error approving course: " + ex.getMessage());
-            }
-        });
-
-        rejectBtn.addActionListener(e -> {
-            try {
-                course.reject(currentUser, "Rejected via dialog");
-                db.updateCourse(course); // persist changes
-                JOptionPane.showMessageDialog(this, "Course rejected!");
-                dispose();
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Error rejecting course: " + ex.getMessage());
-            }
-        });
-
-        buttonPanel.add(approveBtn);
-        buttonPanel.add(rejectBtn);
-        add(buttonPanel, BorderLayout.SOUTH);
-    }
-}
-
-    private void r()
-  {
-      int selectedRow = jTable1.getSelectedRow();
-    if (selectedRow == -1) {
-        JOptionPane.showMessageDialog(this, "Select a course first!");
-        return;
-    }
-    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-   
-    String courseId = (String) model.getValueAt(selectedRow, 0);
-    
-    JsonDataBaseManager db = new JsonDataBaseManager();
-    try {
-        ArrayList<Course> allCourses = db.getAllCourses1();
-        Course c=null;
-        for (Course course : allCourses) {
-            if (course.getCourseId().equals(courseId)) {
-                c = course; // now you have the full object with lessons, students, history
-                break;
-            }
-        }
-        if (c != null) {
-            /*JDialog dialog = new JDialog(this, "Course Details", true);
-            dialog.setSize(500, 400);
-            dialog.setLocationRelativeTo(this);
-            dialog.setLayout(new BorderLayout());
-
-            // Text area with details
-            JTextArea textArea = new JTextArea();
-            textArea.setEditable(false);
-            StringBuilder sb = new StringBuilder();
-            sb.append("Course ID: ").append(c.getCourseId()).append("\n");
-            sb.append("Title: ").append(c.getTitle()).append("\n");
-            sb.append("Description: ").append(c.getDescription()).append("\n");
-            sb.append("Instructor: ").append(c.getInstructorId()).append("\n");
-            sb.append("Status: ").append(c.getApproval_status()).append("\n\n");
-
-            sb.append("Students:\n");
-            for (String student : c.getStudents()) {
-                sb.append(" - ").append(student).append("\n");
-            }
-
-            sb.append("\nLessons:\n");
-            for (Lesson lesson : c.getLessons()) {
-                sb.append(" - ").append(lesson.getTitle()).append("\n");
-            }
-
-            textArea.setText(sb.toString());
-            dialog.add(new JScrollPane(textArea), BorderLayout.CENTER);
-
-            
-            JPanel buttonPanel = new JPanel();
-            JButton acceptBtn = new JButton("Accept");
-            JButton rejectBtn = new JButton("Reject");
-
-            acceptBtn.addActionListener(e -> {
-                c.approve(cu, courseId);
-                c.getApprovalHistory().add(new ApprovalAction("APPROVED", "Admin001", "Approved via dialog"));
-                try {
-                    db.updateCourse(c); // you need to implement updateCourse in JsonDataBaseManager
-                    JOptionPane.showMessageDialog(dialog, "Course approved!");
-                } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(dialog, "Error saving course update");
-                }
-                dialog.dispose();
-            });
-
-            rejectBtn.addActionListener(e -> {
-                c.reject(cu, courseId);
-                
-                c.getApprovalHistory().add(new ApprovalAction("REJECTED", "Admin001", "Rejected via dialog"));
-                try {
-                    db.updateCourse(c);
-                    
-                    JOptionPane.showMessageDialog(dialog, "Course rejected!");
-                } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(dialog, "Error saving course update");
-                }
-                dialog.dispose();
-            });
-
-            buttonPanel.add(acceptBtn);
-            buttonPanel.add(rejectBtn);
-            dialog.add(buttonPanel, BorderLayout.SOUTH);
-
-            dialog.setVisible(true);*/
-        } else {
-            JOptionPane.showMessageDialog(this, "Course not found in database!");
-        }
-    } catch (IOException e) {
-        JOptionPane.showMessageDialog(this, "Error loading course details");
-    }
-  }
     /**
      * @param args the command line arguments
      */

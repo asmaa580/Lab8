@@ -271,6 +271,7 @@ public static ArrayList<Course> getAllCourses1() throws IOException {
                 lessonObj.getString("title"), 
                 lessonObj.getString("content")
             );
+            
             lessons.add(lesson);
         }
          ArrayList<ApprovalAction> approvalHistory = new ArrayList<>();
@@ -518,7 +519,7 @@ return;
 
         // Find the course by ID
         if (obj.getString("courseId").equals(updatedCourse.getCourseId())) {
-            // ✅ Update fields
+            
             obj.put("title", updatedCourse.getTitle());
             obj.put("description", updatedCourse.getDescription());
             obj.put("instructorId", updatedCourse.getInstructorId());
@@ -552,7 +553,7 @@ return;
             }
             obj.put("approvalHistory", historyArray);
 
-            // ✅ Replace the course object in the array
+          
             coursesArray.put(i, obj);
             break;
         }

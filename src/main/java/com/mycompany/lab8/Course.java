@@ -138,7 +138,9 @@ public class Course {
     public boolean isrejected()
     {return approval_status.equals(REJECTED); }
     
-    
+    public void addApprovalHistory(ApprovalAction history) {
+    approvalHistory.add(history);}
+
     public String getCourseId() { return courseId; }
     public String getTitle() { return title; }
     public String getDescription() { return description; }

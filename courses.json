@@ -1,178 +1,157 @@
 [
-  {
-    "approval status": "PENDING",
-    "approvalHistory": [],
-    "description": "digital ",
-    "title": "Logic",
-    "courseId": "3063",
-    "instructorId": "4150",
-    "lessons": [
-      {
-        "quiz": {
-          "questions": [
+    {
+        "approval status": "REJECTED",
+        "approvalHistory": [{
+            "reason": "bad",
+            "adminId": "7419",
+            "action": "REJECTED",
+            "timestamp": "22-11-2025 23:48:17"
+        }],
+        "description": "digital ",
+        "students": ["4852"],
+        "title": "Logic",
+        "courseId": "3063",
+        "instructorId": "4150",
+        "lessons": [{
+            "lessonId": "222",
+            "resources": [],
+            "title": "b",
+            "content": "a"
+        }]
+    },
+    {
+        "approval status": "REJECTED",
+        "approvalHistory": [],
+        "description": "intro",
+        "title": "math",
+        "courseId": "7544",
+        "instructorId": "4151",
+        "lessons": [
             {
-              "options": ["a", "b", "c", "d"],
-              "text": "q",
-              "correctIndex": 0
+                "lessonId": "L001",
+                "resources": [],
+                "title": "intro",
+                "content": "basics"
             },
             {
-              "options": ["a2", "b2", "c2", "d2"],
-              "text": "q2",
-              "correctIndex": 1
+                "lessonId": "L002",
+                "resources": [],
+                "title": "a",
+                "content": "basics 2"
             }
-          ],
-          "lessonId": "222",
-          "passingScore": 5
-        },
-        "lessonId": "222",
-        "resources": [],
-        "title": "b",
-        "content": "a"
-      }
-    ]
-  },
-  {
-    "approval status": "REJECTED",
-    "approvalHistory": [],
-    "description": "intro",
-    "title": "math",
-    "courseId": "7544",
-    "instructorId": "4151",
-    "lessons": [
-      {
-        "lessonId": "L001",
-        "resources": [],
-        "title": "intro",
-        "content": "basics"
-      },
-      {
-        "lessonId": "L002",
-        "resources": [],
-        "title": "a",
-        "content": "basics 2"
-      }
-    ]
-  },
-  {
-    "approval status": "APPROVED",
-    "approvalHistory": [
-      {
-        "reason": "Course content complete and clear",
-        "adminId": "Admin001",
-        "action": "APPROVED",
-        "timestamp": "22-11-2025 12:14:13"
-      }
-    ],
-    "description": "Learn the basics of Java",
-    "students": ["7202"],
-    "title": "Java Programming",
-    "courseId": "C001",
-    "instructorId": "U002",
-    "lessons": [
-      {
-        "lessonId": "L001",
-        "resources": [],
-        "title": "Introduction to Java",
-        "content": "Java is a programming language..."
-      },
-      {
-        "lessonId": "L002",
-        "resources": [],
-        "title": "Variables and Data Types",
-        "content": "Variables store data..."
-      }
-    ]
-  },
-  {
-    "approval status": "REJECTED",
-    "approvalHistory": [
-      {
-        "reason": "Rejected via dialog",
-        "adminId": "48",
-        "action": "REJECTED",
-        "timestamp": "22-11-2025 14:24:22"
-      }
-    ],
-    "description": "c",
-    "students": [],
-    "title": "control",
-    "courseId": "8558",
-    "instructorId": "4646",
-    "lessons": []
-  },
-  {
-    "approval status": "REJECTED",
-    "approvalHistory": [
-      {
-        "reason": "Insufficient lesson details",
-        "adminId": "Admin002",
-        "action": "REJECTED",
-        "timestamp": "22-11-2025 12:14:13"
-      }
-    ],
-    "description": "Learn Python from scratch",
-    "students": [],
-    "title": "Python Programming",
-    "courseId": "C002",
-    "instructorId": "U003",
-    "lessons": [
-      {
-        "lessonId": "L003",
-        "resources": [],
-        "title": "Introduction to Python",
-        "content": "Python is a programming language..."
-      }
-    ]
-  },
-  {
-    "approval status": "APPROVED",
-    "approvalHistory": [
-      {
-        "reason": "Basic maths course accepted",
-        "adminId": "Admin003",
-        "action": "APPROVED",
-        "timestamp": "22-11-2025 12:14:13"
-      }
-    ],
-    "description": "learn maths",
-    "students": [],
-    "title": "maths",
-    "courseId": "1366",
-    "instructorId": "8013",
-    "lessons": [
-      {
-        "lessonId": "9329",
-        "resources": [],
-        "title": "algebra",
-        "content": "learnalgebra"
-      }
-    ]
-  },
-  {
-    "approval status": "REJECTED",
-    "approvalHistory": [
-      {
-        "reason": "Rejected via dialog",
-        "adminId": "48",
-        "action": "REJECTED",
-        "timestamp": "22-11-2025 14:27:46"
-      }
-    ],
-    "description": "q",
-    "students": ["7202"],
-    "title": "q",
-    "courseId": "6611",
-    "instructorId": "4646",
-    "lessons": []
-  },
-  {
-    "approval status": "PENDING",
-    "approvalHistory": [],
-    "description": "art and fun",
-    "students": [],
-    "title": "art",
-    "courseId": "3155",
-    "instructorId": "8562",
-    "lessons": []
-  }
+        ]
+    },
+    {
+        "approval status": "APPROVED",
+        "approvalHistory": [{
+            "reason": "Course content complete and clear",
+            "adminId": "Admin001",
+            "action": "APPROVED",
+            "timestamp": "22-11-2025 12:14:13"
+        }],
+        "description": "Learn the basics of Java",
+        "students": ["7202"],
+        "title": "Java Programming",
+        "courseId": "C001",
+        "instructorId": "U002",
+        "lessons": [
+            {
+                "lessonId": "L001",
+                "resources": [],
+                "title": "Introduction to Java",
+                "content": "Java is a programming language..."
+            },
+            {
+                "lessonId": "L002",
+                "resources": [],
+                "title": "Variables and Data Types",
+                "content": "Variables store data..."
+            }
+        ]
+    },
+    {
+        "approval status": "REJECTED",
+        "approvalHistory": [{
+            "reason": "Rejected via dialog",
+            "adminId": "48",
+            "action": "REJECTED",
+            "timestamp": "22-11-2025 14:24:22"
+        }],
+        "description": "c",
+        "students": ["4852"],
+        "title": "control",
+        "courseId": "8558",
+        "instructorId": "4646",
+        "lessons": []
+    },
+    {
+        "approval status": "REJECTED",
+        "approvalHistory": [{
+            "reason": "Insufficient lesson details",
+            "adminId": "Admin002",
+            "action": "REJECTED",
+            "timestamp": "22-11-2025 12:14:13"
+        }],
+        "description": "Learn Python from scratch",
+        "students": [],
+        "title": "Python Programming",
+        "courseId": "C002",
+        "instructorId": "U003",
+        "lessons": [{
+            "lessonId": "L003",
+            "resources": [],
+            "title": "Introduction to Python",
+            "content": "Python is a programming language..."
+        }]
+    },
+    {
+        "approval status": "APPROVED",
+        "approvalHistory": [{
+            "reason": "Basic maths course accepted",
+            "adminId": "Admin003",
+            "action": "APPROVED",
+            "timestamp": "22-11-2025 12:14:13"
+        }],
+        "description": "learn maths",
+        "students": [],
+        "title": "maths",
+        "courseId": "1366",
+        "instructorId": "8013",
+        "lessons": [{
+            "lessonId": "9329",
+            "resources": [],
+            "title": "algebra",
+            "content": "learnalgebra"
+        }]
+    },
+    {
+        "approval status": "APPROVED",
+        "approvalHistory": [{
+            "reason": "Rejected via dialog",
+            "adminId": "48",
+            "action": "REJECTED",
+            "timestamp": "22-11-2025 22:45:11"
+        }],
+        "description": "q",
+        "students": ["7202"],
+        "title": "q",
+        "courseId": "6611",
+        "instructorId": "4646",
+        "lessons": []
+    },
+    {
+        "approval status": "REJECTED",
+        "approvalHistory": [{
+            "reason": "no",
+            "adminId": "7419",
+            "action": "REJECTED",
+            "timestamp": "22-11-2025 23:54:59"
+        }],
+        "description": "art and fun",
+        "students": [],
+        "title": "art",
+        "courseId": "3155",
+        "instructorId": "8562",
+        "lessons": []
+    }
 ]
