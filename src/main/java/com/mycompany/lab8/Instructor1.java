@@ -421,7 +421,7 @@ public class Instructor1 extends javax.swing.JFrame {
             Course newcourse = new Course(title, description, cu.getUserId());
             db.addCourse(newcourse);
 
-            JOptionPane.showMessageDialog(this, "Course created succeffully");
+            JOptionPane.showMessageDialog(this, "Course created successfully");
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
