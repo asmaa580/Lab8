@@ -93,6 +93,59 @@ if (obj.has("lessons")) {
         }}
         return pendingCourses;
      }
+    public static ArrayList<Course> loadapprovedcourses()throws IOException
+    {
+     ArrayList<Course> approvedCourses=new ArrayList<>();
+     JSONArray coursesArray = loadJson(COURSES_FILE);
+     
+     for (int i = 0; i < coursesArray.length(); i++) {
+            JSONObject obj = coursesArray.getJSONObject(i);
+            String status = obj.getString("approval status");
+
+            if ("APPROVED".equalsIgnoreCase(status)) {        
+            String courseId = obj.getString("courseId");
+            String title = obj.getString("title");
+            String description = obj.optString("description", "");
+            String instructorId = obj.getString("instructorId");
+
+            ArrayList<String> students = new ArrayList<>();
+            if (obj.has("students")) {
+                JSONArray studentsArray = obj.getJSONArray("students");
+                for (int j = 0; j < studentsArray.length(); j++) {
+                    students.add(studentsArray.getString(j));
+                }
+            }
+
+            ArrayList<Lesson> lessons = new ArrayList<>();
+if (obj.has("lessons")) {
+    JSONArray lessonsArray = obj.getJSONArray("lessons");
+    for (int j = 0; j < lessonsArray.length(); j++) {
+        JSONObject lessonObj = lessonsArray.getJSONObject(j);
+        Lesson lesson = new Lesson(
+            lessonObj.getString("lessonId"),
+            lessonObj.getString("title")
+        );
+        /*if (lessonObj.has("quiz")) {
+            JSONObject quizObj = lessonObj.getJSONObject("quiz");
+            JSONArray questionsArray = quizObj.getJSONArray("questions");
+
+            for (int k = 0; k < questionsArray.length(); k++) {
+                JSONObject qObj = questionsArray.getJSONObject(k);
+                QuizQuestion question = new QuizQuestion(
+                    qObj.getString("question"),
+                    qObj.getJSONArray("options").toList(),
+                    qObj.getInt("answer")
+                );
+                lesson.addQuestion(question);
+            }
+        }*/
+        lessons.add(lesson);}
+           }          
+            Course course = new Course(courseId, title, description, instructorId, students, lessons,"PENDING");
+            approvedCourses.add(course);
+        }}
+        return approvedCourses;
+     }
     public static void addUser(User user) throws IOException {
         JSONArray users = loadJson(USERS_FILE);
         for (int i = 0; i < users.length(); i++) {
@@ -271,6 +324,7 @@ public static ArrayList<Course> getAllCourses1() throws IOException {
                 lessonObj.getString("title"), 
                 lessonObj.getString("content")
             );
+            
             lessons.add(lesson);
         }
          ArrayList<ApprovalAction> approvalHistory = new ArrayList<>();
@@ -464,6 +518,7 @@ public static ArrayList<Course> getEnrolledCourses(String studentId) throws IOEx
     // Save the updated array back to the file
     saveJson("users.json", allUsers);
 }
+
  public static void updateLessonInCourse(Lesson updatedLesson) throws IOException {
 JSONArray coursesArray = loadJson(COURSES_FILE);
 
@@ -506,7 +561,60 @@ saveJson(COURSES_FILE, coursesArray);
 return;
 }
 }
-}
+}}
+
+ public void updateCourse(Course updatedCourse) throws IOException {
+    // Load all courses from file
+    JSONArray coursesArray = loadJson(COURSES_FILE);
+
+    for (int i = 0; i < coursesArray.length(); i++) {
+        JSONObject obj = coursesArray.getJSONObject(i);
+
+        // Find the course by ID
+        if (obj.getString("courseId").equals(updatedCourse.getCourseId())) {
+            
+            obj.put("title", updatedCourse.getTitle());
+            obj.put("description", updatedCourse.getDescription());
+            obj.put("instructorId", updatedCourse.getInstructorId());
+
+            // Lessons
+            JSONArray lessonsArray = new JSONArray();
+            for (Lesson lesson : updatedCourse.getLessons()) {
+                JSONObject lessonObj = new JSONObject();
+                lessonObj.put("lessonId", lesson.getLessonId());
+                lessonObj.put("title", lesson.getTitle());
+                lessonObj.put("content", lesson.getContent());
+                lessonObj.put("resources", new JSONArray(lesson.getResources()));
+                lessonsArray.put(lessonObj);
+            }
+            obj.put("lessons", lessonsArray);
+
+            // Students
+            JSONArray studentsArray = new JSONArray();
+            for (String studentId : updatedCourse.getStudents()) {
+                studentsArray.put(studentId);
+            }
+            obj.put("students", studentsArray);
+
+            // Approval status
+            obj.put("approval status", updatedCourse.getApproval_status());
+
+            // Approval history
+            JSONArray historyArray = new JSONArray();
+            for (ApprovalAction action : updatedCourse.getApprovalHistory()) {
+                historyArray.put(action.toJson());
+            }
+            obj.put("approvalHistory", historyArray);
+
+          
+            coursesArray.put(i, obj);
+            break;
+        }
+    }
+
+    // Save back to file
+    saveJson(COURSES_FILE, coursesArray);
+
 }
 
 }

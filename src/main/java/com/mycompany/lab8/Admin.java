@@ -4,9 +4,18 @@
  */
 package com.mycompany.lab8;
 
+import java.awt.BorderLayout;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Vector;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -29,6 +38,21 @@ public class Admin extends javax.swing.JFrame {
     {
      this.cu=u;
       initComponents();
+      DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    jTable1.setModel(new DefaultTableModel(
+    model.getDataVector(),
+    new Vector<>(Arrays.asList("Course Id", "Title", "Instructor Id", "Status"))
+) 
+
+{
+    @Override
+    public boolean isCellEditable(int row, int column) {
+        return false;
+    }
+});
+    JsonDataBaseManager db = new JsonDataBaseManager();
+    loadAllCoursesIntoTable(db);
+
     }
     private void loadAllCoursesIntoTable(JsonDataBaseManager db) {
     DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
@@ -232,7 +256,58 @@ private void refreshTable(ArrayList<Course> courses) {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        
+ 
+        int selectedRow = jTable1.getSelectedRow();
+if (selectedRow == -1) {
+    JOptionPane.showMessageDialog(this, "Select a course first!");
+    return;
+}
+
+DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+
+String courseId = (String) model.getValueAt(selectedRow, 0);
+
+
+JsonDataBaseManager db = new JsonDataBaseManager();
+Course selectedCourse = null;
+
+try {
+    ArrayList<Course> allCourses = db.getAllCourses1();
+
+    for (Course c : allCourses) {
+        if (c.getCourseId().equals(courseId)) {
+            selectedCourse = c;
+            break;
+        }
+    }
+
+    if (selectedCourse != null) {
+         Review Revieww = new Review(this, true,selectedCourse,cu);  
+    Revieww.setVisible(true);
+    String selectedFilter = (String) jComboBox1.getSelectedItem();
+if ("Pending courses".equals(selectedFilter)) {
+    loadPendingCoursesIntoTable(db);
+} else {
+    loadAllCoursesIntoTable(db);
+}
+
+    } else {
+        JOptionPane.showMessageDialog(this, "Course not found in database!");
+    }
+
+} catch (IOException ex) {
+    JOptionPane.showMessageDialog(this, "Error loading courses: " + ex.getMessage());
+    ex.printStackTrace(); // optional: log error for debugging
+}
+
+
+/*if (selectedCourse != null) {
+    CourseDialog dialog = new CourseDialog(this, selectedCourse, cu, db);
+    loadAllCoursesIntoTable(db);
+    dialog.setVisible(true);
+}*/
+
+       
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
