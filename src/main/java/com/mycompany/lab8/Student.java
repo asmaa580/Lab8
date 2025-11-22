@@ -17,6 +17,7 @@ import org.json.JSONObject;
 public class Student extends javax.swing.JFrame {
      private String id;
      
+     
        public Student()
        {};
    
@@ -476,7 +477,7 @@ public class Student extends javax.swing.JFrame {
                       
                         jTabbedPane1.setSelectedIndex(3);
                         content.setText(l.getContent());
-                       
+                       break;
                    }
                }
             }
@@ -491,6 +492,7 @@ public class Student extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
+        JsonDataBaseManager dbm=new JsonDataBaseManager();
         if(content.getText().equals("no content"))
         {
              JOptionPane.showMessageDialog(this,"Please select a lesson that has content");
@@ -498,10 +500,34 @@ public class Student extends javax.swing.JFrame {
         }
         else
         {
-            QuizFrame frame=new QuizFrame();
-            frame.setVisible(true);
-            
-            this.dispose(); 
+            int selectedRow=lessonsTabel.getSelectedRow();
+             int selectedrow=studentsTable.getSelectedRow();
+    
+        Object courseId=studentsTable.getValueAt(selectedrow, 0);
+        Object lessonId=lessonsTabel.getValueAt(selectedRow, 0);
+        try{
+        ArrayList<Course> courses=JsonDataBaseManager.getEnrolledCourses(id);
+        for(Course c:courses)
+            if(c.getCourseId().equals((String)courseId))
+            {
+                dbm.updateCourse(c);
+               ArrayList<Lesson> lessons= c.getLessons();
+               for(Lesson l:lessons)
+                   if(l.getLessonId().equals(lessonId))
+                   {
+                      
+                         QuizFrame frame=new QuizFrame(l.getQuiz());
+                            frame.setVisible(true);
+                            this.dispose(); 
+                            break; 
+                   }
+            }
+        }
+        catch(Exception e)
+        {
+             JOptionPane.showMessageDialog(this,"No courses found for this student");
+        }
+           
         }
        
         

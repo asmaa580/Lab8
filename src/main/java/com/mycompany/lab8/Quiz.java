@@ -62,7 +62,7 @@ public class Quiz {
         this.lessonId = lessonId;
     }
 
-    public List<Question> getQuestions() {
+    public ArrayList<Question> getQuestions() {
         return questions;
     }
 
