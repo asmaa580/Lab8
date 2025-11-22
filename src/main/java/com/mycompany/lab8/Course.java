@@ -34,7 +34,9 @@ public class Course {
     this.instructorId = instructorId;
     this.lessons = lessons;
     this.students = students;
-    this.approval_status = approval_status ;
+    if(approval_status.equals(REJECTED)||approval_status.equals(APPROVED)||approval_status.equals(PENDING))
+        {this.approval_status = approval_status; 
+        }
     this.approvalHistory = new ArrayList<>();
 }
 
@@ -84,7 +86,16 @@ public class Course {
         return approval_status;
     }
 
-    /*public void setApproval_status(String status,User user,String reason) {
+   /* public void setstatus(String status) { 
+        if(status.equals(REJECTED)||status.equals(APPROVED)||status.equals(PENDING))
+        {this.approval_status = status; 
+        }
+        
+        else 
+            throw new IllegalArgumentException("Invalid approval status: " + status);
+        }
+    
+    public void setApproval_status(String status,User user,String reason) {
         if(!user.getRole().equalsIgnoreCase("admin"))
         {  throw new SecurityException("Only admin can change course status");
         }

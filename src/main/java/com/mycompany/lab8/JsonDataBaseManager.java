@@ -464,6 +464,7 @@ public static ArrayList<Course> getEnrolledCourses(String studentId) throws IOEx
     // Save the updated array back to the file
     saveJson("users.json", allUsers);
 }
+
  public static void updateLessonInCourse(Lesson updatedLesson) throws IOException {
 JSONArray coursesArray = loadJson(COURSES_FILE);
 
@@ -506,7 +507,60 @@ saveJson(COURSES_FILE, coursesArray);
 return;
 }
 }
-}
+}}
+
+ public void updateCourse(Course updatedCourse) throws IOException {
+    // Load all courses from file
+    JSONArray coursesArray = loadJson(COURSES_FILE);
+
+    for (int i = 0; i < coursesArray.length(); i++) {
+        JSONObject obj = coursesArray.getJSONObject(i);
+
+        // Find the course by ID
+        if (obj.getString("courseId").equals(updatedCourse.getCourseId())) {
+            // ✅ Update fields
+            obj.put("title", updatedCourse.getTitle());
+            obj.put("description", updatedCourse.getDescription());
+            obj.put("instructorId", updatedCourse.getInstructorId());
+
+            // Lessons
+            JSONArray lessonsArray = new JSONArray();
+            for (Lesson lesson : updatedCourse.getLessons()) {
+                JSONObject lessonObj = new JSONObject();
+                lessonObj.put("lessonId", lesson.getLessonId());
+                lessonObj.put("title", lesson.getTitle());
+                lessonObj.put("content", lesson.getContent());
+                lessonObj.put("resources", new JSONArray(lesson.getResources()));
+                lessonsArray.put(lessonObj);
+            }
+            obj.put("lessons", lessonsArray);
+
+            // Students
+            JSONArray studentsArray = new JSONArray();
+            for (String studentId : updatedCourse.getStudents()) {
+                studentsArray.put(studentId);
+            }
+            obj.put("students", studentsArray);
+
+            // Approval status
+            obj.put("approval status", updatedCourse.getApproval_status());
+
+            // Approval history
+            JSONArray historyArray = new JSONArray();
+            for (ApprovalAction action : updatedCourse.getApprovalHistory()) {
+                historyArray.put(action.toJson());
+            }
+            obj.put("approvalHistory", historyArray);
+
+            // ✅ Replace the course object in the array
+            coursesArray.put(i, obj);
+            break;
+        }
+    }
+
+    // Save back to file
+    saveJson(COURSES_FILE, coursesArray);
+
 }
 
 }
