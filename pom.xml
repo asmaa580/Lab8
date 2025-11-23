@@ -17,6 +17,17 @@
             <artifactId>json</artifactId>
             <version>20230618</version>
         </dependency>
+<dependency>
+    <groupId>org.jfree</groupId>
+    <artifactId>jfreechart</artifactId>
+    <version>1.5.4</version>
+</dependency>
+<dependency>
+    <groupId>org.jfree</groupId>
+    <artifactId>jcommon</artifactId>
+    <version>1.0.24</version>
+</dependency>
+
     </dependencies>
 
 </project>
