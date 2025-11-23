@@ -18,7 +18,8 @@ public class Lesson {
     private String content;
     private ArrayList<String> resources;
     private Quiz quiz;
-
+    private boolean isCompleted;
+    
     
     public Lesson(String lessonId,String title, String content,ArrayList<String> resources) {
         this.lessonId =lessonId;
@@ -42,6 +43,22 @@ public class Lesson {
         this.resources = new ArrayList<>();
     }
 
+       
+ public void checkCompletion(QuizAttempt attempt) {
+        if (attempt.isPassed(quiz)) {
+            this.isCompleted = true;
+        }
+    }
+
+    public boolean isIsCompleted() {
+        return isCompleted;
+    }
+
+    public void setIsCompleted(boolean isCompleted) {
+        this.isCompleted = isCompleted;
+    }
+ 
+    
     public String getLessonId() { return lessonId; }
     public String getTitle() { return title; }
     public String getContent() { return content; }

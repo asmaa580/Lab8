@@ -14,16 +14,18 @@ import java.util.ArrayList;
 public class QuizAttempt {
     private String attemptId;
     private String QuizId;
-    private String StudentId;
+    private String LessonId;
     private int score;
     private int retryCount;
     private ArrayList<Integer> chosenAnswers;
     private LocalDateTime timestamp;
 
+    
     public boolean isPassed(Quiz quiz)
     {
         return quiz.isPassingScore(score);
     }
+    
     
     public String getAttemptId() {
         return attemptId;
@@ -41,12 +43,12 @@ public class QuizAttempt {
         this.QuizId = QuizId;
     }
 
-    public String getStudentId() {
-        return StudentId;
+    public String getLessonId() {
+        return LessonId;
     }
 
-    public void setStudentId(String StudentId) {
-        this.StudentId = StudentId;
+    public void setLessonId(String LessonId) {
+        this.LessonId = LessonId;
     }
 
     public int getScore() {
