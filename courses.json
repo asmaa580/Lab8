@@ -8,7 +8,10 @@
             "timestamp": "23-11-2025 20:25:33"
         }],
         "description": "c",
-        "students": ["1585"],
+        "students": [
+            "1585",
+            "5394"
+        ],
         "title": "c",
         "courseId": "1229",
         "instructorId": "8562",
@@ -20,10 +23,15 @@
         }]
     },
     {
-        "approval status": "PENDING",
-        "approvalHistory": [],
+        "approval status": "APPROVED",
+        "approvalHistory": [{
+            "reason": "nice",
+            "adminId": "6759",
+            "action": "APPROVED",
+            "timestamp": "23-11-2025 21:31:31"
+        }],
         "description": "1",
-        "students": [],
+        "students": ["5394"],
         "title": "c1",
         "courseId": "4176",
         "instructorId": "6634",

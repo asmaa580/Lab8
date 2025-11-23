@@ -1,11 +1,32 @@
-[{
-    "role": "Instructor",
-    "createdCourses": [
-        "4176",
-        "9542"
-    ],
-    "userId": "6634",
-    "email": "h1@gmail.com",
-    "passwordHash": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
-    "username": "h"
-}]
+[
+    {
+        "role": "Instructor",
+        "createdCourses": [
+            "4176",
+            "9542"
+        ],
+        "userId": "6634",
+        "email": "h1@gmail.com",
+        "passwordHash": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+        "username": "h"
+    },
+    {
+        "role": "Student",
+        "enrolledCourses": [
+            "1229",
+            "4176"
+        ],
+        "progress": {},
+        "userId": "5394",
+        "email": "asmaa@gmail.com",
+        "passwordHash": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+        "username": "asmaa"
+    },
+    {
+        "role": "Admin",
+        "userId": "6759",
+        "email": "malakk@gmail.com",
+        "passwordHash": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+        "username": "malak"
+    }
+]

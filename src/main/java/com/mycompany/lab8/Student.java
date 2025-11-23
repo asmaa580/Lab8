@@ -87,6 +87,36 @@ private void loadCertificates() {
 }
 
       
+    public Student(User u) {
+         this.id=u.userId;
+        initComponents();
+        jLabel1.setText(u.username);
+        try{JsonDataBaseManager dbm=new JsonDataBaseManager();
+        ArrayList <Course> allCourses = new ArrayList<>();
+
+        allCourses=dbm.loadapprovedcourses("APPROVED");
+
+        DefaultTableModel coursesModel = new DefaultTableModel();
+        coursesModel.addColumn("Course ID");
+        coursesModel.addColumn("Course Name");
+        coursesModel.addColumn("Instructor");
+        coursesModel.addColumn("Number of Lessons");
+        jTable1.setModel(coursesModel);
+        for (Course c : allCourses) {
+    coursesModel.addRow(new Object[]{
+            c.getCourseId(),
+            c.getTitle(),
+            c.getInstructorId(),
+            c.getLessons().size()
+    });
+}
+        }
+        catch(Exception e)
+        {
+        JOptionPane.showMessageDialog(this,"No available courses");
+        }
+
+    }
     public Student(String id) {
          this.id=id;
         initComponents();
@@ -116,6 +146,7 @@ private void loadCertificates() {
         }
 
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -150,6 +181,8 @@ private void loadCertificates() {
         jButton2 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -411,6 +444,10 @@ private void loadCertificates() {
             }
         });
 
+        jLabel1.setText("jLabel1");
+
+        jLabel2.setText("welcome");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -418,7 +455,11 @@ private void loadCertificates() {
             .addGroup(layout.createSequentialGroup()
                 .addGap(188, 188, 188)
                 .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(125, 125, 125))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 718, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 16, Short.MAX_VALUE))
@@ -428,7 +469,10 @@ private void loadCertificates() {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
                 .addContainerGap())
         );
 
@@ -776,6 +820,8 @@ JOptionPane.showMessageDialog(this, scrollPane, "View Certificate", JOptionPane.
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
