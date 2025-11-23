@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class JsonDataBaseManager {
@@ -40,7 +41,7 @@ public class JsonDataBaseManager {
     }
 
     // ---------------- Users ----------------
-    public static ArrayList<Course> loadpendingcourses()throws IOException
+    /*public static ArrayList<Course> loadpendingcourses()throws IOException
     {
      ArrayList<Course> pendingCourses=new ArrayList<>();
      JSONArray coursesArray = loadJson(COURSES_FILE);
@@ -85,15 +86,17 @@ if (obj.has("lessons")) {
                 );
                 lesson.addQuestion(question);
             }
-        }*/
+        }
         lessons.add(lesson);}
            }          
             Course course = new Course(courseId, title, description, instructorId, students, lessons,"PENDING");
             pendingCourses.add(course);
         }}
         return pendingCourses;
-     }
-    public static ArrayList<Course> loadapprovedcourses()throws IOException
+     }*/
+    
+    
+    public static ArrayList<Course> loadapprovedcourses(String s)throws IOException
     {
      ArrayList<Course> approvedCourses=new ArrayList<>();
      JSONArray coursesArray = loadJson(COURSES_FILE);
@@ -102,7 +105,7 @@ if (obj.has("lessons")) {
             JSONObject obj = coursesArray.getJSONObject(i);
             String status = obj.getString("approval status");
 
-            if ("APPROVED".equalsIgnoreCase(status)) {        
+            if (s.equalsIgnoreCase(status)) {        
             String courseId = obj.getString("courseId");
             String title = obj.getString("title");
             String description = obj.optString("description", "");
@@ -141,7 +144,7 @@ if (obj.has("lessons")) {
         }*/
         lessons.add(lesson);}
            }          
-            Course course = new Course(courseId, title, description, instructorId, students, lessons,"PENDING");
+            Course course = new Course(courseId, title, description, instructorId, students, lessons,s);
             approvedCourses.add(course);
         }}
         return approvedCourses;
@@ -632,6 +635,39 @@ public void updateCourse(Course updatedCourse) throws IOException {
     // Save back to file
     saveJson(COURSES_FILE, coursesArray);
 }
+public static HashMap<String, ArrayList<String>> getUserProgress(String studentId) throws IOException {
+    HashMap<String, ArrayList<String>> progressMap = new HashMap<>();
+
+    // Load users.json
+    JSONArray users = loadJson(USERS_FILE);
+
+    for (int i = 0; i < users.length(); i++) {
+        JSONObject user = users.getJSONObject(i);
+
+        if (user.getString("userId").equals(studentId)) {
+            if (user.has("progress")) {
+                JSONObject progressObj = user.getJSONObject("progress");
+
+                // Iterate over courseIds
+                Iterator<String> keys = progressObj.keys();
+                while (keys.hasNext()) {
+                    String courseId = keys.next();
+                    JSONArray lessonsArray = progressObj.getJSONArray(courseId);
+
+                    ArrayList<String> lessonsList = new ArrayList<>();
+                    for (int j = 0; j < lessonsArray.length(); j++) {
+                        lessonsList.add(lessonsArray.getString(j));
+                    }
+
+                    progressMap.put(courseId, lessonsList);
+                }
+            }
+            break;
+        }
+    }
+
+    return progressMap;
+}
 
 
 public static void addQuizAttempt(String studentId, QuizAttempt attempt, Quiz quiz, String courseId) throws IOException {
@@ -746,7 +782,4 @@ private static void updateCourseStats(String quizId, String lessonId) throws IOE
 
     saveJson(COURSES_FILE, courses);
 }
-
-
-
 }

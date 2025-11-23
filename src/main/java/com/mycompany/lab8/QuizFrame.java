@@ -203,18 +203,23 @@ QuizFrame(Quiz quiz,String id,String courseId)
         }
        
         if(currentIndex == questions.size() - 1) {
-              Timer timer = new Timer(1000,e-> 
-              {scoreLabel.setText("Your Score: " + score + "/" + questions.size());
-                hideOptions();
-                next.setEnabled(false);});
-                timer.setRepeats(false);
-                timer.start();               
+//              Timer timer = new Timer(1000,e-> 
+//              {scoreLabel.setText("Your Score: " + score + "/" + questions.size());
+//                hideOptions();
+//                next.setEnabled(false);});
+//                timer.setRepeats(false);
+//                timer.start();       
+       JOptionPane.showMessageDialog(this,"Your Score: " + score + "/" + questions.size());
         QuizAttempt attempt=new QuizAttempt(quiz.getQuizId(),quiz.getLessonId(),score,0,answers);
             try {
                 JsonDataBaseManager.addQuizAttempt(id,attempt,quiz,courseId);
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this,"");
             }
+            Student studentFrame = new Student(id);
+            studentFrame.setVisible(true);
+            this.dispose();  
+            studentFrame.showCoursesTab(); 
     } 
         else {
         currentIndex++;
