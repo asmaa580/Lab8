@@ -1,47 +1,52 @@
-[{
-    "approval status": "APPROVED",
-    "approvalHistory": [{
-        "reason": "good",
-        "adminId": "7419",
-        "action": "APPROVED",
-        "timestamp": "23-11-2025 13:48:21"
-    }],
-    "description": "c",
-    "students": ["1585"],
-    "title": "c",
-    "courseId": "1229",
-    "instructorId": "8562",
-    "lessons": [{
-        "quiz": {
-            "quizId": "2357",
-            "questions": [
-                {
-                    "options": [
-                        "a",
-                        "b",
-                        "c",
-                        "d"
-                    ],
-                    "text": "m",
-                    "correctIndex": 1
-                },
-                {
-                    "options": [
-                        "e",
-                        "f",
-                        "g",
-                        "h"
-                    ],
-                    "text": "n",
-                    "correctIndex": 3
-                }
-            ],
+[
+    {
+        "approval status": "APPROVED",
+        "approvalHistory": [{
+            "reason": "good",
+            "adminId": "7419",
+            "action": "APPROVED",
+            "timestamp": "23-11-2025 20:25:33"
+        }],
+        "description": "c",
+        "students": ["1585"],
+        "title": "c",
+        "courseId": "1229",
+        "instructorId": "8562",
+        "lessons": [{
             "lessonId": "l",
-            "passingScore": 0
-        },
-        "lessonId": "l",
-        "resources": [],
-        "title": "l",
-        "content": "l"
-    }]
-}]
+            "resources": [],
+            "title": "l",
+            "content": "l"
+        }]
+    },
+    {
+        "approval status": "PENDING",
+        "approvalHistory": [],
+        "description": "1",
+        "students": [],
+        "title": "c1",
+        "courseId": "4176",
+        "instructorId": "6634",
+        "lessons": [{
+            "lessonId": "11",
+            "resources": [],
+            "title": "12",
+            "content": "1"
+        }]
+    },
+    {
+        "approval status": "PENDING",
+        "approvalHistory": [],
+        "description": "2",
+        "students": [],
+        "title": "c2",
+        "courseId": "9542",
+        "instructorId": "6634",
+        "lessons": [{
+            "lessonId": "22",
+            "resources": [],
+            "title": "2",
+            "content": "2"
+        }]
+    }
+]

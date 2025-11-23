@@ -6,9 +6,11 @@ package com.mycompany.lab8;
 
 import com.mycompany.lab8.login;
 import java.nio.file.Files;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.BoxLayout;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.json.JSONArray;
@@ -16,6 +18,7 @@ import org.json.JSONObject;
 import javax.swing.JTable;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 
@@ -37,6 +40,14 @@ public class Instructor1 extends javax.swing.JFrame {
     public Instructor1(User u) {
         initComponents();
         this.cu=u;
+        int selectedIndex = insightsPanel.getSelectedIndex();
+    if (selectedIndex == 3) { 
+        try {
+            showInstructorInsights(u.getUserId());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
         
  };
 
@@ -59,7 +70,52 @@ public class Instructor1 extends javax.swing.JFrame {
 
     }      
     
-    
+    public void showInstructorInsights(String instructorId) throws IOException {
+    // --- 1. Create datasets ---
+    DefaultCategoryDataset scoreDataset = new DefaultCategoryDataset();
+    DefaultCategoryDataset completionDataset = new DefaultCategoryDataset();
+
+    // --- 2. Load courses.json ---
+    JSONArray courses = JsonDataBaseManager.loadJson("courses.json");
+
+    for (int i = 0; i < courses.length(); i++) {
+        JSONObject course = courses.getJSONObject(i);
+        if (course.getString("instructorId").equals(instructorId)) {
+
+            JSONArray lessons = course.getJSONArray("lessons");
+
+            for (int j = 0; j < lessons.length(); j++) {
+                JSONObject lesson = lessons.getJSONObject(j);
+                String lessonTitle = lesson.getString("title");
+
+                if (lesson.has("quizStats")) {
+                    JSONObject stats = lesson.getJSONObject("quizStats");
+                    double avgScore = stats.getDouble("averageScore");
+                    double completion = stats.getDouble("completionRate") * 100;
+
+                    // --- Add values to datasets ---
+                    scoreDataset.addValue(avgScore, "Quiz Score", lessonTitle);
+                    completionDataset.addValue(completion, "Completion %", lessonTitle);
+                }
+            }
+        }
+    }
+
+    // --- 3. Create charts ---
+    JFreeChart scoreChart = ChartFactory.createBarChart(
+            "Average Quiz Scores", "Lesson", "Score", scoreDataset
+    );
+    JFreeChart completionChart = ChartFactory.createBarChart(
+            "Lesson Completion %", "Lesson", "Completion %", completionDataset
+    );
+
+    // --- 4. Add charts to the Insights panel ---
+    insightsPanel.removeAll(); // clear old charts
+    insightsPanel.setLayout(new BoxLayout(insightsPanel, BoxLayout.Y_AXIS));
+    insightsPanel.add(new ChartPanel(scoreChart));
+    insightsPanel.add(new ChartPanel(completionChart));
+    insightsPanel.revalidate(); // refresh panel
+}
      
     
     private void loadInstructorCourses(){
