@@ -16,6 +16,7 @@ public class Studentt extends User {
     private HashMap<String, ArrayList<QuizAttempt>> quizAttempts;
     
 
+    
     public Studentt(String username, String email, String passwordHash) {
         super(username, email, passwordHash);
         enrolledCourses = new ArrayList<>();
@@ -27,6 +28,21 @@ public class Studentt extends User {
     ArrayList<QuizAttempt> attempts = quizAttempts.getOrDefault(attempt.getQuizId(), new ArrayList<>());
     attempts.add(attempt);
     quizAttempts.put(attempt.getQuizId(), attempts);
+}
+    
+    public ArrayList<QuizAttempt> getAttemptsForQuiz(String quizId) {
+    return quizAttempts.getOrDefault(quizId, new ArrayList<>());
+}
+
+// Get the latest score for a specific quiz
+public int getLatestScore(String quizId) {
+    ArrayList<QuizAttempt> attempts = quizAttempts.get(quizId);
+    if (attempts == null || attempts.isEmpty()) {
+        return -1; // means no attempts yet
+    }
+    // get the last attempt in the list
+    QuizAttempt latest = attempts.get(attempts.size() - 1);
+    return latest.getScore();
 }
 
     @Override
