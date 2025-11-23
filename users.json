@@ -1,26 +1,68 @@
 [
     {
         "role": "Admin",
-        "userId": "7419",
-        "email": "malakk@gmail.com",
-        "passwordHash": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
-        "username": "malak"
+        "certificates": [],
+        "userId": "U001",
+        "email": "admin1@example.com",
+        "passwordHash": "123",
+        "username": "admin1"
     },
     {
         "role": "Instructor",
-        "createdCourses": ["3155"],
-        "userId": "8562",
-        "email": "k@gmail.com",
-        "passwordHash": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
-        "username": "k"
+        "certificates": [],
+        "createdCourses": ["C101"],
+        "userId": "U002",
+        "email": "instructor1@example.com",
+        "passwordHash": "123",
+        "username": "instructor1"
     },
     {
         "role": "Student",
-        "enrolledCourses": ["1366"],
+        "certificates": [{
+            "certificateID": "CERT001",
+            "issueDate": "2025-01-10",
+            "courseID": "C101"
+        }],
+        "enrolledCourses": ["C101"],
+        "progress": {"C101": ["L1"]},
+        "userId": "U003",
+        "email": "student1@example.com",
+        "passwordHash": "123",
+        "username": "student1"
+    },
+    {
+        "role": "Student",
+        "enrolledCourses": [],
         "progress": {},
-        "userId": "1585",
-        "email": "asmaa@gmail.com",
+        "userId": "1524",
+        "email": "aseel@gmail.com",
+        "passwordHash": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+        "username": "aseel"
+    },
+    {
+        "role": "Student",
+        "enrolledCourses": [],
+        "progress": {},
+        "userId": "6157",
+        "email": "eman@gmail.com",
+        "passwordHash": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+        "username": "eman"
+    },
+    {
+        "role": "Student",
+        "enrolledCourses": [],
+        "progress": {},
+        "userId": "5606",
+        "email": "@gmail.com",
         "passwordHash": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
         "username": "asmaa"
+    },
+    {
+        "role": "Instructor",
+        "createdCourses": ["5316"],
+        "userId": "821",
+        "email": "a@gmail.com",
+        "passwordHash": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+        "username": "aseel"
     }
 ]
