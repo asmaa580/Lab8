@@ -1,7 +1,10 @@
 
 package com.mycompany.lab8;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
@@ -11,9 +14,12 @@ public class QuizFrame extends javax.swing.JFrame {
     private Quiz quiz;
     private int score;
     private int currentIndex;
+    private String id;
+    private ArrayList<Integer> answers = new ArrayList<>();
 
-QuizFrame(Quiz quiz)
+QuizFrame(Quiz quiz,String id)
 {
+    this.id=id;
     this.quiz=quiz;
     initComponents();
     
@@ -185,25 +191,28 @@ QuizFrame(Quiz quiz)
         {
             score++;
             feedback.setText("Correct answer");
+            answers.add(selectedIndex);
         }
         else
         {
             int y=(questions.get(currentIndex).getCorrectAnswerIndex())+1;
             feedback.setText("Wrong answer, the correct answer is option"+y);
+             answers.add(selectedIndex);
         }
-        if(currentIndex == questions.size() - 1)
-        {
-            next.setText("Submit");
-        }
+       
         if(currentIndex == questions.size() - 1) {
               Timer timer = new Timer(1000,e-> 
               {scoreLabel.setText("Your Score: " + score + "/" + questions.size());
                 hideOptions();
                 next.setEnabled(false);});
                 timer.setRepeats(false);
-                timer.start();
-              //  QuizAttempt 
-        
+                timer.start();               
+        QuizAttempt attempt=new QuizAttempt(quiz.getQuizId(),quiz.getLessonId(),score,0,answers);
+            try {
+                JsonDataBaseManager.addQuizAttempt(id,attempt,quiz);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this,"");
+            }
     } 
         else {
         currentIndex++;
@@ -212,7 +221,9 @@ QuizFrame(Quiz quiz)
         }
         Timer timer = new Timer(1000, e -> showQuestion());
     timer.setRepeats(false);
-    timer.start();}
+    timer.start();
+        
+        }
     }//GEN-LAST:event_nextActionPerformed
 private void hideOptions() {
     option1.setVisible(false);

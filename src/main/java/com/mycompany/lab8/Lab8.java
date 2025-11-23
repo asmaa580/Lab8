@@ -34,7 +34,7 @@ public class Lab8 {
             attempt.setAttemptId("att1");
             attempt.setQuizId(quiz.getQuizId());
             attempt.setLessonId("lesson1");
-            attempt.setScore(3); // student got 3 correct
+            attempt.setScore(5); // student got 3 correct
             attempt.setRetryCount(0);
             attempt.setChosenAnswers(chosenAnswers);
             attempt.setTimestamp(LocalDateTime.now());

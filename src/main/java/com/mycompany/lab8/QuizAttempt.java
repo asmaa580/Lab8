@@ -6,6 +6,7 @@ package com.mycompany.lab8;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *
@@ -19,6 +20,20 @@ public class QuizAttempt {
     private int retryCount;
     private ArrayList<Integer> chosenAnswers;
     private LocalDateTime timestamp;
+
+    public QuizAttempt( String QuizId, String LessonId, int score, int retryCount, ArrayList<Integer> chosenAnswers) {
+          Random rand = new Random();
+       this.attemptId = String.valueOf(rand.nextInt(10000));
+        this.QuizId = QuizId;
+        this.LessonId = LessonId;
+        this.score = score;
+        this.retryCount = retryCount;
+        this.chosenAnswers = chosenAnswers;
+        this.timestamp = LocalDateTime.now();
+    }
+
+    public QuizAttempt() {
+    }
 
     
     public boolean isPassed(Quiz quiz)
