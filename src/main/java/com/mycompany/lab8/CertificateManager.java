@@ -19,110 +19,110 @@ public class CertificateManager {
     private static final String USERS_FILE = "users.json";
     private static ArrayList<Certificate> result = new ArrayList<>();
 
-//    public static boolean isCourseCompleted(Studentt student, String cr) throws IOException {  //logic function 8lt
-//        int totalQuizzes = 0;
-//        int passedQuizzes = 0;
-//        ArrayList<Course> courses = JsonDataBaseManager.getAllCourses1();
-//        System.out.println(courses.size());
-//        Course course = null;
-//        for (Course c : courses) {
-//            if (c.getCourseId().equals(cr)) {
-//                course = c;
-//                break;
-//            }
-//        }
-//        if (course != null) {
-//            System.out.println("!!");
-//            for (Lesson lesson : course.getLessons()) {
-//                Quiz quiz = lesson.getQuiz();
-//                if (quiz == null) {
-//                    continue;
-//                }
-//
-//                totalQuizzes++;
-//                
-//                ArrayList<QuizAttempt> attempts = student.getAttemptsForQuiz(quiz.getQuizId());
-//                boolean passed = false;
-//
-//                for (QuizAttempt attempt : attempts) {
-//                    if (attempt.isPassed(quiz)) {
-//                        passed = true;
-//                        break;
-//                    }
-//                }
-//
-//                if (passed) {
-//                    passedQuizzes++;
-//                }
-//            }
-//        }
-//        System.out.println(totalQuizzes == passedQuizzes);
-//        //return totalQuizzes == passedQuizzes;
-//        return true;
-//    }
-    public static boolean isCourseCompleted(Studentt student, String courseId) throws IOException {
-
-        // Load all courses
+    public static boolean isCourseCompleted(Studentt student, String cr) throws IOException {  //logic function 8lt
+        int totalQuizzes = 0;
+        int passedQuizzes = 0;
         ArrayList<Course> courses = JsonDataBaseManager.getAllCourses1();
-
+        System.out.println(courses.size());
         Course course = null;
         for (Course c : courses) {
-            if (c.getCourseId().equals(courseId)) {
+            if (c.getCourseId().equals(cr)) {
                 course = c;
                 break;
             }
         }
+        if (course != null) {
+            System.out.println("!!");
+            for (Lesson lesson : course.getLessons()) {
+                Quiz quiz = lesson.getQuiz();
+                if (quiz == null) {
+                    continue;
+                }
 
-        if (course == null) {
-            System.out.println("Course not found!");
-            return false;
-        }
-        System.out.println(course.getCourseId());
+                totalQuizzes++;
+                
+                ArrayList<QuizAttempt> attempts = student.getAttemptsForQuiz(quiz.getQuizId());
+                boolean passed = false;
 
-        int totalQuizzes = 0;
-        int passedQuizzes = 0;
+                for (QuizAttempt attempt : attempts) {
+                    if (attempt.isPassed(quiz)) {
+                        passed = true;
+                        break;
+                    }
+                }
 
-        for (Lesson lesson : course.getLessons()) {
-            Quiz quiz = lesson.getQuiz();
-            if (quiz == null) {
-                continue;
-            }
-
-            totalQuizzes++;
-            ArrayList<QuizAttempt> attempts = student.getAttemptsForQuiz(quiz.getQuizId());
-            System.out.println(attempts.size());
-            if (attempts.isEmpty()) {
-                attempts = new ArrayList<>();
-            }
-
-            boolean passed = false;
-            for (QuizAttempt attempt : attempts) {
-                System.out.println(attempt.getAttemptId());
-                if (attempt.isPassed(quiz)) {
-                    passed = true;
-                    break;
+                if (passed) {
+                    passedQuizzes++;
                 }
             }
-
-            if (passed) {
-                passedQuizzes++;
-            }
         }
-        if (totalQuizzes == 0) {
-            return false;
-        }
-        if (totalQuizzes == passedQuizzes) {
-            System.out.println("true");
-            System.out.println(totalQuizzes);
-            System.out.println(passedQuizzes);
-            return true;
-        } else {
-            System.out.println("false");
-            System.out.println(totalQuizzes);
-            System.out.println(passedQuizzes);
-            return false;
-        }
-    }
+        System.out.println(totalQuizzes == passedQuizzes);
+        //return totalQuizzes == passedQuizzes;
+        return true;
+  }
+//    public static boolean isCourseCompleted(Studentt student, String courseId) throws IOException {
+//
+//        // Load all courses
+//        ArrayList<Course> courses = JsonDataBaseManager.getAllCourses1();
+//
+//        Course course = null;
+//        for (Course c : courses) {
+//            if (c.getCourseId().equals(courseId)) {
+//                course = c;
+//                break;
+//            }
+//        }
+//
+//        if (course == null) {
+//            System.out.println("Course not found!");
+//            return false;
+//        }
+//        System.out.println(course.getCourseId());
+//
+//        int totalQuizzes = 0;
+//        int passedQuizzes = 0;
+//
+//        for (Lesson lesson : course.getLessons()) {
+//            Quiz quiz = lesson.getQuiz();
+//            if (quiz == null) {
+//                continue;
+//            }
+//
+//            totalQuizzes++;
+//            ArrayList<QuizAttempt> attempts = student.getAttemptsForQuiz(quiz.getQuizId());
+//            System.out.println(attempts.size());
+//            if (attempts.isEmpty()) {
+//                attempts = new ArrayList<>();
+//            }
+//
+//            boolean passed = false;
+//            for (QuizAttempt attempt : attempts) {
+//                System.out.println(attempt.getAttemptId());
+//                if (attempt.isPassed(quiz)) {
+//                    passed = true;
+//                    break;
+//                }
+//            }
+//
+//            if (passed) {
+//                passedQuizzes++;
+//            }
+//        }
+//        if (totalQuizzes == 0) {
+//            return false;
+//        }
+//        if (totalQuizzes == passedQuizzes) {
+//            System.out.println("true");
+//            System.out.println(totalQuizzes);
+//            System.out.println(passedQuizzes);
+//            return true;
+//        } else {
+//            System.out.println("false");
+//            System.out.println(totalQuizzes);
+//            System.out.println(passedQuizzes);
+//            return false;
+//        }
+//    }
 
     public static Certificate generateCertificate(Studentt student, String course) throws IOException {
         System.out.println(student);

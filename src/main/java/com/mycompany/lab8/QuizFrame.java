@@ -219,14 +219,24 @@ public class QuizFrame extends javax.swing.JFrame {
 
                 try {
                     currentStudent.addQuizAttempt(new QuizAttempt(this.quiz.getQuizId(),score));
-                    Certificate c = CertificateManager.generateCertificate(currentStudent, currentCourse);
-                    if (c != null) {
-                        JOptionPane.showMessageDialog(this,
-                                "Congratulations! Certificate ID: " + c.getCertificateID());
+                    System.out.println("TESSEETTT "+ score);
+                    System.out.println("TESSEETTT "+ quiz.getPassingScore());
+
+                    if (score >= quiz.getPassingScore()) {
+                        Certificate c = CertificateManager.generateCertificate(currentStudent, currentCourse);
+
+                        if (c != null) {
+                            JOptionPane.showMessageDialog(this,
+                                    "Congratulations! Certificate ID: " + c.getCertificateID());
+                        } else {
+                            JOptionPane.showMessageDialog(this,
+                                    "Course not completed or certificate conditions not satisfied. No certificate generated.");
+                        }
                     } else {
-                        JOptionPane.showMessageDialog(this,
-                                "Course not completed or certificate conditions not satisfied. No certificate generated.");
+                           JOptionPane.showMessageDialog(this,
+                                    "Failed!");
                     }
+
                 } catch (IOException ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(this, "Error generating certificate: " + ex.getMessage());

@@ -74,7 +74,7 @@ private void loadCertificates() {
 
             for (Certificate c : certs) {
                 certificatesModel.addRow(new Object[]{
-                    c.getStudentID(),
+                    studentToUse.getUserId(),
                     c.getCertificateID(),
                     c.getCourseID(),
                     c.getIssueDate() != null ? c.getIssueDate().toString() : "N/A"

@@ -339,7 +339,9 @@ public class JsonDataBaseManager {
         }
 
         Quiz quiz = new Quiz(quizObj.getString("lessonId"), new ArrayList<Question>());
-
+        if (quizObj.has("passingScore")) {
+                quiz.setPassingScore(quizObj.getInt("passingScore"));
+        }
         // Load questions
         if (quizObj.has("questions")) {
             JSONArray questionsArray = quizObj.getJSONArray("questions");
