@@ -351,20 +351,12 @@ public static ArrayList<Course> getAllCourses1() throws IOException {
                 lessonObj.getString("title"), 
                 lessonObj.getString("content")
             );
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-=======
->>>>>>> Stashed changes
+
              if (lessonObj.has("quiz")) {
                 JSONObject quizObj = lessonObj.getJSONObject("quiz");
                 lesson.setQuiz(loadQuizFromJson(quizObj));
             }
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-            
+
             lessons.add(lesson);
         }
          ArrayList<ApprovalAction> approvalHistory = new ArrayList<>();

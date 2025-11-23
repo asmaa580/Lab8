@@ -13,6 +13,7 @@ import java.util.HashMap;
 public class Studentt extends User {
     private ArrayList<String> enrolledCourses;
     private HashMap<String, ArrayList<String>> progress; // courseId -> list of completed lessonIds
+    private HashMap<String, ArrayList<QuizAttempt>> quizAttempts;
     
 
     public Studentt(String username, String email, String passwordHash) {
@@ -20,6 +21,13 @@ public class Studentt extends User {
         enrolledCourses = new ArrayList<>();
         progress = new HashMap<>();
     }
+    
+    public void addQuizAttempt(QuizAttempt attempt) {
+        
+    ArrayList<QuizAttempt> attempts = quizAttempts.getOrDefault(attempt.getQuizId(), new ArrayList<>());
+    attempts.add(attempt);
+    quizAttempts.put(attempt.getQuizId(), attempts);
+}
 
     @Override
     public String getRole() { return "Student"; }
@@ -27,18 +35,6 @@ public class Studentt extends User {
     public ArrayList<String> getEnrolledCourses() { return enrolledCourses; }
     public HashMap<String, ArrayList<String>> getProgress() { return progress; }
 
-    public void enrollCourse(String courseId) {
-        if (!enrolledCourses.contains(courseId)) {
-            enrolledCourses.add(courseId);
-            progress.put(courseId, new ArrayList<>());
-        }
-    }
-
-    public void completeLesson(String courseId, String lessonId) {
-        if (progress.containsKey(courseId)) {
-            ArrayList<String> completed = progress.get(courseId);
-            if (!completed.contains(lessonId)) completed.add(lessonId);
-        }
-    }
+     
 }
 

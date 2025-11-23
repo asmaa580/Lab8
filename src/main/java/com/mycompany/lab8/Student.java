@@ -30,15 +30,9 @@ public class Student extends javax.swing.JFrame {
         initComponents();
         try{JsonDataBaseManager dbm=new JsonDataBaseManager();
         ArrayList <Course> allCourses = new ArrayList<>();
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
+
         allCourses=dbm.loadapprovedcourses();
-=======
-        allCourses=JsonDataBaseManager.getAllCourses1();
->>>>>>> Stashed changes
-=======
-        allCourses=JsonDataBaseManager.getAllCourses1();
->>>>>>> Stashed changes
+
         DefaultTableModel coursesModel = new DefaultTableModel();
         coursesModel.addColumn("Course ID");
         coursesModel.addColumn("Course Name");

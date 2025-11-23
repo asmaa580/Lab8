@@ -30,10 +30,10 @@ public class Question {
     
     
     
-    /*public boolean isCorrectAnswer(String answer)
+    public boolean isCorrectAnswer(int index)
     {
-        return answer.equals(correctAnswer);
-    }*/
+        return index==correctAnswerIndex;
+    }
 
     public String getQuestionId() {
         return questionId;

@@ -1,3 +1,4 @@
+com\mycompany\lab8\QuizAttempt.class
 com\mycompany\lab8\Instructor1.class
 com\mycompany\lab8\Instructor1$8.class
 com\mycompany\lab8\Review.class
@@ -19,7 +20,9 @@ com\mycompany\lab8\Instructor1$9.class
 com\mycompany\lab8\Question.class
 com\mycompany\lab8\QuizFrame$3.class
 com\mycompany\lab8\SignUp1$2.class
+com\mycompany\lab8\CertificateManager.class
 com\mycompany\lab8\Student$1.class
+com\mycompany\lab8\Certificate.class
 com\mycompany\lab8\User.class
 com\mycompany\lab8\Student$5.class
 com\mycompany\lab8\Instructor1$6.class
@@ -53,6 +56,7 @@ com\mycompany\lab8\QuizBuilderFrame$2.class
 com\mycompany\lab8\Instructor1$4.class
 com\mycompany\lab8\Admin$4.class
 com\mycompany\lab8\Review$3.class
+com\mycompany\lab8\CertificateFrame.class
 com\mycompany\lab8\Studentt.class
 com\mycompany\lab8\Instructor1$11.class
 com\mycompany\lab8\Instructor1$1.class
