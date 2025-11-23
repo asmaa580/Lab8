@@ -3,6 +3,7 @@ package com.mycompany.lab8;
 
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 
 
 
@@ -187,22 +188,29 @@ QuizFrame(Quiz quiz)
         }
         else
         {
-            int y=questions.get(0).getCorrectAnswerIndex()+1;
+            int y=(questions.get(currentIndex).getCorrectAnswerIndex())+1;
             feedback.setText("Wrong answer, the correct answer is option"+y);
         }
-        if(questions.size()-currentIndex==1)
+        if(currentIndex == questions.size() - 1)
         {
             next.setText("Submit");
         }
-        if(currentIndex>=questions.size())
-        {
-            scoreLabel.setText("Your Score: " + score + "/" + questions.size());
-            hideOptions(); 
-            next.setEnabled(false); 
-            return;
-        }
+        if(currentIndex == questions.size() - 1) {
+              Timer timer = new Timer(1000,e-> 
+              {scoreLabel.setText("Your Score: " + score + "/" + questions.size());
+                hideOptions();
+                next.setEnabled(false);});
+                timer.setRepeats(false);
+                timer.start();
+        
+    } else {
         currentIndex++;
-        showQuestion();
+        if(currentIndex == questions.size() - 1) {
+            next.setText("Submit");
+        }
+        Timer timer = new Timer(1000, e -> showQuestion());
+    timer.setRepeats(false);
+    timer.start();}
     }//GEN-LAST:event_nextActionPerformed
 private void hideOptions() {
     option1.setVisible(false);

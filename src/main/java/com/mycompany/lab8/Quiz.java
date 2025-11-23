@@ -28,8 +28,6 @@ public class Quiz {
     public Quiz(){
         questions=new ArrayList<>();
     }
-    
-    
     public int getTotalPoints()
     {
         return questions.size();
