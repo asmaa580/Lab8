@@ -3,10 +3,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.mycompany.lab8;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 import java.util.Map;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -16,15 +21,44 @@ import org.json.JSONObject;
  */
 public class Student extends javax.swing.JFrame {
      private String id;
-     
+     private Studentt student;
      
        public Student()
        {};
-   
+  
+  private void loadCertificates() {
+    try {
+        Studentt student = this.student; 
+
+        ArrayList<Certificate> certs = CertificateManager.getCertificates(student);
+        
+        DefaultTableModel certificatesModel = new DefaultTableModel();
+        certificatesModel.addColumn("student Id");
+        certificatesModel.addColumn("Certificate ID");
+        certificatesModel.addColumn("Course ID");
+        certificatesModel.addColumn("Issue Date");
+        
+        for (Certificate c : certs) {
+            certificatesModel.addRow(new Object[]{
+                c.getCertificateID(),
+                c.getCourseID(),
+                c.getIssueDate().toString()
+            });
+        }
+        certificatesTable.setModel(certificatesModel);
+
+    } catch (IOException ex) {
+        JOptionPane.showMessageDialog(this, "Error loading certificates: " + ex.getMessage());
+    }
+}
+
+
+
 
     /**
      * Creates new form Student
      */
+      
     public Student(String id) {
          this.id=id;
         initComponents();
@@ -80,9 +114,18 @@ public class Student extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         jButton4 = new javax.swing.JButton();
         content = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        certificatesTable = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -109,7 +152,7 @@ public class Student extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 712, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(180, 180, 180)
@@ -123,7 +166,7 @@ public class Student extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(31, 31, 31)
                 .addComponent(enroll)
-                .addContainerGap(160, Short.MAX_VALUE))
+                .addContainerGap(159, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Browse available courses", jPanel1);
@@ -180,7 +223,7 @@ public class Student extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(loadBtn)
                     .addComponent(loadBtn1))
-                .addContainerGap(132, Short.MAX_VALUE))
+                .addContainerGap(131, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Enrolled courses", jPanel2);
@@ -227,7 +270,7 @@ public class Student extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(130, 130, 130)
                         .addComponent(jButton3)))
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(260, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -237,7 +280,7 @@ public class Student extends javax.swing.JFrame {
                 .addComponent(jButton2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton3)
-                .addGap(0, 122, Short.MAX_VALUE))
+                .addGap(0, 120, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Lessons", jPanel3);
@@ -263,7 +306,7 @@ public class Student extends javax.swing.JFrame {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(184, 184, 184)
                         .addComponent(jButton4)))
-                .addContainerGap(208, Short.MAX_VALUE))
+                .addContainerGap(429, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -272,10 +315,42 @@ public class Student extends javax.swing.JFrame {
                 .addComponent(content)
                 .addGap(46, 46, 46)
                 .addComponent(jButton4)
-                .addGap(0, 197, Short.MAX_VALUE))
+                .addGap(0, 194, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Content", jPanel4);
+
+        certificatesTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane4.setViewportView(certificatesTable);
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(118, 118, 118)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(148, Short.MAX_VALUE))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Certificates Earned", jPanel5);
 
         jButton1.setText("log out");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -284,21 +359,36 @@ public class Student extends javax.swing.JFrame {
             }
         });
 
+        jButton5.setText("Download Certificate");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
             .addGroup(layout.createSequentialGroup()
                 .addGap(188, 188, 188)
                 .addComponent(jButton1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 718, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton5)
+                .addGap(120, 120, 120))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                .addGap(61, 61, 61)
+                .addComponent(jButton5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addContainerGap())
         );
@@ -533,6 +623,51 @@ public class Student extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        loadCertificates();
+    }//GEN-LAST:event_formWindowOpened
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+    int selectedRow = certificatesTable.getSelectedRow();
+
+    if (selectedRow == -1) {
+        JOptionPane.showMessageDialog(this, "Please select a certificate first.");
+        return;
+    }
+
+    String certID = certificatesTable.getValueAt(selectedRow, 0).toString();
+    String courseID = certificatesTable.getValueAt(selectedRow, 1).toString();
+    String date = certificatesTable.getValueAt(selectedRow, 2).toString();
+    String content = "=== COURSE COMPLETION CERTIFICATE ===\n\n"
+                    + "Certificate ID: " + certID + "\n"
+                    + "Course ID: " + courseID + "\n"
+                    + "Issued On: " + date + "\n\n"
+                    + "Congratulations! You have successfully completed the course.";
+
+    try {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setSelectedFile(new File("Certificate_" + certID + ".txt"));
+
+        int result = fileChooser.showSaveDialog(this);
+
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+
+            FileWriter writer = new FileWriter(file);
+            writer.write(content);
+            writer.close();
+
+            JOptionPane.showMessageDialog(this, "Certificate downloaded successfully!");
+        }
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error downloading certificate: " + e.getMessage());
+    }
+
+    }//GEN-LAST:event_jButton5ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -569,19 +704,23 @@ public class Student extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable certificatesTable;
     private javax.swing.JLabel content;
     private javax.swing.JButton enroll;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable lessonsTabel;

@@ -20,6 +20,12 @@ public class Studentt extends User {
         enrolledCourses = new ArrayList<>();
         progress = new HashMap<>();
     }
+    public Studentt(String id) {
+    super("", "", ""); 
+    super.setUserId(id);
+    enrolledCourses = new ArrayList<>();
+    progress = new HashMap<>();
+}
 
     @Override
     public String getRole() { return "Student"; }

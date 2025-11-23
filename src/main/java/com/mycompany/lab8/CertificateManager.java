@@ -18,9 +18,6 @@ public class CertificateManager {
 
     private static final String USERS_FILE = "users.json";
 
-    /**
-     * Check if a student passed ALL quizzes of a course
-     */
     /*public static boolean isCourseCompleted(Studentt student, Course course) {
 
         int totalQuizzes = course.getLessons().size();
@@ -119,4 +116,12 @@ public class CertificateManager {
 
         return result;
     }
+    /*public static ArrayList<Certificate> getCertificates(String studentID) throws IOException {
+    Studentt student = new Studentt("dummy", "dummy", "dummy") {
+        @Override
+        public String getUserId() { return studentID; }
+    };
+    return getCertificates(student);
+}
+*/
 }
