@@ -93,7 +93,7 @@ private void loadCertificates() {
         try{JsonDataBaseManager dbm=new JsonDataBaseManager();
         ArrayList <Course> allCourses = new ArrayList<>();
 
-        allCourses=dbm.loadapprovedcourses();
+        allCourses=dbm.loadapprovedcourses("APPROVED");
 
         DefaultTableModel coursesModel = new DefaultTableModel();
         coursesModel.addColumn("Course ID");

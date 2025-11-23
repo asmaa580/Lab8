@@ -41,7 +41,7 @@ public class JsonDataBaseManager {
     }
 
     // ---------------- Users ----------------
-    public static ArrayList<Course> loadpendingcourses()throws IOException
+    /*public static ArrayList<Course> loadpendingcourses()throws IOException
     {
      ArrayList<Course> pendingCourses=new ArrayList<>();
      JSONArray coursesArray = loadJson(COURSES_FILE);
@@ -86,15 +86,17 @@ if (obj.has("lessons")) {
                 );
                 lesson.addQuestion(question);
             }
-        }*/
+        }
         lessons.add(lesson);}
            }          
             Course course = new Course(courseId, title, description, instructorId, students, lessons,"PENDING");
             pendingCourses.add(course);
         }}
         return pendingCourses;
-     }
-    public static ArrayList<Course> loadapprovedcourses()throws IOException
+     }*/
+    
+    
+    public static ArrayList<Course> loadapprovedcourses(String s)throws IOException
     {
      ArrayList<Course> approvedCourses=new ArrayList<>();
      JSONArray coursesArray = loadJson(COURSES_FILE);
@@ -103,7 +105,7 @@ if (obj.has("lessons")) {
             JSONObject obj = coursesArray.getJSONObject(i);
             String status = obj.getString("approval status");
 
-            if ("APPROVED".equalsIgnoreCase(status)) {        
+            if (s.equalsIgnoreCase(status)) {        
             String courseId = obj.getString("courseId");
             String title = obj.getString("title");
             String description = obj.optString("description", "");
@@ -142,7 +144,7 @@ if (obj.has("lessons")) {
         }*/
         lessons.add(lesson);}
            }          
-            Course course = new Course(courseId, title, description, instructorId, students, lessons,"PENDING");
+            Course course = new Course(courseId, title, description, instructorId, students, lessons,s);
             approvedCourses.add(course);
         }}
         return approvedCourses;

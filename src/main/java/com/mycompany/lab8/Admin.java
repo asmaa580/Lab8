@@ -42,7 +42,7 @@ public class Admin extends javax.swing.JFrame {
     jTable1.setModel(new DefaultTableModel(
     model.getDataVector(),
     new Vector<>(Arrays.asList("Course Id", "Title", "Instructor Id", "Status"))
-) 
+      ) 
 
 {
     @Override
@@ -54,6 +54,7 @@ public class Admin extends javax.swing.JFrame {
     loadAllCoursesIntoTable(db);
 
     }
+    
     private void loadAllCoursesIntoTable(JsonDataBaseManager db) {
     DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
     model.setRowCount(0); // clear old rows
@@ -81,7 +82,7 @@ public class Admin extends javax.swing.JFrame {
 
     try
     {
-    ArrayList<Course> pendingCourses = db.loadpendingcourses();
+    ArrayList<Course> pendingCourses = db.loadapprovedcourses("PENDING");
 
     for (Course c : pendingCourses) {
         model.addRow(new Object[]{
@@ -118,19 +119,7 @@ public class Admin extends javax.swing.JFrame {
     }
 }
 
-private void refreshTable(ArrayList<Course> courses) {
-    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-    model.setRowCount(0);
 
-    for (Course c : courses) {
-        model.addRow(new Object[]{
-            c.getCourseId(),
-            c.getTitle(),
-            c.getInstructorId(),
-             c.getApproval_status()
-        });
-    }
-}
 
     /**
      * This method is called from within the constructor to initialize the form.
