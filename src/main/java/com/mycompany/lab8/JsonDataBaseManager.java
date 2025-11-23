@@ -296,6 +296,32 @@ private static String getCourseTitleById(String courseId) throws IOException {
     return null; // Course not found
 } 
 
+private static Quiz loadQuizFromJson(JSONObject quizObj) {
+    if (quizObj == null) return null;
+    
+    Quiz quiz=new Quiz(quizObj.getString("lessonId"),new ArrayList<Question>());
+    
+    // Load questions
+    if (quizObj.has("questions")) {
+        JSONArray questionsArray = quizObj.getJSONArray("questions");
+        for (int i = 0; i < questionsArray.length(); i++) {
+            JSONObject qObj = questionsArray.getJSONObject(i);
+            
+            String questionText = qObj.getString("text");
+            JSONArray optionsArray = qObj.getJSONArray("options");
+            ArrayList<String> options = new ArrayList<>();
+            for (int j = 0; j < optionsArray.length(); j++) {
+                options.add(optionsArray.getString(j));
+            }
+            int correctIndex = qObj.getInt("correctIndex");
+            
+            Question question = new Question(questionText, options, correctIndex);
+            quiz.addQuestion(question);
+        }
+    }
+    
+    return quiz;
+}
 
 public static ArrayList<Course> getAllCourses1() throws IOException {
     JSONArray coursesArray = loadJson(COURSES_FILE);
@@ -317,6 +343,7 @@ public static ArrayList<Course> getAllCourses1() throws IOException {
         // Lessons
         JSONArray lessonsArray = obj.has("lessons") ? obj.getJSONArray("lessons") : new JSONArray();
         ArrayList<Lesson> lessons = new ArrayList<>();
+        
         for (int j = 0; j < lessonsArray.length(); j++) {
             JSONObject lessonObj = lessonsArray.getJSONObject(j);
             Lesson lesson = new Lesson(
@@ -324,7 +351,12 @@ public static ArrayList<Course> getAllCourses1() throws IOException {
                 lessonObj.getString("title"), 
                 lessonObj.getString("content")
             );
-            
+
+             if (lessonObj.has("quiz")) {
+                JSONObject quizObj = lessonObj.getJSONObject("quiz");
+                lesson.setQuiz(loadQuizFromJson(quizObj));
+            }
+
             lessons.add(lesson);
         }
          ArrayList<ApprovalAction> approvalHistory = new ArrayList<>();
@@ -474,51 +506,7 @@ public static ArrayList<Course> getEnrolledCourses(String studentId) throws IOEx
     return result;
 }
 
- public static void updateStudent(Studentt updatedStudent) throws IOException {
-    // Read all users from the JSON file
-    JSONArray allUsers = loadJson("users.json");
-    
-    // Find and update the specific student
-    for (int i = 0; i < allUsers.length(); i++) {
-        JSONObject user = allUsers.getJSONObject(i);
-        if (user.getString("userId").equals(updatedStudent.getUserId())) {
-            // Create updated JSON object directly
-            JSONObject updatedUser = new JSONObject();
-            updatedUser.put("userId", updatedStudent.getUserId());
-            updatedUser.put("username", updatedStudent.getUsername());
-            updatedUser.put("email", updatedStudent.getEmail());
-            updatedUser.put("passwordHash", updatedStudent.getPasswordHash());
-            updatedUser.put("role", "student");
-            
-            // Add enrolled courses
-            JSONArray enrolledCourses = new JSONArray();
-            for (String courseId : updatedStudent.getEnrolledCourses()) {
-                enrolledCourses.put(courseId);
-            }
-            updatedUser.put("enrolledCourses", enrolledCourses);
-            
-            // Add progress data
-            JSONObject progressJson = new JSONObject();
-            HashMap<String, ArrayList<String>> progress = updatedStudent.getProgress();
-            for (Map.Entry<String, ArrayList<String>> entry : progress.entrySet()) {
-                JSONArray lessonsArray = new JSONArray();
-                for (String lessonId : entry.getValue()) {
-                    lessonsArray.put(lessonId);
-                }
-                progressJson.put(entry.getKey(), lessonsArray);
-            }
-            updatedUser.put("progress", progressJson);
-            
-            // Replace the old data
-            allUsers.put(i, updatedUser);
-            break;
-        }
-    }
-    
-    // Save the updated array back to the file
-    saveJson("users.json", allUsers);
-}
-
+ 
  public static void updateLessonInCourse(Lesson updatedLesson) throws IOException {
 JSONArray coursesArray = loadJson(COURSES_FILE);
 
@@ -555,7 +543,12 @@ qList.put(qJson);
 quizObj.put("questions", qList);
 lessonObj.put("quiz", quizObj);
 }
+updatedLesson.setQuiz(q);
 
+// Save JSON back
+saveJson(COURSES_FILE, coursesArray);
+
+// Return the updated lesson
 // Save back and return immediately
 saveJson(COURSES_FILE, coursesArray);
 return;

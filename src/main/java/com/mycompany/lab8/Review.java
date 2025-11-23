@@ -124,6 +124,7 @@ public class Review extends javax.swing.JDialog {
 
         jLabel1.setText("Write the reason:");
 
+        jButton1.setForeground(new java.awt.Color(0, 204, 51));
         jButton1.setText("Approve");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -131,6 +132,7 @@ public class Review extends javax.swing.JDialog {
             }
         });
 
+        jButton2.setForeground(new java.awt.Color(255, 0, 0));
         jButton2.setText("Reject");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

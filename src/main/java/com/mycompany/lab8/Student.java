@@ -64,7 +64,9 @@ public class Student extends javax.swing.JFrame {
         initComponents();
         try{JsonDataBaseManager dbm=new JsonDataBaseManager();
         ArrayList <Course> allCourses = new ArrayList<>();
+
         allCourses=dbm.loadapprovedcourses();
+
         DefaultTableModel coursesModel = new DefaultTableModel();
         coursesModel.addColumn("Course ID");
         coursesModel.addColumn("Course Name");
@@ -109,7 +111,6 @@ public class Student extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         lessonsTabel = new javax.swing.JTable();
-        jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jButton4 = new javax.swing.JButton();
@@ -241,13 +242,6 @@ public class Student extends javax.swing.JFrame {
         ));
         jScrollPane3.setViewportView(lessonsTabel);
 
-        jButton2.setText("Mark lesson as completed");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
         jButton3.setText("See content of selected lesson");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -265,9 +259,6 @@ public class Student extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(139, 139, 139)
-                        .addComponent(jButton2))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(130, 130, 130)
                         .addComponent(jButton3)))
                 .addContainerGap(260, Short.MAX_VALUE))
@@ -276,9 +267,7 @@ public class Student extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(57, 57, 57)
-                .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(86, 86, 86)
                 .addComponent(jButton3)
                 .addGap(0, 120, Short.MAX_VALUE))
         );
@@ -514,33 +503,6 @@ public class Student extends javax.swing.JFrame {
         
     }//GEN-LAST:event_loadBtn1ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-        int selectedRow=lessonsTabel.getSelectedRow();
-        int selectedrow=studentsTable.getSelectedRow();
-        if(selectedRow==-1)
-        {
-            JOptionPane.showMessageDialog(this,"Please select a lesson to mark as complete");
-            return;
-        }
-        Object lessonId=lessonsTabel.getValueAt(selectedRow,0);
-        Object courseId=studentsTable.getValueAt(selectedrow,0);
-        try{
-        ArrayList<Studentt> students=JsonDataBaseManager.getStudentsForCourse((String)courseId);
-        for(Studentt s:students)
-            if(s.getUserId().equals(id)){
-        s.completeLesson((String)courseId,(String)lessonId);
-        JsonDataBaseManager.updateStudent(s);
-        JOptionPane.showMessageDialog(this,"Lesson completed succesfully");
-        break;
-        }}
-        catch(Exception e)
-        {
-            JOptionPane.showMessageDialog(this,"No such course");
-        }
-       
-    }//GEN-LAST:event_jButton2ActionPerformed
-
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         int selectedRow=lessonsTabel.getSelectedRow();
@@ -562,7 +524,7 @@ public class Student extends javax.swing.JFrame {
                ArrayList<Lesson> lessons= c.getLessons();
                for(Lesson l:lessons)
                {
-                   if(l.getLessonId().equals(lessonId))
+                   if(l.getLessonId().equals((String)lessonId))
                    {
                       
                         jTabbedPane1.setSelectedIndex(3);
@@ -582,7 +544,7 @@ public class Student extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        JsonDataBaseManager dbm=new JsonDataBaseManager();
+        
         if(content.getText().equals("no content"))
         {
              JOptionPane.showMessageDialog(this,"Please select a lesson that has content");
@@ -590,26 +552,41 @@ public class Student extends javax.swing.JFrame {
         }
         else
         {
+           
             int selectedRow=lessonsTabel.getSelectedRow();
              int selectedrow=studentsTable.getSelectedRow();
+             
+    if (selectedRow == -1 || selectedrow == -1) {
+    JOptionPane.showMessageDialog(this, "Please select a course and a lesson");
+    return;
+}
     
-        Object courseId=studentsTable.getValueAt(selectedrow, 0);
-        Object lessonId=lessonsTabel.getValueAt(selectedRow, 0);
+        Object courseId1=studentsTable.getValueAt(selectedrow, 0);
+        String courseId = courseId1.toString().trim();
+        
+        Object lessonId1=lessonsTabel.getValueAt(selectedRow, 0);
+        String lessonId = lessonId1.toString().trim();
+        
+        
         try{
+           
         ArrayList<Course> courses=JsonDataBaseManager.getEnrolledCourses(id);
         for(Course c:courses)
-            if(c.getCourseId().equals((String)courseId))
+            if(c.getCourseId().trim().equals(courseId))
             {
-                dbm.updateCourse(c);
                ArrayList<Lesson> lessons= c.getLessons();
                for(Lesson l:lessons)
-                   if(l.getLessonId().equals(lessonId))
+                   if(l.getLessonId().trim().equals(lessonId))
                    {
-                      
-                         QuizFrame frame=new QuizFrame(l.getQuiz());
+                       
+                       if (l.getQuiz() == null ) {
+            JOptionPane.showMessageDialog(this, "This lesson has no quiz!");
+            return;
+}
+                       QuizFrame frame=new QuizFrame(l.getQuiz());
                             frame.setVisible(true);
                             this.dispose(); 
-                            break; 
+                            return; 
                    }
             }
         }
@@ -708,7 +685,6 @@ public class Student extends javax.swing.JFrame {
     private javax.swing.JLabel content;
     private javax.swing.JButton enroll;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;

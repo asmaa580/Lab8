@@ -534,7 +534,8 @@ new QuizBuilderFrame(lesson).setVisible(true);
                 course.getTitle(),
                 course.getDescription(),
                 course.getCourseId(),
-                course.getApproval_status()
+                course.getApproval_status(),
+                course.getStudents()
             });
             displayedCourses.add(course);
         }}
@@ -572,6 +573,8 @@ new QuizBuilderFrame(lesson).setVisible(true);
             obj.put("courseId", c.getCourseId());
             obj.put("instructorId", c.getInstructorId());
             obj.put("approval status",c.getApproval_status());
+             obj.put("students", c.getStudents());
+
         JSONArray historyArray = new JSONArray();
         for (ApprovalAction action : c.getApprovalHistory()) {
         historyArray.put(action.toJson());
