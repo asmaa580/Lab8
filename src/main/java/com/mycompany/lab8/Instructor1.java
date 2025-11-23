@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import javax.swing.JLabel;
 import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JOptionPane;
@@ -40,14 +41,11 @@ public class Instructor1 extends javax.swing.JFrame {
     public Instructor1(User u) {
         initComponents();
         this.cu=u;
-        int selectedIndex = insightsPanel.getSelectedIndex();
-    if (selectedIndex == 3) { 
         try {
-            showInstructorInsights(u.getUserId());
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
+showInstructorInsights(u.getUserId());
+} catch (IOException ex) {
+ex.printStackTrace();
+}
         
  };
 
@@ -69,19 +67,87 @@ public class Instructor1 extends javax.swing.JFrame {
  });
 
     }      
-    
     public void showInstructorInsights(String instructorId) throws IOException {
-    // --- 1. Create datasets ---
     DefaultCategoryDataset scoreDataset = new DefaultCategoryDataset();
     DefaultCategoryDataset completionDataset = new DefaultCategoryDataset();
 
-    // --- 2. Load courses.json ---
     JSONArray courses = JsonDataBaseManager.loadJson("courses.json");
+
+    boolean hasData = false;
+
+    for (int i = 0; i < courses.length(); i++) {
+
+        JSONObject course = courses.getJSONObject(i);
+
+        if (!course.getString("instructorId").equals(instructorId))
+            continue;
+
+        String courseTitle = course.getString("title");
+        JSONArray lessons = course.getJSONArray("lessons");
+
+        for (int j = 0; j < lessons.length(); j++) {
+
+            JSONObject lesson = lessons.getJSONObject(j);
+
+            // Skip lessons that DO NOT have a quiz
+            if (!lesson.has("quiz"))
+                continue;
+
+            if (!lesson.has("quizStats"))
+                continue; // no stats yet
+
+            JSONObject stats = lesson.getJSONObject("quizStats");
+
+            double avgScore = stats.getDouble("averageScore");
+            double completion = stats.getDouble("completionRate") * 100;
+
+            // Label format: LessonTitle - CourseTitle
+            String label = lesson.getString("title") + " - " + courseTitle;
+
+            scoreDataset.addValue(avgScore, "Quiz Score", label);
+            completionDataset.addValue(completion, "Completion %", label);
+
+            hasData = true;
+        }
+    }
+
+    jPanel4.removeAll();
+    jPanel4.setLayout(new BoxLayout(jPanel4, BoxLayout.Y_AXIS));
+
+    if (!hasData) {
+        jPanel4.add(new JLabel("No quiz data available."));
+    } else {
+        JFreeChart scoreChart = ChartFactory.createBarChart(
+                "Average Quiz Scores",
+                "Lesson",
+                "Score",
+                scoreDataset
+        );
+
+        JFreeChart completionChart = ChartFactory.createBarChart(
+                "Lesson Completion %",
+                "Lesson",
+                "Completion %",
+                completionDataset
+        );
+
+        jPanel4.add(new ChartPanel(scoreChart));
+        jPanel4.add(new ChartPanel(completionChart));
+    }
+
+    jPanel4.revalidate();
+    jPanel4.repaint();
+}
+    /*public void showInstructorInsights(String instructorId) throws IOException {
+    DefaultCategoryDataset scoreDataset = new DefaultCategoryDataset();
+    DefaultCategoryDataset completionDataset = new DefaultCategoryDataset();
+    JSONArray courses = JsonDataBaseManager.loadJson("courses.json");
+
+    boolean hasData = false;
 
     for (int i = 0; i < courses.length(); i++) {
         JSONObject course = courses.getJSONObject(i);
         if (course.getString("instructorId").equals(instructorId)) {
-
             JSONArray lessons = course.getJSONArray("lessons");
 
             for (int j = 0; j < lessons.length(); j++) {
@@ -93,29 +159,48 @@ public class Instructor1 extends javax.swing.JFrame {
                     double avgScore = stats.getDouble("averageScore");
                     double completion = stats.getDouble("completionRate") * 100;
 
-                    // --- Add values to datasets ---
+                    
                     scoreDataset.addValue(avgScore, "Quiz Score", lessonTitle);
                     completionDataset.addValue(completion, "Completion %", lessonTitle);
+
+                    hasData = true;
                 }
             }
         }
     }
 
-    // --- 3. Create charts ---
-    JFreeChart scoreChart = ChartFactory.createBarChart(
-            "Average Quiz Scores", "Lesson", "Score", scoreDataset
-    );
-    JFreeChart completionChart = ChartFactory.createBarChart(
-            "Lesson Completion %", "Lesson", "Completion %", completionDataset
-    );
+    // --- 3. Clear old charts / content ---
+    jPanel4.removeAll();
+    jPanel4.setLayout(new BoxLayout(jPanel4, BoxLayout.Y_AXIS));
 
-    // --- 4. Add charts to the Insights panel ---
-    insightsPanel.removeAll(); // clear old charts
-    insightsPanel.setLayout(new BoxLayout(insightsPanel, BoxLayout.Y_AXIS));
-    insightsPanel.add(new ChartPanel(scoreChart));
-    insightsPanel.add(new ChartPanel(completionChart));
-    insightsPanel.revalidate(); // refresh panel
-}
+    if (!hasData) {
+        // No data to show
+        jPanel4.add(new javax.swing.JLabel("No courses or quiz data available yet."));
+    } else {
+        // --- 4. Create charts ---
+        JFreeChart scoreChart = ChartFactory.createBarChart(
+                "Average Quiz Scores", // chart title
+                "Lesson",             // x-axis label
+                "Score",              // y-axis label
+                scoreDataset
+        );
+
+        JFreeChart completionChart = ChartFactory.createBarChart(
+                "Lesson Completion %", 
+                "Lesson", 
+                "Completion %", 
+                completionDataset
+        );
+
+        // --- 5. Add charts to the panel ---
+        jPanel4.add(new ChartPanel(scoreChart));
+        jPanel4.add(new ChartPanel(completionChart));
+    }
+
+    // --- 6. Refresh the panel ---
+    jPanel4.revalidate();
+    jPanel4.repaint();
+}*/
      
     
     private void loadInstructorCourses(){

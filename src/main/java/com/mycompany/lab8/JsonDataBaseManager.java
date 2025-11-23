@@ -727,6 +727,66 @@ public static void addQuizAttempt(String studentId, QuizAttempt attempt, Quiz qu
 }
 
 private static void updateCourseStats(String quizId, String lessonId) throws IOException {
+JSONArray users = loadJson(USERS_FILE);
+
+    int totalScore = 0;
+    int attemptCount = 0;
+    int passedCount = 0;
+
+    for (int i = 0; i < users.length(); i++) {
+        JSONObject user = users.getJSONObject(i);
+
+        if (user.has("quizAttempts")) {
+            JSONObject attempts = user.getJSONObject("quizAttempts");
+
+            if (attempts.has(quizId)) {
+                JSONArray quizAttempts = attempts.getJSONArray(quizId);
+
+                for (int j = 0; j < quizAttempts.length(); j++) {
+                    JSONObject att = quizAttempts.getJSONObject(j);
+                    totalScore += att.getInt("score");
+                    attemptCount++;
+                    if (att.getBoolean("passed")) {
+                        passedCount++;
+                    }
+                }
+            }
+        }
+    }
+
+    double averageScore = attemptCount > 0 ? (double) totalScore / attemptCount : 0.0;
+    double completionRate = attemptCount > 0 ? (double) passedCount / attemptCount : 0.0;
+
+    // --- 2. Load courses.json ---
+    JSONArray courses = loadJson(COURSES_FILE);
+
+    for (int i = 0; i < courses.length(); i++) {
+
+        JSONObject course = courses.getJSONObject(i);
+        JSONArray lessons = course.getJSONArray("lessons");
+
+        for (int j = 0; j < lessons.length(); j++) {
+            JSONObject lesson = lessons.getJSONObject(j);
+
+            // Only update if:
+            // 1) lessonId matches
+            // 2) lesson actually has a quiz object
+            if (lesson.getString("lessonId").equals(lessonId) && lesson.has("quiz")) {
+
+                JSONObject stats = new JSONObject();
+                stats.put("averageScore", averageScore);
+                stats.put("completionRate", completionRate);
+
+                lesson.put("quizStats", stats);
+                lessons.put(j, lesson);
+                break;
+            }
+        }
+    }
+
+    saveJson(COURSES_FILE, courses);}
+
+/*private static void updateCourseStats(String quizId, String lessonId) throws IOException {
     // --- Step 1: Collect attempts from users.json ---
     JSONArray users = loadJson(USERS_FILE);
 
@@ -781,5 +841,5 @@ private static void updateCourseStats(String quizId, String lessonId) throws IOE
     }
 
     saveJson(COURSES_FILE, courses);
-}
+}*/
 }

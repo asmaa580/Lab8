@@ -2,51 +2,153 @@
     {
         "approval status": "APPROVED",
         "approvalHistory": [{
-            "reason": "good",
-            "adminId": "7419",
+            "reason": "a",
+            "adminId": "9563",
             "action": "APPROVED",
-            "timestamp": "23-11-2025 20:25:33"
+            "timestamp": "23-11-2025 23:34:12"
         }],
-        "description": "c",
-        "students": ["1585"],
-        "title": "c",
-        "courseId": "1229",
-        "instructorId": "8562",
-        "lessons": [{
-            "lessonId": "l",
-            "resources": [],
-            "title": "l",
-            "content": "l"
-        }]
+        "description": "oop",
+        "students": ["3165"],
+        "title": "programming",
+        "courseId": "4733",
+        "instructorId": "2446",
+        "lessons": [
+            {
+                "quiz": {
+                    "quizId": "2981",
+                    "questions": [
+                        {
+                            "options": [
+                                "a",
+                                "b",
+                                "c",
+                                "d"
+                            ],
+                            "text": "q1",
+                            "correctIndex": 0
+                        },
+                        {
+                            "options": [
+                                "a",
+                                "b",
+                                "c",
+                                "d"
+                            ],
+                            "text": "q2",
+                            "correctIndex": 1
+                        }
+                    ],
+                    "lessonId": "1",
+                    "passingScore": 50
+                },
+                "lessonId": "1",
+                "resources": [],
+                "quizStats": {
+                    "completionRate": 1,
+                    "averageScore": 2
+                },
+                "title": "convolution",
+                "content": "graphing"
+            },
+            {
+                "quiz": {
+                    "quizId": "8558",
+                    "questions": [
+                        {
+                            "options": [
+                                "a",
+                                "b",
+                                "c",
+                                "d"
+                            ],
+                            "text": "q1",
+                            "correctIndex": 0
+                        },
+                        {
+                            "options": [
+                                "a",
+                                "b",
+                                "c",
+                                "d"
+                            ],
+                            "text": "q2",
+                            "correctIndex": 0
+                        },
+                        {
+                            "options": [
+                                "a",
+                                "b",
+                                "c",
+                                "d"
+                            ],
+                            "text": "q3",
+                            "correctIndex": 2
+                        }
+                    ],
+                    "lessonId": "2",
+                    "passingScore": 50
+                },
+                "lessonId": "2",
+                "resources": [],
+                "title": "fourir",
+                "content": "trignometric fourir series"
+            }
+        ]
     },
     {
-        "approval status": "PENDING",
-        "approvalHistory": [],
-        "description": "1",
-        "students": [],
-        "title": "c1",
-        "courseId": "4176",
-        "instructorId": "6634",
-        "lessons": [{
-            "lessonId": "11",
-            "resources": [],
-            "title": "12",
-            "content": "1"
-        }]
+        "approval status": "APPROVED",
+        "approvalHistory": [{
+            "reason": "a",
+            "adminId": "9563",
+            "action": "APPROVED",
+            "timestamp": "23-11-2025 23:34:18"
+        }],
+        "description": "calculus",
+        "students": ["9599"],
+        "title": "math",
+        "courseId": "2221",
+        "instructorId": "2446",
+        "lessons": [
+            {
+                "lessonId": "1",
+                "resources": [],
+                "title": "integration",
+                "content": "integration table"
+            },
+            {
+                "lessonId": "2",
+                "resources": [],
+                "title": "differentiation",
+                "content": "diff table"
+            }
+        ]
     },
     {
-        "approval status": "PENDING",
-        "approvalHistory": [],
-        "description": "2",
-        "students": [],
-        "title": "c2",
-        "courseId": "9542",
-        "instructorId": "6634",
-        "lessons": [{
-            "lessonId": "22",
-            "resources": [],
-            "title": "2",
-            "content": "2"
-        }]
+        "approval status": "APPROVED",
+        "approvalHistory": [{
+            "reason": "a",
+            "adminId": "9563",
+            "action": "APPROVED",
+            "timestamp": "23-11-2025 23:34:28"
+        }],
+        "description": "convolution",
+        "students": ["9599"],
+        "title": "signals",
+        "courseId": "9153",
+        "instructorId": "2446",
+        "lessons": [
+            {
+                "lessonId": "1",
+                "resources": [],
+                "title": "convolution",
+                "content": "graphing"
+            },
+            {
+                "lessonId": "2",
+                "resources": [],
+                "title": "fourir",
+                "content": "trignometric fourir series"
+            }
+        ]
     }
 ]
