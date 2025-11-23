@@ -31,7 +31,11 @@ public class Student extends javax.swing.JFrame {
         try{JsonDataBaseManager dbm=new JsonDataBaseManager();
         ArrayList <Course> allCourses = new ArrayList<>();
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         allCourses=dbm.loadapprovedcourses();
+=======
+        allCourses=JsonDataBaseManager.getAllCourses1();
+>>>>>>> Stashed changes
 =======
         allCourses=JsonDataBaseManager.getAllCourses1();
 >>>>>>> Stashed changes
