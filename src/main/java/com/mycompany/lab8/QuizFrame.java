@@ -202,8 +202,10 @@ QuizFrame(Quiz quiz)
                 next.setEnabled(false);});
                 timer.setRepeats(false);
                 timer.start();
+              //  QuizAttempt 
         
-    } else {
+    } 
+        else {
         currentIndex++;
         if(currentIndex == questions.size() - 1) {
             next.setText("Submit");

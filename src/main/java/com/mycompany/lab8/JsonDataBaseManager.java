@@ -687,8 +687,65 @@ public static void addQuizAttempt(String studentId, QuizAttempt attempt, Quiz qu
     saveJson(USERS_FILE, users);
 
     // --- Update courses.json stats ---
-    //updateCourseStats(attempt.getQuizId(), attempt.getLessonId());
+    updateCourseStats(attempt.getQuizId(), attempt.getLessonId());
 }
+private static void updateCourseStats(String quizId, String lessonId) throws IOException {
+    // --- Step 1: Collect attempts from users.json ---
+    JSONArray users = loadJson(USERS_FILE);
+
+    int totalScore = 0;
+    int attemptCount = 0;
+    int passedCount = 0;
+
+    for (int i = 0; i < users.length(); i++) {
+        JSONObject user = users.getJSONObject(i);
+
+        if (user.has("quizAttempts")) {
+            JSONObject quizAttempts = user.getJSONObject("quizAttempts");
+
+            if (quizAttempts.has(quizId)) {
+                JSONArray attempts = quizAttempts.getJSONArray(quizId);
+
+                for (int j = 0; j < attempts.length(); j++) {
+                    JSONObject att = attempts.getJSONObject(j);
+                    totalScore += att.getInt("score");
+                    attemptCount++;
+                    if (att.getBoolean("passed")) {
+                        passedCount++;
+                    }
+                }
+            }
+        }
+    }
+
+    double averageScore = attemptCount > 0 ? (double) totalScore / attemptCount : 0.0;
+    double completionRate = attemptCount > 0 ? (double) passedCount / attemptCount : 0.0;
+
+    // --- Step 2: Update courses.json ---
+    JSONArray courses = loadJson(COURSES_FILE);
+
+    for (int i = 0; i < courses.length(); i++) {
+        JSONObject course = courses.getJSONObject(i);
+        JSONArray lessons = course.getJSONArray("lessons");
+
+        for (int j = 0; j < lessons.length(); j++) {
+            JSONObject lesson = lessons.getJSONObject(j);
+
+            if (lesson.getString("lessonId").equals(lessonId)) {
+                JSONObject stats = new JSONObject();
+                stats.put("averageScore", averageScore);
+                stats.put("completionRate", completionRate);
+
+                lesson.put("quizStats", stats);
+                lessons.put(j, lesson); // replace lesson object
+                break;
+            }
+        }
+    }
+
+    saveJson(COURSES_FILE, courses);
+}
+
 
 
 }

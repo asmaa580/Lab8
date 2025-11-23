@@ -21,6 +21,40 @@
     },
     {
         "role": "Student",
+        "quizAttempts": {
+            "5517": [{
+                "score": 3,
+                "quizId": "5517",
+                "retryCount": 0,
+                "chosenAnswers": [
+                    1,
+                    2,
+                    0,
+                    3,
+                    1
+                ],
+                "lessonId": "lesson1",
+                "passed": false,
+                "attemptId": "att1",
+                "timestamp": "2025-11-23T13:58:16.047193900"
+            }],
+            "7184": [{
+                "score": 3,
+                "quizId": "7184",
+                "retryCount": 0,
+                "chosenAnswers": [
+                    1,
+                    2,
+                    0,
+                    3,
+                    1
+                ],
+                "lessonId": "lesson1",
+                "passed": false,
+                "attemptId": "att1",
+                "timestamp": "2025-11-23T14:11:18.073809"
+            }]
+        },
         "enrolledCourses": [
             "1366",
             "6506",
