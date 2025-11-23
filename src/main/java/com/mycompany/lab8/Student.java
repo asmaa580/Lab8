@@ -10,6 +10,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -85,13 +86,6 @@ private void loadCertificates() {
     }
 }
 
-
-
-
-
-    /**
-     * Creates new form Student
-     */
       
     public Student(String id) {
          this.id=id;
@@ -440,7 +434,9 @@ private void loadCertificates() {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+public void showCoursesTab() {
+    jTabbedPane1.setSelectedIndex(1);
+}
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
        
@@ -526,7 +522,14 @@ private void loadCertificates() {
         }
         try{
         ArrayList<Course> enrolledCourses=JsonDataBaseManager.getEnrolledCourses(id);
+        
         Object courseId = studentsTable.getValueAt(selectedRow, 0);
+        HashMap<String, ArrayList<String>> progress = JsonDataBaseManager.getUserProgress(id);
+        
+         ArrayList<String> completedLessons = progress.containsKey((String)courseId)
+                    ? progress.get((String)courseId)
+                    : new ArrayList<>();
+         
         for(Course c:enrolledCourses)
         {
             if(c.getCourseId().equals(courseId))
@@ -539,13 +542,15 @@ private void loadCertificates() {
         lessonsModel.addColumn("lesson ID");
         lessonsModel.addColumn("lesson title");
         lessonsModel.addColumn("lesson content");
+        lessonsModel.addColumn("Completed");
         lessonsTabel.setModel(lessonsModel);
         
         for (Lesson l : lessons) {
+            boolean isCompleted = completedLessons.contains(l.getLessonId());
     lessonsModel.addRow(new Object[]{
             l.getLessonId(),
             l.getTitle(),
-            l.getContent()
+            l.getContent(), isCompleted ? "Yes" : "No"
            });
         }
              
