@@ -50,7 +50,7 @@ public class Review extends javax.swing.JDialog {
     sb.append("Instructor ID: ").append(c.getInstructorId()).append("\n");
     sb.append("Approval Status: ").append(c.getApproval_status()).append("\n");
 
-    // Approval history
+    
     sb.append("Approval History:\n");
     if (c.getApprovalHistory() != null && !c.getApprovalHistory().isEmpty()) {
         for (ApprovalAction h : c.getApprovalHistory()) {
@@ -63,24 +63,33 @@ public class Review extends javax.swing.JDialog {
         sb.append("  None\n");
     }
 
-    // Students
-    sb.append("Students: ").append(c.getStudents()).append("\n");
+    
+    sb.append("Students:\n");
+   if (c.getStudents() != null && !c.getStudents().isEmpty()) {
+    for (String studentId : c.getStudents()) {
+        sb.append("  - ").append(studentId).append("\n");
+    }
+    } else {
+    sb.append("  None\n");
+        }
 
-    // Lessons
+
+   
     sb.append("Lessons:\n");
     if (c.getLessons() != null && !c.getLessons().isEmpty()) {
         for (Lesson l : c.getLessons()) {
             sb.append("  Lesson ID: ").append(l.getLessonId()).append("\n");
             sb.append("  Title: ").append(l.getTitle()).append("\n");
             sb.append("  Content: ").append(l.getContent()).append("\n");
+            sb.append("  Resources: ").append(l.getResources()).append("\n");
 
-            // Quiz details
+            
             if (l.getQuiz() != null) {
                 sb.append("    Quiz (Passing Score: ").append(l.getQuiz().getPassingScore()).append(")\n");
-                for (Question q : l.getQuiz().getQuestions()) {
-                    sb.append("      Q: ").append(q.getText()).append("\n");
-                    sb.append("      Options: ").append(q.getOptions()).append("\n");
-                   // sb.append("      Correct Index: ").append(q.getCorrectIndex()).append("\n");
+                for (Question q : l.getQuiz().getQuestions()) { 
+                sb.append("      Q: ").append(q.getText()).append("\n");
+                sb.append("      Options: ").append(q.getOptions()).append("\n");
+                sb.append("      Correct Index: ").append(q.getCorrectAnswerIndex()).append("\n");
                 }
             }
             sb.append("\n");
@@ -227,7 +236,6 @@ public class Review extends javax.swing.JDialog {
         return;
     }
     c.approve(cu, reason);
-   // c.addApprovalHistory(new ApprovalAction("APPROVED",cu.getUserId(),reason));
     try {
        
         JsonDataBaseManager db = new JsonDataBaseManager();

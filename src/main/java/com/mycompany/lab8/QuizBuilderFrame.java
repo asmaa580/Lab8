@@ -5,6 +5,7 @@
 package com.mycompany.lab8;
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
+import java.util.Random;
 import javax.swing.JOptionPane;
 /**
  *
@@ -48,8 +49,6 @@ questionsTable.setModel(questionsModel);
         correctComboBox = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
         addQuestionBtn = new javax.swing.JButton();
-        passingScoreSpinner = new javax.swing.JSpinner();
-        jLabel3 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         questionsTable = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
@@ -89,8 +88,6 @@ questionsTable.setModel(questionsModel);
             }
         });
 
-        jLabel3.setText("Passing Score:");
-
         questionsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -128,11 +125,6 @@ questionsTable.setModel(questionsModel);
                     .addGroup(layout.createSequentialGroup()
                         .addGap(26, 26, 26)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(85, 85, 85)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(70, 70, 70)
-                        .addComponent(passingScoreSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(187, 187, 187)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -173,11 +165,7 @@ questionsTable.setModel(questionsModel);
                 .addComponent(addQuestionBtn)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(50, 50, 50)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(passingScoreSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(90, 90, 90)
                 .addComponent(saveQuizBtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                 .addComponent(jButton1)
@@ -223,7 +211,7 @@ correctComboBox.setSelectedIndex(0);
 
     private void saveQuizBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveQuizBtnActionPerformed
         // TODO add your handling code here:
-         tempQuiz.setPassingScore((Integer) passingScoreSpinner.getValue());
+        
 
 if (tempQuiz.getQuestions().isEmpty()) {
 JOptionPane.showMessageDialog(this, "Add at least one question before saving!");
@@ -289,7 +277,6 @@ e.printStackTrace();
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
@@ -297,7 +284,6 @@ e.printStackTrace();
     private javax.swing.JTextField option2Field;
     private javax.swing.JTextField option3Field;
     private javax.swing.JTextField option4Field;
-    private javax.swing.JSpinner passingScoreSpinner;
     private javax.swing.JTextField questionTextField;
     private javax.swing.JTable questionsTable;
     private javax.swing.JButton saveQuizBtn;

@@ -6,14 +6,22 @@ package com.mycompany.lab8;
 
 import com.mycompany.lab8.login;
 import java.nio.file.Files;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import javax.swing.JLabel;
 import java.util.List;
+import javax.swing.BoxLayout;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import javax.swing.JTable; 
+import javax.swing.JTable;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.category.DefaultCategoryDataset;
+
 
 /**
  *
@@ -33,7 +41,14 @@ public class Instructor1 extends javax.swing.JFrame {
     public Instructor1(User u) {
         initComponents();
         this.cu=u;
+        try {
+showInstructorInsights(u.getUserId());
+} catch (IOException ex) {
+ex.printStackTrace();
+}
         
+        jLabel7.setText(cu.username);
+
  };
 
           
@@ -54,8 +69,140 @@ public class Instructor1 extends javax.swing.JFrame {
  });
 
     }      
-    
-    
+    public void showInstructorInsights(String instructorId) throws IOException {
+    DefaultCategoryDataset scoreDataset = new DefaultCategoryDataset();
+    DefaultCategoryDataset completionDataset = new DefaultCategoryDataset();
+
+    JSONArray courses = JsonDataBaseManager.loadJson("courses.json");
+
+    boolean hasData = false;
+
+    for (int i = 0; i < courses.length(); i++) {
+
+        JSONObject course = courses.getJSONObject(i);
+
+        if (!course.getString("instructorId").equals(instructorId))
+            continue;
+
+        String courseTitle = course.getString("title");
+        JSONArray lessons = course.getJSONArray("lessons");
+
+        for (int j = 0; j < lessons.length(); j++) {
+
+            JSONObject lesson = lessons.getJSONObject(j);
+
+            // Skip lessons that DO NOT have a quiz
+            if (!lesson.has("quiz"))
+                continue;
+
+            if (!lesson.has("quizStats"))
+                continue; // no stats yet
+
+            JSONObject stats = lesson.getJSONObject("quizStats");
+
+            double avgScore = stats.getDouble("averageScore");
+            double completion = stats.getDouble("completionRate") * 100;
+
+            // Label format: LessonTitle - CourseTitle
+            String label = lesson.getString("title") + " - " + courseTitle;
+
+            scoreDataset.addValue(avgScore, "Quiz Score", label);
+            completionDataset.addValue(completion, "Completion %", label);
+
+            hasData = true;
+        }
+    }
+
+    jPanel4.removeAll();
+    jPanel4.setLayout(new BoxLayout(jPanel4, BoxLayout.Y_AXIS));
+
+    if (!hasData) {
+        jPanel4.add(new JLabel("No quiz data available."));
+    } else {
+        JFreeChart scoreChart = ChartFactory.createBarChart(
+                "Average Quiz Scores",
+                "Lesson",
+                "Score",
+                scoreDataset
+        );
+
+        JFreeChart completionChart = ChartFactory.createBarChart(
+                "Lesson Completion %",
+                "Lesson",
+                "Completion %",
+                completionDataset
+        );
+
+        jPanel4.add(new ChartPanel(scoreChart));
+        jPanel4.add(new ChartPanel(completionChart));
+    }
+
+    jPanel4.revalidate();
+    jPanel4.repaint();
+}
+    /*public void showInstructorInsights(String instructorId) throws IOException {
+    DefaultCategoryDataset scoreDataset = new DefaultCategoryDataset();
+    DefaultCategoryDataset completionDataset = new DefaultCategoryDataset();
+    JSONArray courses = JsonDataBaseManager.loadJson("courses.json");
+
+    boolean hasData = false;
+
+    for (int i = 0; i < courses.length(); i++) {
+        JSONObject course = courses.getJSONObject(i);
+        if (course.getString("instructorId").equals(instructorId)) {
+            JSONArray lessons = course.getJSONArray("lessons");
+
+            for (int j = 0; j < lessons.length(); j++) {
+                JSONObject lesson = lessons.getJSONObject(j);
+                String lessonTitle = lesson.getString("title");
+
+                if (lesson.has("quizStats")) {
+                    JSONObject stats = lesson.getJSONObject("quizStats");
+                    double avgScore = stats.getDouble("averageScore");
+                    double completion = stats.getDouble("completionRate") * 100;
+
+                    
+                    scoreDataset.addValue(avgScore, "Quiz Score", lessonTitle);
+                    completionDataset.addValue(completion, "Completion %", lessonTitle);
+
+                    hasData = true;
+                }
+            }
+        }
+    }
+
+    // --- 3. Clear old charts / content ---
+    jPanel4.removeAll();
+    jPanel4.setLayout(new BoxLayout(jPanel4, BoxLayout.Y_AXIS));
+
+    if (!hasData) {
+        // No data to show
+        jPanel4.add(new javax.swing.JLabel("No courses or quiz data available yet."));
+    } else {
+        // --- 4. Create charts ---
+        JFreeChart scoreChart = ChartFactory.createBarChart(
+                "Average Quiz Scores", // chart title
+                "Lesson",             // x-axis label
+                "Score",              // y-axis label
+                scoreDataset
+        );
+
+        JFreeChart completionChart = ChartFactory.createBarChart(
+                "Lesson Completion %", 
+                "Lesson", 
+                "Completion %", 
+                completionDataset
+        );
+
+        // --- 5. Add charts to the panel ---
+        jPanel4.add(new ChartPanel(scoreChart));
+        jPanel4.add(new ChartPanel(completionChart));
+    }
+
+    // --- 6. Refresh the panel ---
+    jPanel4.revalidate();
+    jPanel4.repaint();
+}*/
      
     
     private void loadInstructorCourses(){
@@ -110,7 +257,7 @@ public class Instructor1 extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        insightsPanel = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
@@ -134,7 +281,10 @@ public class Instructor1 extends javax.swing.JFrame {
         loadBtn = new javax.swing.JButton();
         jTextField3 = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -196,7 +346,7 @@ public class Instructor1 extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Create", jPanel1);
+        insightsPanel.addTab("Create", jPanel1);
 
         jLabel4.setText("courses");
 
@@ -309,7 +459,7 @@ public class Instructor1 extends javax.swing.JFrame {
                 .addComponent(jButton6))
         );
 
-        jTabbedPane1.addTab("manage courses and lessons ", jPanel2);
+        insightsPanel.addTab("manage courses and lessons ", jPanel2);
 
         studentsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -371,7 +521,20 @@ public class Instructor1 extends javax.swing.JFrame {
                 .addComponent(loadBtn))
         );
 
-        jTabbedPane1.addTab("view", jPanel3);
+        insightsPanel.addTab("view", jPanel3);
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 465, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 461, Short.MAX_VALUE)
+        );
+
+        insightsPanel.addTab("Insights", jPanel4);
 
         jButton1.setText("log out");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -379,6 +542,10 @@ public class Instructor1 extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
+
+        jLabel6.setText("welcome");
+
+        jLabel7.setText("jLabel7");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -388,10 +555,14 @@ public class Instructor1 extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jTabbedPane1))
+                        .addComponent(insightsPanel))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(173, 173, 173)
                         .addComponent(jButton1)
+                        .addGap(71, 71, 71)
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -399,9 +570,13 @@ public class Instructor1 extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1)
+                .addComponent(insightsPanel)
                 .addGap(40, 40, 40)
-                .addComponent(jButton1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel6)
+                        .addComponent(jLabel7)))
                 .addContainerGap())
         );
 
@@ -685,6 +860,7 @@ new QuizBuilderFrame(lesson).setVisible(true);
 }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTabbedPane insightsPanel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -696,13 +872,15 @@ new QuizBuilderFrame(lesson).setVisible(true);
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextField1;

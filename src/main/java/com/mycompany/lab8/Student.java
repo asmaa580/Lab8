@@ -11,6 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -88,40 +89,69 @@ private void loadCertificates() {
             JOptionPane.showMessageDialog(this, "Error loading certificates: " + ex.getMessage());
         }
     }
+}
 
-    /**
-     * Creates new form Student
-     */
-    public Student(String id) throws IOException {
-        this.id = id;
-        this.student = (Studentt)JsonDataBaseManager.getUser(id);
+      
+    public Student(User u) {
+         this.id=u.userId;
         initComponents();
-        try {
-            JsonDataBaseManager dbm = new JsonDataBaseManager();
-            ArrayList<Course> allCourses = new ArrayList<>();
+        jLabel1.setText(u.username);
+        try{JsonDataBaseManager dbm=new JsonDataBaseManager();
+        ArrayList <Course> allCourses = new ArrayList<>();
 
-            allCourses = dbm.loadapprovedcourses();
+        allCourses=dbm.loadapprovedcourses("APPROVED");
 
-            DefaultTableModel coursesModel = new DefaultTableModel();
-            coursesModel.addColumn("Course ID");
-            coursesModel.addColumn("Course Name");
-            coursesModel.addColumn("Instructor");
-            coursesModel.addColumn("Number of Lessons");
-            jTable1.setModel(coursesModel);
-            System.out.println(allCourses.size());
-            for (Course c : allCourses) {
-                coursesModel.addRow(new Object[]{
-                    c.getCourseId(),
-                    c.getTitle(),
-                    c.getInstructorId(),
-                    c.getLessons().size()
-                });
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "No available courses");
+        DefaultTableModel coursesModel = new DefaultTableModel();
+        coursesModel.addColumn("Course ID");
+        coursesModel.addColumn("Course Name");
+        coursesModel.addColumn("Instructor");
+        coursesModel.addColumn("Number of Lessons");
+        jTable1.setModel(coursesModel);
+        for (Course c : allCourses) {
+    coursesModel.addRow(new Object[]{
+            c.getCourseId(),
+            c.getTitle(),
+            c.getInstructorId(),
+            c.getLessons().size()
+    });
+}
+        }
+        catch(Exception e)
+        {
+        JOptionPane.showMessageDialog(this,"No available courses");
         }
 
     }
+    public Student(String id) {
+         this.id=id;
+        initComponents();
+        try{JsonDataBaseManager dbm=new JsonDataBaseManager();
+        ArrayList <Course> allCourses = new ArrayList<>();
+
+        allCourses=dbm.loadapprovedcourses("APPROVED");
+
+        DefaultTableModel coursesModel = new DefaultTableModel();
+        coursesModel.addColumn("Course ID");
+        coursesModel.addColumn("Course Name");
+        coursesModel.addColumn("Instructor");
+        coursesModel.addColumn("Number of Lessons");
+        jTable1.setModel(coursesModel);
+        for (Course c : allCourses) {
+    coursesModel.addRow(new Object[]{
+            c.getCourseId(),
+            c.getTitle(),
+            c.getInstructorId(),
+            c.getLessons().size()
+    });
+}
+        }
+        catch(Exception e)
+        {
+        JOptionPane.showMessageDialog(this,"No available courses");
+        }
+
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -156,6 +186,8 @@ private void loadCertificates() {
         jButton2 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -417,6 +449,10 @@ private void loadCertificates() {
             }
         });
 
+        jLabel1.setText(".");
+
+        jLabel2.setText("welcome");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -424,7 +460,11 @@ private void loadCertificates() {
             .addGroup(layout.createSequentialGroup()
                 .addGap(188, 188, 188)
                 .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(141, 141, 141))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 718, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 16, Short.MAX_VALUE))
@@ -434,13 +474,18 @@ private void loadCertificates() {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+public void showCoursesTab() {
+    jTabbedPane1.setSelectedIndex(1);
+}
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
 
@@ -519,29 +564,40 @@ private void loadCertificates() {
             JOptionPane.showMessageDialog(this, "Please select a course to acess its lessons .");
             return;
         }
-        try {
-            ArrayList<Course> enrolledCourses = JsonDataBaseManager.getEnrolledCourses(id);
-            Object courseId = studentsTable.getValueAt(selectedRow, 0);
-            for (Course c : enrolledCourses) {
-                if (c.getCourseId().equals(courseId)) {
-                    jTabbedPane1.setSelectedIndex(2);
-                    ArrayList<Lesson> lessons = c.getLessons();
-
-                    DefaultTableModel lessonsModel = new DefaultTableModel();
-                    lessonsModel.addColumn("lesson ID");
-                    lessonsModel.addColumn("lesson title");
-                    lessonsModel.addColumn("lesson content");
-                    lessonsTabel.setModel(lessonsModel);
-
-                    for (Lesson l : lessons) {
-                        lessonsModel.addRow(new Object[]{
-                            l.getLessonId(),
-                            l.getTitle(),
-                            l.getContent()
-                        });
-                    }
-
-                }
+        try{
+        ArrayList<Course> enrolledCourses=JsonDataBaseManager.getEnrolledCourses(id);
+        
+        Object courseId = studentsTable.getValueAt(selectedRow, 0);
+        HashMap<String, ArrayList<String>> progress = JsonDataBaseManager.getUserProgress(id);
+        
+         ArrayList<String> completedLessons = progress.containsKey((String)courseId)
+                    ? progress.get((String)courseId)
+                    : new ArrayList<>();
+         
+        for(Course c:enrolledCourses)
+        {
+            if(c.getCourseId().equals(courseId))
+            {
+                jTabbedPane1.setSelectedIndex(2);  
+                ArrayList<Lesson> lessons=c.getLessons();
+                
+                 
+        DefaultTableModel lessonsModel = new DefaultTableModel();
+        lessonsModel.addColumn("lesson ID");
+        lessonsModel.addColumn("lesson title");
+        lessonsModel.addColumn("lesson content");
+        lessonsModel.addColumn("Completed");
+        lessonsTabel.setModel(lessonsModel);
+        
+        for (Lesson l : lessons) {
+            boolean isCompleted = completedLessons.contains(l.getLessonId());
+    lessonsModel.addRow(new Object[]{
+            l.getLessonId(),
+            l.getTitle(),
+            l.getContent(), isCompleted ? "Yes" : "No"
+           });
+        }
+             
             }
 
         } catch (Exception e) {
@@ -596,6 +652,25 @@ private void loadCertificates() {
             if (selectedRow == -1 || selectedrow == -1) {
                 JOptionPane.showMessageDialog(this, "Please select a course and a lesson");
                 return;
+            
+}         // Block if already passed
+                if (JsonDataBaseManager.hasPassedQuiz(id, l.getQuiz().getQuizId())) {
+                    JOptionPane.showMessageDialog(this, "You have already passed this quiz.");
+                    return;
+                }
+
+                // Block if retry limit reached
+                if (!JsonDataBaseManager.canRetry(id, l.getQuiz().getQuizId(), 3)) {
+                    JOptionPane.showMessageDialog(this, "Retry limit reached for this quiz.");
+                    return;
+                }
+
+                
+                QuizFrame frame = new QuizFrame(l.getQuiz(), id, courseId);
+                frame.setVisible(true);
+                this.dispose();
+
+                   }
             }
 
             Object courseId1 = studentsTable.getValueAt(selectedrow, 0);
@@ -749,6 +824,8 @@ private void loadCertificates() {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

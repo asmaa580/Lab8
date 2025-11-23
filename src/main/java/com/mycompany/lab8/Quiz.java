@@ -16,7 +16,7 @@ public class Quiz {
     private String quizId;
     private String lessonId;
     private ArrayList<Question> questions;
-    static private double passingScore=0.5;
+    static private double passingScore=50.0;
 
     public Quiz( String lessonId, ArrayList<Question> questions) {
         
@@ -36,8 +36,7 @@ public class Quiz {
     
     public boolean isPassingScore(int score)
     {
-        //
-        double perc =(score/passingScore)*100; 
+        double perc =(score*100.0)/questions.size(); 
         return perc>=passingScore;
     }
     
@@ -74,7 +73,4 @@ public class Quiz {
         return passingScore;
     }
 
-    public void setPassingScore(int passingScore) {
-        this.passingScore = passingScore;
-    }
 }

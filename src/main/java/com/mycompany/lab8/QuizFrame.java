@@ -2,6 +2,8 @@ package com.mycompany.lab8;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
@@ -9,6 +11,7 @@ public class QuizFrame extends javax.swing.JFrame {
 
     private Quiz quiz;
     private int score;
+     private int attemptNumber=1;
     private int currentIndex;
     private Studentt currentStudent;
     private String currentCourse;
@@ -31,6 +34,21 @@ public class QuizFrame extends javax.swing.JFrame {
 
     }
 
+    private String id;
+    private String courseId;
+    private ArrayList<Integer> answers = new ArrayList<>();
+
+QuizFrame(Quiz quiz,String id,String courseId)
+{
+    this.courseId=courseId;
+    this.id=id;
+    this.quiz=quiz;
+    initComponents();
+    
+   showQuestion();
+   
+}
+    
     public QuizFrame() {
         initComponents();
     }
@@ -195,74 +213,88 @@ public class QuizFrame extends javax.swing.JFrame {
         if (selectedIndex == questions.get(currentIndex).getCorrectAnswerIndex()) {
             score++;
             feedback.setText("Correct answer");
-        } else {
-            int y = (questions.get(currentIndex).getCorrectAnswerIndex()) + 1;
-            feedback.setText("Wrong answer, the correct answer is option" + y);
+            answers.add(selectedIndex);
         }
-        if (currentIndex == questions.size() - 1) {
-            next.setText("Submit");
+        else
+        {
+            int y=(questions.get(currentIndex).getCorrectAnswerIndex())+1;
+            feedback.setText("Wrong answer, the correct answer is option"+y);
+             answers.add(selectedIndex);
         }
-//        try {///////CERTIFICATE NOT = NULL
-//            Certificate certificate = CertificateManager.generateCertificate(currentStudent, currentCourse);
-//            JOptionPane.showMessageDialog(this,
-//                    "Congratulations! Certificate ID: " + certificate.getCertificateID());
-//        } catch (IOException ex) {
-//            ex.printStackTrace();
-//            JOptionPane.showMessageDialog(this, "Error generating certificate!");
-//        }
-        if (currentIndex == questions.size() - 1) {
-            Timer timer = new Timer(1000, e
-                    -> {
-                scoreLabel.setText("Your Score: " + score + "/" + questions.size());
-                hideOptions();
-                next.setEnabled(false);
-
-                try {
-                    currentStudent.addQuizAttempt(new QuizAttempt(this.quiz.getQuizId(),score));
-                    System.out.println("TESSEETTT "+ score);
-                    System.out.println("TESSEETTT "+ quiz.getPassingScore());
-
-                    if (score >= quiz.getPassingScore()) {
+       
+        if(currentIndex == questions.size() - 1) {
+           
+       JOptionPane.showMessageDialog(this,"Your Score: " + score + "/" + questions.size());
+        QuizAttempt attempt=new QuizAttempt(quiz.getQuizId(),quiz.getLessonId(),score,attemptNumber,answers);
+            try {
+                JsonDataBaseManager.addQuizAttempt(id,attempt,quiz,courseId);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this,"");
+            }
+            if(quiz.isPassingScore(score)){
+               JOptionPane.showMessageDialog(this,"You passed the quiz and completed the lesson" );  
+                  try {
                         Certificate c = CertificateManager.generateCertificate(currentStudent, currentCourse);
-
                         if (c != null) {
                             JOptionPane.showMessageDialog(this,
                                     "Congratulations! Certificate ID: " + c.getCertificateID());
-                        } else {
-                            JOptionPane.showMessageDialog(this,
-                                    "Course not completed or certificate conditions not satisfied. No certificate generated.");
                         }
-                    } else {
-                           JOptionPane.showMessageDialog(this,
-                                    "Failed!");
-                    }
-
+ 
                 } catch (IOException ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(this, "Error generating certificate: " + ex.getMessage());
                 }
+              
+            Student studentFrame = new Student(id);
+            studentFrame.setVisible(true);
+            this.dispose();  
+            studentFrame.showCoursesTab();}
+            else
+            {
+                int choice = JOptionPane.showConfirmDialog(
+        this,
+        "You failed the quiz. Do you want to retry?",
+        "Retry Quiz",
+        JOptionPane.YES_NO_OPTION
+    );
 
-            });
-//                try {
-//                    Certificate c = CertificateManager.generateCertificate(currentStudent, currentCourse);  // 
-//                } catch (IOException ex) {
-//                    System.out.println("Error");
-//                    //System.getLogger(QuizFrame.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-//                }
-
-            //   });
-            timer.setRepeats(false);
-            timer.start();
-            //  QuizAttempt 
-
-        } else {
-            currentIndex++;
-            if (currentIndex == questions.size() - 1) {
-                next.setText("Submit");
+    if (choice == JOptionPane.YES_OPTION) {
+        try {
+            // Check retry policy before restarting
+            if (!JsonDataBaseManager.canRetry(id, quiz.getQuizId(), 3)) {
+                JOptionPane.showMessageDialog(this, "Retry limit reached for this quiz.");
+                Student studentFrame = new Student(id);
+                studentFrame.setVisible(true);
+                this.dispose();
+                studentFrame.showCoursesTab();
+                return;
             }
-            Timer timer = new Timer(1000, e -> showQuestion());
-            timer.setRepeats(false);
-            timer.start();
+
+            // Restart quiz frame
+            QuizFrame retryFrame = new QuizFrame(quiz, id, courseId);
+            retryFrame.setVisible(true);
+            this.dispose();
+
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "Error checking retry policy.");
+        }
+    } else {
+        // If student chooses not to retry, return to courses
+        Student studentFrame = new Student(id);
+        studentFrame.setVisible(true);
+        this.dispose();
+        studentFrame.showCoursesTab();}}
+    } 
+        else {
+        currentIndex++;
+        if(currentIndex == questions.size() - 1) {
+            next.setText("Submit");
+            
+        }
+        Timer timer = new Timer(1000, e -> showQuestion());
+    timer.setRepeats(false);
+    timer.start();
+        
         }
     }//GEN-LAST:event_nextActionPerformed
     private void hideOptions() {
