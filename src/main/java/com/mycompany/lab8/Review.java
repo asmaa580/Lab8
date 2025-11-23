@@ -73,14 +73,16 @@ public class Review extends javax.swing.JDialog {
             sb.append("  Lesson ID: ").append(l.getLessonId()).append("\n");
             sb.append("  Title: ").append(l.getTitle()).append("\n");
             sb.append("  Content: ").append(l.getContent()).append("\n");
+            sb.append("  Resources: ").append(l.getResources()).append("\n");
 
             // Quiz details
             if (l.getQuiz() != null) {
                 sb.append("    Quiz (Passing Score: ").append(l.getQuiz().getPassingScore()).append(")\n");
-                for (Question q : l.getQuiz().getQuestions()) {
+                for (Question q : l.getQuiz().getQuestions()) { 
                     sb.append("      Q: ").append(q.getText()).append("\n");
-                    sb.append("      Options: ").append(q.getOptions()).append("\n");
-                   // sb.append("      Correct Index: ").append(q.getCorrectIndex()).append("\n");
+                sb.append("      Options: ").append(q.getOptions()).append("\n");
+                sb.append("      Correct Index: ").append(q.getCorrectAnswerIndex()).append("\n");
+                
                 }
             }
             sb.append("\n");
