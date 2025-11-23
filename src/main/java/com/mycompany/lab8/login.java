@@ -191,7 +191,7 @@ try
         JOptionPane.showMessageDialog(this,"Login Successful");
         
             String id=authenticatedUser.getUserId();
-            Student studentFrame = new Student(id);
+            Student studentFrame = new Student((Studentt)authenticatedUser);
             studentFrame.setVisible(true);
             
             this.dispose();  
