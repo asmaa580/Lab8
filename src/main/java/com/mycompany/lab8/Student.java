@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.mycompany.lab8;
+
 import java.awt.Desktop;
 import java.awt.Font;
 import java.io.File;
@@ -24,11 +25,14 @@ import org.json.JSONObject;
  * @author USER
  */
 public class Student extends javax.swing.JFrame {
-     private String id;
-     private Studentt student;
-     
-       public Student()
-       {};
+
+    private String id;
+    private Studentt student ;
+
+    public Student() {
+    }
+
+    ;
 //  private void loadCertificates() {
 // try {
 //        Studentt student = this.student; 
@@ -56,69 +60,65 @@ public class Student extends javax.swing.JFrame {
 //    }
 //  }
 private void loadCertificates() {
-    try {
-        Studentt studentToUse = this.student;
-        if (studentToUse == null) {
-           studentToUse = new Studentt(this.id); 
+        try {
+            Studentt studentToUse = this.student;
+            if (studentToUse == null) {
+                studentToUse = new Studentt(this.id);
+            }
+
+            ArrayList<Certificate> certs = CertificateManager.getCertificates(studentToUse);
+
+            DefaultTableModel certificatesModel = new DefaultTableModel(
+                    new Object[]{"Student ID", "Certificate ID", "Course ID", "Issue Date"}, 0
+            );
+
+            for (Certificate c : certs) {
+                certificatesModel.addRow(new Object[]{
+                    c.getStudentID(),
+                    c.getCertificateID(),
+                    c.getCourseID(),
+                    c.getIssueDate() != null ? c.getIssueDate().toString() : "N/A"
+                });
+            }
+
+            certificatesTable.setModel(certificatesModel);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading certificates: " + ex.getMessage());
         }
-
-        ArrayList<Certificate> certs = CertificateManager.getCertificates(studentToUse);
-
-        DefaultTableModel certificatesModel = new DefaultTableModel(
-            new Object[]{"Student ID", "Certificate ID", "Course ID", "Issue Date"}, 0
-        );
-
-        for (Certificate c : certs) {
-            certificatesModel.addRow(new Object[]{
-                c.getStudentID(),
-                c.getCertificateID(),
-                c.getCourseID(),
-                c.getIssueDate() != null ? c.getIssueDate().toString() : "N/A"
-            });
-        }
-
-        certificatesTable.setModel(certificatesModel);
-
-    } catch (Exception ex) {
-        ex.printStackTrace(); 
-        JOptionPane.showMessageDialog(this, "Error loading certificates: " + ex.getMessage());
     }
-}
-
-
-
-
 
     /**
      * Creates new form Student
      */
-      
-    public Student(String id) {
-         this.id=id;
+    public Student(String id) throws IOException {
+        this.id = id;
+        this.student = (Studentt)JsonDataBaseManager.getUser(id);
         initComponents();
-        try{JsonDataBaseManager dbm=new JsonDataBaseManager();
-        ArrayList <Course> allCourses = new ArrayList<>();
+        try {
+            JsonDataBaseManager dbm = new JsonDataBaseManager();
+            ArrayList<Course> allCourses = new ArrayList<>();
 
-        allCourses=dbm.loadapprovedcourses();
+            allCourses = dbm.loadapprovedcourses();
 
-        DefaultTableModel coursesModel = new DefaultTableModel();
-        coursesModel.addColumn("Course ID");
-        coursesModel.addColumn("Course Name");
-        coursesModel.addColumn("Instructor");
-        coursesModel.addColumn("Number of Lessons");
-        jTable1.setModel(coursesModel);
-        for (Course c : allCourses) {
-    coursesModel.addRow(new Object[]{
-            c.getCourseId(),
-            c.getTitle(),
-            c.getInstructorId(),
-            c.getLessons().size()
-    });
-}
-        }
-        catch(Exception e)
-        {
-        JOptionPane.showMessageDialog(this,"No available courses");
+            DefaultTableModel coursesModel = new DefaultTableModel();
+            coursesModel.addColumn("Course ID");
+            coursesModel.addColumn("Course Name");
+            coursesModel.addColumn("Instructor");
+            coursesModel.addColumn("Number of Lessons");
+            jTable1.setModel(coursesModel);
+            System.out.println(allCourses.size());
+            for (Course c : allCourses) {
+                coursesModel.addRow(new Object[]{
+                    c.getCourseId(),
+                    c.getTitle(),
+                    c.getInstructorId(),
+                    c.getLessons().size()
+                });
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "No available courses");
         }
 
     }
@@ -385,15 +385,15 @@ private void loadCertificates() {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane5)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 654, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jButton2)
                         .addGap(81, 81, 81)
                         .addComponent(jButton6)
                         .addGap(51, 51, 51)
                         .addComponent(jButton5)))
-                .addContainerGap(295, Short.MAX_VALUE))
+                .addContainerGap(58, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -405,7 +405,7 @@ private void loadCertificates() {
                     .addComponent(jButton5)
                     .addComponent(jButton2)
                     .addComponent(jButton6))
-                .addContainerGap(299, Short.MAX_VALUE))
+                .addContainerGap(57, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Certificates Earned", jPanel5);
@@ -443,20 +443,18 @@ private void loadCertificates() {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-       
+
         login studentFrame = new login();
         studentFrame.setVisible(true);
-        
-        
-        this.dispose();  
-        
+
+        this.dispose();
 
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void enrollActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enrollActionPerformed
         // TODO add your handling code here:
-       
+
         DefaultTableModel tableModel = (DefaultTableModel) jTable1.getModel();
         int selectedRow = jTable1.getSelectedRow();
 
@@ -468,197 +466,177 @@ private void loadCertificates() {
         Object courseId = tableModel.getValueAt(selectedRow, 0);
 
         int confirm = JOptionPane.showConfirmDialog(
-            this,
-            "Are you sure you want to enroll course \"" + courseId +  ")?",
-            "Confirm enrollment",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.WARNING_MESSAGE
+                this,
+                "Are you sure you want to enroll course \"" + courseId + ")?",
+                "Confirm enrollment",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE
         );
 
         if (confirm == JOptionPane.YES_OPTION) {
             try {
-                JsonDataBaseManager.enrollStudentInCourse(id,(String) courseId);
+                JsonDataBaseManager.enrollStudentInCourse(id, (String) courseId);
                 JOptionPane.showMessageDialog(this, "Course enrolled successfully.");
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Could not enroll: " + e.getMessage());
-            }}
-            else
+            }
+        } else {
             JOptionPane.showMessageDialog(this, "enrollment cancelled.");
+        }
 
     }//GEN-LAST:event_enrollActionPerformed
 
     private void loadBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadBtnActionPerformed
         // TODO add your handling code here:4
-        try{
-            
-        JsonDataBaseManager dbm=new JsonDataBaseManager();
-        ArrayList<Course> enrolledCourses=dbm.getEnrolledCourses(id);
-        
-        DefaultTableModel coursesModel = new DefaultTableModel();
-        coursesModel.addColumn("Course ID");
-        coursesModel.addColumn("Course Name");
-        coursesModel.addColumn("Instructor");
-        coursesModel.addColumn("Number of Lessons");
-        studentsTable.setModel(coursesModel);
-        
-        for (Course c : enrolledCourses) {
-    coursesModel.addRow(new Object[]{
-            c.getCourseId(),
-            c.getTitle(),
-            c.getInstructorId(),
-            c.getLessons().size()});
+        try {
+
+            JsonDataBaseManager dbm = new JsonDataBaseManager();
+            ArrayList<Course> enrolledCourses = dbm.getEnrolledCourses(id);
+            DefaultTableModel coursesModel = new DefaultTableModel();
+            coursesModel.addColumn("Course ID");
+            coursesModel.addColumn("Course Name");
+            coursesModel.addColumn("Instructor");
+            coursesModel.addColumn("Number of Lessons");
+            studentsTable.setModel(coursesModel);
+
+            for (Course c : enrolledCourses) {
+                coursesModel.addRow(new Object[]{
+                    c.getCourseId(),
+                    c.getTitle(),
+                    c.getInstructorId(),
+                    c.getLessons().size()});
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "No courses found for this student");
         }
-        }
-        catch(Exception e)
-                {
-                JOptionPane.showMessageDialog(this,"No courses found for this student");
-                }
     }//GEN-LAST:event_loadBtnActionPerformed
 
     private void loadBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadBtn1ActionPerformed
         // TODO add your handling code here:
-         int selectedRow = studentsTable.getSelectedRow();
+        int selectedRow = studentsTable.getSelectedRow();
 
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(this, "Please select a course to acess its lessons .");
             return;
         }
-        try{
-        ArrayList<Course> enrolledCourses=JsonDataBaseManager.getEnrolledCourses(id);
-        Object courseId = studentsTable.getValueAt(selectedRow, 0);
-        for(Course c:enrolledCourses)
-        {
-            if(c.getCourseId().equals(courseId))
-            {
-                jTabbedPane1.setSelectedIndex(2);  
-                ArrayList<Lesson> lessons=c.getLessons();
-                
-                 
-        DefaultTableModel lessonsModel = new DefaultTableModel();
-        lessonsModel.addColumn("lesson ID");
-        lessonsModel.addColumn("lesson title");
-        lessonsModel.addColumn("lesson content");
-        lessonsTabel.setModel(lessonsModel);
-        
-        for (Lesson l : lessons) {
-    lessonsModel.addRow(new Object[]{
-            l.getLessonId(),
-            l.getTitle(),
-            l.getContent()
-           });
-        }
-             
+        try {
+            ArrayList<Course> enrolledCourses = JsonDataBaseManager.getEnrolledCourses(id);
+            Object courseId = studentsTable.getValueAt(selectedRow, 0);
+            for (Course c : enrolledCourses) {
+                if (c.getCourseId().equals(courseId)) {
+                    jTabbedPane1.setSelectedIndex(2);
+                    ArrayList<Lesson> lessons = c.getLessons();
+
+                    DefaultTableModel lessonsModel = new DefaultTableModel();
+                    lessonsModel.addColumn("lesson ID");
+                    lessonsModel.addColumn("lesson title");
+                    lessonsModel.addColumn("lesson content");
+                    lessonsTabel.setModel(lessonsModel);
+
+                    for (Lesson l : lessons) {
+                        lessonsModel.addRow(new Object[]{
+                            l.getLessonId(),
+                            l.getTitle(),
+                            l.getContent()
+                        });
+                    }
+
+                }
             }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "No courses found for this student");
         }
-       
-        
-        }
-        catch(Exception e)
-        { JOptionPane.showMessageDialog(this,"No courses found for this student");}
-        
+
     }//GEN-LAST:event_loadBtn1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        int selectedRow=lessonsTabel.getSelectedRow();
-         if(selectedRow==-1)
-        {
-            JOptionPane.showMessageDialog(this,"Please select a lesson to show its content");
+        int selectedRow = lessonsTabel.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a lesson to show its content");
             return;
         }
-        int selectedrow=studentsTable.getSelectedRow();
-    
-        Object courseId=studentsTable.getValueAt(selectedrow, 0);
-        Object lessonId=lessonsTabel.getValueAt(selectedRow, 0);
-        try{
-        ArrayList<Course> courses=JsonDataBaseManager.getEnrolledCourses(id);
-        for(Course c:courses)
-        {
-            if(c.getCourseId().equals((String)courseId))
-            {
-               ArrayList<Lesson> lessons= c.getLessons();
-               for(Lesson l:lessons)
-               {
-                   if(l.getLessonId().equals((String)lessonId))
-                   {
-                      
-                        jTabbedPane1.setSelectedIndex(3);
-                        content.setText(l.getContent());
-                       break;
-                   }
-               }
+        int selectedrow = studentsTable.getSelectedRow();
+
+        Object courseId = studentsTable.getValueAt(selectedrow, 0);
+        Object lessonId = lessonsTabel.getValueAt(selectedRow, 0);
+        try {
+            ArrayList<Course> courses = JsonDataBaseManager.getEnrolledCourses(id);
+            for (Course c : courses) {
+                if (c.getCourseId().equals((String) courseId)) {
+                    ArrayList<Lesson> lessons = c.getLessons();
+                    for (Lesson l : lessons) {
+                        if (l.getLessonId().equals((String) lessonId)) {
+
+                            jTabbedPane1.setSelectedIndex(3);
+                            content.setText(l.getContent());
+                            break;
+                        }
+                    }
+                }
             }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "No courses found for this student");
         }
-        }
-        catch(Exception e)
-        {
-             JOptionPane.showMessageDialog(this,"No courses found for this student");
-        }
-        
+
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        
-        if(content.getText().equals("no content"))
-        {
-             JOptionPane.showMessageDialog(this,"Please select a lesson that has content");
+
+        if (content.getText().equals("no content")) {
+            JOptionPane.showMessageDialog(this, "Please select a lesson that has content");
             return;
-        }
-        else
-        {
-           
-            int selectedRow=lessonsTabel.getSelectedRow();
-             int selectedrow=studentsTable.getSelectedRow();
-             
-    if (selectedRow == -1 || selectedrow == -1) {
-    JOptionPane.showMessageDialog(this, "Please select a course and a lesson");
-    return;
-}
-    
-        Object courseId1=studentsTable.getValueAt(selectedrow, 0);
-        String courseId = courseId1.toString().trim();
-        
-        Object lessonId1=lessonsTabel.getValueAt(selectedRow, 0);
-        String lessonId = lessonId1.toString().trim();
-        
-        
-        try{
-           
-        ArrayList<Course> courses=JsonDataBaseManager.getEnrolledCourses(id);
-        for(Course c:courses)
-            if(c.getCourseId().trim().equals(courseId))
-            {
-               ArrayList<Lesson> lessons= c.getLessons();
-               for(Lesson l:lessons)
-                   if(l.getLessonId().trim().equals(lessonId))
-                   {
-                       
-                       if (l.getQuiz() == null ) {
-            JOptionPane.showMessageDialog(this, "This lesson has no quiz!");
-            return;
-}
-                       QuizFrame frame=new QuizFrame(l.getQuiz());
-                            frame.setVisible(true);
-                            this.dispose(); 
-                            return; 
-                   }
+        } else {
+
+            int selectedRow = lessonsTabel.getSelectedRow();
+            int selectedrow = studentsTable.getSelectedRow();
+
+            if (selectedRow == -1 || selectedrow == -1) {
+                JOptionPane.showMessageDialog(this, "Please select a course and a lesson");
+                return;
             }
+
+            Object courseId1 = studentsTable.getValueAt(selectedrow, 0);
+            String courseId = courseId1.toString().trim();
+
+            Object lessonId1 = lessonsTabel.getValueAt(selectedRow, 0);
+            String lessonId = lessonId1.toString().trim();
+
+            try {
+
+                ArrayList<Course> courses = JsonDataBaseManager.getEnrolledCourses(id);
+                for (Course c : courses) {
+                    if (c.getCourseId().trim().equals(courseId)) {
+                        ArrayList<Lesson> lessons = c.getLessons();
+                        for (Lesson l : lessons) {
+                            if (l.getLessonId().trim().equals(lessonId)) {
+
+                                if (l.getQuiz() == null) {
+                                    JOptionPane.showMessageDialog(this, "This lesson has no quiz!");
+                                    return;
+                                }
+                                QuizFrame frame = new QuizFrame(student,courseId,l.getQuiz());
+                                frame.setVisible(true);
+                                this.dispose();
+                                return;
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "No courses found for this student");
+            }
+
         }
-        catch(Exception e)
-        {
-             JOptionPane.showMessageDialog(this,"No courses found for this student");
-        }
-           
-        }
-       
-        
+
+
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
-  
+
     }//GEN-LAST:event_formWindowOpened
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -668,62 +646,62 @@ private void loadCertificates() {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-    int selectedRow = certificatesTable.getSelectedRow();
-    if (selectedRow == -1) {
-        JOptionPane.showMessageDialog(this, "Please select a certificate.");
-        return;
-    }
-
-    String certId = certificatesTable.getValueAt(selectedRow, 0).toString();
-    String courseId = certificatesTable.getValueAt(selectedRow, 1).toString();
-    String issueDate = certificatesTable.getValueAt(selectedRow, 2).toString();
-
-    String content = "📜Certificate of Completion\n\n" +
-                     "Certificate ID: " + certId + "\n" +
-                     "Course ID: " + courseId + "\n" +
-                     "Student ID: " + id + "\n" +
-                     "Issue Date: " + issueDate;
-
-    JFileChooser fileChooser = new JFileChooser();
-    fileChooser.setSelectedFile(new File("Certificate_" + certId + ".txt"));
-    int option = fileChooser.showSaveDialog(this);
-
-    if (option == JFileChooser.APPROVE_OPTION) {
-        File file = fileChooser.getSelectedFile();
-        try (FileWriter writer = new FileWriter(file)) {
-            writer.write(content);
-            JOptionPane.showMessageDialog(this, "Certificate saved successfully.");
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(this, "Error saving certificate: " + ex.getMessage());
+        int selectedRow = certificatesTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a certificate.");
+            return;
         }
-    }
+
+        String certId = certificatesTable.getValueAt(selectedRow, 0).toString();
+        String courseId = certificatesTable.getValueAt(selectedRow, 1).toString();
+        String issueDate = certificatesTable.getValueAt(selectedRow, 2).toString();
+
+        String content = "📜Certificate of Completion\n\n"
+                + "Certificate ID: " + certId + "\n"
+                + "Course ID: " + courseId + "\n"
+                + "Student ID: " + id + "\n"
+                + "Issue Date: " + issueDate;
+
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setSelectedFile(new File("Certificate_" + certId + ".txt"));
+        int option = fileChooser.showSaveDialog(this);
+
+        if (option == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            try (FileWriter writer = new FileWriter(file)) {
+                writer.write(content);
+                JOptionPane.showMessageDialog(this, "Certificate saved successfully.");
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Error saving certificate: " + ex.getMessage());
+            }
+        }
 
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:                                                 
-    int selectedRow = certificatesTable.getSelectedRow();
-if (selectedRow == -1) {
-    JOptionPane.showMessageDialog(this, "Please select a certificate.");
-    return;
-}
+        int selectedRow = certificatesTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a certificate.");
+            return;
+        }
 
-String certId = certificatesTable.getValueAt(selectedRow, 0).toString();
-String courseId = certificatesTable.getValueAt(selectedRow, 1).toString();
-String issueDate = certificatesTable.getValueAt(selectedRow, 2).toString();
+        String certId = certificatesTable.getValueAt(selectedRow, 0).toString();
+        String courseId = certificatesTable.getValueAt(selectedRow, 1).toString();
+        String issueDate = certificatesTable.getValueAt(selectedRow, 2).toString();
 
-String content = "📜 Certificate of Completion 📜\n\n" +
-                 "Certificate ID: " + certId + "\n" +
-                 "Course ID: " + courseId + "\n" +
-                 "Student ID: " + id + "\n" +
-                 "Issue Date: " + issueDate;
+        String content = "📜 Certificate of Completion 📜\n\n"
+                + "Certificate ID: " + certId + "\n"
+                + "Course ID: " + courseId + "\n"
+                + "Student ID: " + id + "\n"
+                + "Issue Date: " + issueDate;
+        
+        JTextArea textArea = new JTextArea(content);
+        textArea.setEditable(false);
+        textArea.setFont(new Font("Monospaced", Font.PLAIN, 14));
+        JScrollPane scrollPane = new JScrollPane(textArea);
 
-JTextArea textArea = new JTextArea(content);
-textArea.setEditable(false);
-textArea.setFont(new Font("Monospaced", Font.PLAIN, 14));
-JScrollPane scrollPane = new JScrollPane(textArea);
-
-JOptionPane.showMessageDialog(this, scrollPane, "View Certificate", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, scrollPane, "View Certificate", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jButton6ActionPerformed
 
     /**

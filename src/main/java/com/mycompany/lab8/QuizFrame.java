@@ -1,44 +1,53 @@
-
 package com.mycompany.lab8;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
-
-
 public class QuizFrame extends javax.swing.JFrame {
+
     private Quiz quiz;
     private int score;
     private int currentIndex;
+    private Studentt currentStudent;
+    private String currentCourse;
 
-QuizFrame(Quiz quiz)
-{
-    this.quiz=quiz;
-    initComponents();
-    
-   showQuestion();
-   
-}
-    
+    public QuizFrame(Studentt student, String course, Quiz quiz) {
+        this.currentStudent = student;
+        this.currentCourse = course;
+        this.quiz = quiz;
+        this.score = 0;
+        this.currentIndex = 0;
+        initComponents();
+        showQuestion();
+    }
+
+    QuizFrame(Quiz quiz) {
+        this.quiz = quiz;
+        initComponents();
+
+        showQuestion();
+
+    }
+
     public QuizFrame() {
         initComponents();
     }
-    
-    public void showQuestion()
-{
-    feedback.setText("");
-    scoreLabel.setText("");
-    buttonGroup1.clearSelection();
-    
-     ArrayList<Question> questions=quiz.getQuestions();
-     ArrayList<String> options=questions.get(currentIndex).getOptions();
-    text.setText(questions.get(currentIndex).getText());
-    option1.setText(options.get(0));
-    option2.setText(options.get(1));
-    option3.setText(options.get(2));
-    option4.setText(options.get(3));
-}
+
+    public void showQuestion() {
+        feedback.setText("");
+        scoreLabel.setText("");
+        buttonGroup1.clearSelection();
+
+        ArrayList<Question> questions = quiz.getQuestions();
+        ArrayList<String> options = questions.get(currentIndex).getOptions();
+        text.setText(questions.get(currentIndex).getText());
+        option1.setText(options.get(0));
+        option2.setText(options.get(1));
+        option3.setText(options.get(2));
+        option4.setText(options.get(3));
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -163,66 +172,99 @@ QuizFrame(Quiz quiz)
 
     private void nextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextActionPerformed
         // TODO add your handling code here:
-       
-        
-        ArrayList<Question> questions=quiz.getQuestions();
-        int selectedIndex=-1;
-        
-        if(option1.isSelected())
-            selectedIndex=0;
-        if(option2.isSelected())
-            selectedIndex=1;
-        if(option3.isSelected())
-            selectedIndex=2;
-        if(option4.isSelected())
-            selectedIndex=3;
-        if(selectedIndex==-1)
-        {
-            JOptionPane.showMessageDialog(this,"Cant go the next question without choosing an option");
+
+        ArrayList<Question> questions = quiz.getQuestions();
+        int selectedIndex = -1;
+
+        if (option1.isSelected()) {
+            selectedIndex = 0;
+        }
+        if (option2.isSelected()) {
+            selectedIndex = 1;
+        }
+        if (option3.isSelected()) {
+            selectedIndex = 2;
+        }
+        if (option4.isSelected()) {
+            selectedIndex = 3;
+        }
+        if (selectedIndex == -1) {
+            JOptionPane.showMessageDialog(this, "Cant go the next question without choosing an option");
             return;
         }
-        if(selectedIndex==questions.get(currentIndex).getCorrectAnswerIndex())
-        {
+        if (selectedIndex == questions.get(currentIndex).getCorrectAnswerIndex()) {
             score++;
             feedback.setText("Correct answer");
+        } else {
+            int y = (questions.get(currentIndex).getCorrectAnswerIndex()) + 1;
+            feedback.setText("Wrong answer, the correct answer is option" + y);
         }
-        else
-        {
-            int y=(questions.get(currentIndex).getCorrectAnswerIndex())+1;
-            feedback.setText("Wrong answer, the correct answer is option"+y);
-        }
-        if(currentIndex == questions.size() - 1)
-        {
+        if (currentIndex == questions.size() - 1) {
             next.setText("Submit");
         }
-        if(currentIndex == questions.size() - 1) {
-              Timer timer = new Timer(1000,e-> 
-              {scoreLabel.setText("Your Score: " + score + "/" + questions.size());
+//        try {///////CERTIFICATE NOT = NULL
+//            Certificate certificate = CertificateManager.generateCertificate(currentStudent, currentCourse);
+//            JOptionPane.showMessageDialog(this,
+//                    "Congratulations! Certificate ID: " + certificate.getCertificateID());
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//            JOptionPane.showMessageDialog(this, "Error generating certificate!");
+//        }
+        if (currentIndex == questions.size() - 1) {
+            Timer timer = new Timer(1000, e
+                    -> {
+                scoreLabel.setText("Your Score: " + score + "/" + questions.size());
                 hideOptions();
-                next.setEnabled(false);});
-                timer.setRepeats(false);
-                timer.start();
-              //  QuizAttempt 
-        
-    } 
-        else {
-        currentIndex++;
-        if(currentIndex == questions.size() - 1) {
-            next.setText("Submit");
+                next.setEnabled(false);
+
+                try {
+                    currentStudent.addQuizAttempt(new QuizAttempt(this.quiz.getQuizId(),score));
+                    Certificate c = CertificateManager.generateCertificate(currentStudent, currentCourse);
+                    if (c != null) {
+                        JOptionPane.showMessageDialog(this,
+                                "Congratulations! Certificate ID: " + c.getCertificateID());
+                    } else {
+                        JOptionPane.showMessageDialog(this,
+                                "Course not completed or certificate conditions not satisfied. No certificate generated.");
+                    }
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(this, "Error generating certificate: " + ex.getMessage());
+                }
+
+            });
+//                try {
+//                    Certificate c = CertificateManager.generateCertificate(currentStudent, currentCourse);  // 
+//                } catch (IOException ex) {
+//                    System.out.println("Error");
+//                    //System.getLogger(QuizFrame.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+//                }
+
+            //   });
+            timer.setRepeats(false);
+            timer.start();
+            //  QuizAttempt 
+
+        } else {
+            currentIndex++;
+            if (currentIndex == questions.size() - 1) {
+                next.setText("Submit");
+            }
+            Timer timer = new Timer(1000, e -> showQuestion());
+            timer.setRepeats(false);
+            timer.start();
         }
-        Timer timer = new Timer(1000, e -> showQuestion());
-    timer.setRepeats(false);
-    timer.start();}
     }//GEN-LAST:event_nextActionPerformed
-private void hideOptions() {
-    option1.setVisible(false);
-    option2.setVisible(false);
-    option3.setVisible(false);
-    option4.setVisible(false);
-    next.setVisible(false);
-    feedback.setVisible(false);
-    text.setVisible(false);
-}
+    private void hideOptions() {
+        option1.setVisible(false);
+        option2.setVisible(false);
+        option3.setVisible(false);
+        option4.setVisible(false);
+        next.setVisible(false);
+        feedback.setVisible(false);
+        text.setVisible(false);
+    }
+
     /**
      * @param args the command line arguments
      */

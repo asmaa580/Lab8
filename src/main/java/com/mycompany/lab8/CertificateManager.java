@@ -17,39 +17,121 @@ import java.util.ArrayList;
 public class CertificateManager {
 
     private static final String USERS_FILE = "users.json";
+    private static ArrayList<Certificate> result = new ArrayList<>();
 
-    /*public static boolean isCourseCompleted(Studentt student, Course course) {
+//    public static boolean isCourseCompleted(Studentt student, String cr) throws IOException {  //logic function 8lt
+//        int totalQuizzes = 0;
+//        int passedQuizzes = 0;
+//        ArrayList<Course> courses = JsonDataBaseManager.getAllCourses1();
+//        System.out.println(courses.size());
+//        Course course = null;
+//        for (Course c : courses) {
+//            if (c.getCourseId().equals(cr)) {
+//                course = c;
+//                break;
+//            }
+//        }
+//        if (course != null) {
+//            System.out.println("!!");
+//            for (Lesson lesson : course.getLessons()) {
+//                Quiz quiz = lesson.getQuiz();
+//                if (quiz == null) {
+//                    continue;
+//                }
+//
+//                totalQuizzes++;
+//                
+//                ArrayList<QuizAttempt> attempts = student.getAttemptsForQuiz(quiz.getQuizId());
+//                boolean passed = false;
+//
+//                for (QuizAttempt attempt : attempts) {
+//                    if (attempt.isPassed(quiz)) {
+//                        passed = true;
+//                        break;
+//                    }
+//                }
+//
+//                if (passed) {
+//                    passedQuizzes++;
+//                }
+//            }
+//        }
+//        System.out.println(totalQuizzes == passedQuizzes);
+//        //return totalQuizzes == passedQuizzes;
+//        return true;
+//    }
+    public static boolean isCourseCompleted(Studentt student, String courseId) throws IOException {
 
-        int totalQuizzes = course.getLessons().size();
-        int passedQuizzes = 0;
+        // Load all courses
+        ArrayList<Course> courses = JsonDataBaseManager.getAllCourses1();
 
-        for (Lesson lesson : course.getLessons()) {
-
-            Quiz quiz = lesson.getQuiz();
-
-            // Student result:
-            QuizResult result = student.getQuizResult(course.getCourseId(), quiz.getQuizId());
-
-            if (result != null && result.isPassed()) {
-                passedQuizzes++;
+        Course course = null;
+        for (Course c : courses) {
+            if (c.getCourseId().equals(courseId)) {
+                course = c;
+                break;
             }
         }
 
-        return passedQuizzes == totalQuizzes;
+        if (course == null) {
+            System.out.println("Course not found!");
+            return false;
+        }
+        System.out.println(course.getCourseId());
+
+        int totalQuizzes = 0;
+        int passedQuizzes = 0;
+
+        for (Lesson lesson : course.getLessons()) {
+            Quiz quiz = lesson.getQuiz();
+            if (quiz == null) {
+                continue;
+            }
+
+            totalQuizzes++;
+            ArrayList<QuizAttempt> attempts = student.getAttemptsForQuiz(quiz.getQuizId());
+            System.out.println(attempts.size());
+            if (attempts.isEmpty()) {
+                attempts = new ArrayList<>();
+            }
+
+            boolean passed = false;
+            for (QuizAttempt attempt : attempts) {
+                System.out.println(attempt.getAttemptId());
+                if (attempt.isPassed(quiz)) {
+                    passed = true;
+                    break;
+                }
+            }
+
+            if (passed) {
+                passedQuizzes++;
+            }
+        }
+        if (totalQuizzes == 0) {
+            return false;
+        }
+        if (totalQuizzes == passedQuizzes) {
+            System.out.println("true");
+            System.out.println(totalQuizzes);
+            System.out.println(passedQuizzes);
+            return true;
+        } else {
+            System.out.println("false");
+            System.out.println(totalQuizzes);
+            System.out.println(passedQuizzes);
+            return false;
+        }
     }
-*/
-    
-    public static Certificate generateCertificate(Studentt student, Course course) throws IOException {
 
-     //   if (!isCourseCompleted(student, course)) {
-       //     return null;
-        //}
-
-        Certificate certificate = new Certificate(student.getUserId(), course.getCourseId());
-
-        // Load users.json
+    public static Certificate generateCertificate(Studentt student, String course) throws IOException {
+        System.out.println(student);
+        if (!isCourseCompleted(student, course)) {
+            return null;
+        }
+        Certificate certificate = new Certificate(student.getUserId(), course);
         JSONArray users = JsonDataBaseManager.loadJson(USERS_FILE);
-
+        System.out.println("");
         for (int i = 0; i < users.length(); i++) {
 
             JSONObject u = users.getJSONObject(i);
@@ -58,11 +140,12 @@ public class CertificateManager {
 
                 JSONArray certs;
 
-                if (u.has("certificates"))
+                if (u.has("certificates")) {
                     certs = u.getJSONArray("certificates");
-                else
+                } else {
                     certs = new JSONArray();
-                
+                }
+
                 JSONObject c = new JSONObject();
                 c.put("certificateID", certificate.getCertificateID());
                 c.put("courseID", certificate.getCourseID());
@@ -79,12 +162,7 @@ public class CertificateManager {
         return certificate;
     }
 
-    /**
-     * Get all certificates for the student
-     */
     public static ArrayList<Certificate> getCertificates(Studentt student) throws IOException {
-
-        ArrayList<Certificate> result = new ArrayList<>();
 
         JSONArray users = JsonDataBaseManager.loadJson(USERS_FILE);
 
@@ -94,7 +172,9 @@ public class CertificateManager {
 
             if (u.getString("userId").equals(student.getUserId())) {
 
-                if (!u.has("certificates")) return result;
+                if (!u.has("certificates")) {
+                    return result;
+                }
 
                 JSONArray certs = u.getJSONArray("certificates");
 
@@ -103,9 +183,9 @@ public class CertificateManager {
                     JSONObject c = certs.getJSONObject(j);
 
                     Certificate cert = new Certificate(
-                        c.getString("certificateID"),
-                        c.getString("courseID"),
-                        LocalDate.parse(c.getString("issueDate"))
+                            c.getString("certificateID"),
+                            c.getString("courseID"),
+                            LocalDate.parse(c.getString("issueDate"))
                     );
 
                     result.add(cert);
@@ -123,5 +203,5 @@ public class CertificateManager {
     };
     return getCertificates(student);
 }
-*/
+     */
 }

@@ -1,7 +1,6 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  */
-
 package com.mycompany.lab8;
 
 import java.time.LocalDateTime;
@@ -30,7 +29,7 @@ public class Lab8 {
 
             // --- Step 2: Simulate a student attempt ---
             ArrayList<Integer> chosenAnswers = new ArrayList<>(Arrays.asList(1, 2, 0, 3, 1)); // 3 correct
-            QuizAttempt attempt = new QuizAttempt();
+            QuizAttempt attempt = new QuizAttempt("lesson1", 0);
             attempt.setAttemptId("att1");
             attempt.setQuizId(quiz.getQuizId());
             attempt.setLessonId("lesson1");

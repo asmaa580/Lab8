@@ -12,6 +12,7 @@ import java.util.ArrayList;
  * @author USER
  */
 public class QuizAttempt {
+
     private String attemptId;
     private String QuizId;
     private String LessonId;
@@ -20,13 +21,15 @@ public class QuizAttempt {
     private ArrayList<Integer> chosenAnswers;
     private LocalDateTime timestamp;
 
-    
-    public boolean isPassed(Quiz quiz)
-    {
+    public QuizAttempt(String quizId, int score) {
+        this.score = score;
+        this.QuizId = quizId;
+    }
+
+    public boolean isPassed(Quiz quiz) {
         return quiz.isPassingScore(score);
     }
-    
-    
+
     public String getAttemptId() {
         return attemptId;
     }
@@ -82,7 +85,5 @@ public class QuizAttempt {
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
-    
-    
-    
+
 }
