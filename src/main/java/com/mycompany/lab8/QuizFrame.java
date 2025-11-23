@@ -15,10 +15,12 @@ public class QuizFrame extends javax.swing.JFrame {
     private int score;
     private int currentIndex;
     private String id;
+    private String courseId;
     private ArrayList<Integer> answers = new ArrayList<>();
 
-QuizFrame(Quiz quiz,String id)
+QuizFrame(Quiz quiz,String id,String courseId)
 {
+    this.courseId=courseId;
     this.id=id;
     this.quiz=quiz;
     initComponents();
@@ -209,7 +211,7 @@ QuizFrame(Quiz quiz,String id)
                 timer.start();               
         QuizAttempt attempt=new QuizAttempt(quiz.getQuizId(),quiz.getLessonId(),score,0,answers);
             try {
-                JsonDataBaseManager.addQuizAttempt(id,attempt,quiz);
+                JsonDataBaseManager.addQuizAttempt(id,attempt,quiz,courseId);
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this,"");
             }

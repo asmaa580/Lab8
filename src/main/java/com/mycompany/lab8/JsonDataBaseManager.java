@@ -634,7 +634,7 @@ public void updateCourse(Course updatedCourse) throws IOException {
 }
 
 
-public static void addQuizAttempt(String studentId, QuizAttempt attempt, Quiz quiz) throws IOException {
+public static void addQuizAttempt(String studentId, QuizAttempt attempt, Quiz quiz, String courseId) throws IOException {
     // --- Update users.json ---
     JSONArray users = loadJson(USERS_FILE);
 
@@ -666,19 +666,19 @@ public static void addQuizAttempt(String studentId, QuizAttempt attempt, Quiz qu
             quizAttempts.put(attempt.getQuizId(), attemptsArray);
             user.put("quizAttempts", quizAttempts);
 
-            // Update progress if passed
+            // --- Update progress if passed ---
             if (attempt.isPassed(quiz)) {
                 JSONObject progress = user.has("progress") ? user.getJSONObject("progress") : new JSONObject();
 
-                // Get lessons completed for this course
-                JSONArray lessons = progress.has(quiz.getLessonId())
-                        ? progress.getJSONArray(quiz.getLessonId())
+                // Get lessons completed for this courseId
+                JSONArray lessons = progress.has(courseId)
+                        ? progress.getJSONArray(courseId)
                         : new JSONArray();
 
                 if (!lessons.toList().contains(attempt.getLessonId())) {
                     lessons.put(attempt.getLessonId());
                 }
-                progress.put(quiz.getLessonId(), lessons);
+                progress.put(courseId, lessons);
                 user.put("progress", progress);
             }
             break;
@@ -689,6 +689,7 @@ public static void addQuizAttempt(String studentId, QuizAttempt attempt, Quiz qu
     // --- Update courses.json stats ---
     updateCourseStats(attempt.getQuizId(), attempt.getLessonId());
 }
+
 private static void updateCourseStats(String quizId, String lessonId) throws IOException {
     // --- Step 1: Collect attempts from users.json ---
     JSONArray users = loadJson(USERS_FILE);

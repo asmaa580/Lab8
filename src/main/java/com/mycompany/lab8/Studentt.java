@@ -14,13 +14,7 @@ public class Studentt extends User {
     private ArrayList<String> enrolledCourses;
     private HashMap<String, ArrayList<String>> progress; // courseId -> list of completed lessonIds
     private HashMap<String, ArrayList<QuizAttempt>> quizAttempts;
-    
-
-<<<<<<< HEAD
-
-=======
-    
->>>>>>> 1f49b92e1f9bf74ccb303df8f56e4f91bb59121a
+ 
     public Studentt(String username, String email, String passwordHash) {
         super(username, email, passwordHash);
         enrolledCourses = new ArrayList<>();

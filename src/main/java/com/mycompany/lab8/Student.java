@@ -639,7 +639,7 @@ private void loadCertificates() {
             JOptionPane.showMessageDialog(this, "This lesson has no quiz!");
             return;
 }
-                       QuizFrame frame=new QuizFrame(l.getQuiz(),id);
+                       QuizFrame frame=new QuizFrame(l.getQuiz(),id,courseId);
                             frame.setVisible(true);
                             this.dispose(); 
                             return; 

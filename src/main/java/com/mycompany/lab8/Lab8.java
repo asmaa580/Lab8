@@ -26,7 +26,7 @@ public class Lab8 {
             questions.add(new Question("Q5", options, 1));
 
             Quiz quiz = new Quiz("lesson1", questions);
-            quiz.setPassingScore(50); // require 50% to pass
+           // quiz.setPassingScore(50); // require 50% to pass
 
             // --- Step 2: Simulate a student attempt ---
             ArrayList<Integer> chosenAnswers = new ArrayList<>(Arrays.asList(1, 2, 0, 3, 1)); // 3 correct
@@ -40,7 +40,7 @@ public class Lab8 {
             attempt.setTimestamp(LocalDateTime.now());
 
             // --- Step 3: Save attempt in JSON ---
-            JsonDataBaseManager.addQuizAttempt("1585", attempt, quiz);
+          //  JsonDataBaseManager.addQuizAttempt("1585", attempt, quiz);
 
             System.out.println("✅ Quiz attempt saved successfully!");
         } catch (Exception e) {
