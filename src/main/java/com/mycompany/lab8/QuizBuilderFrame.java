@@ -5,6 +5,7 @@
 package com.mycompany.lab8;
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
+import java.util.Random;
 import javax.swing.JOptionPane;
 /**
  *

@@ -687,11 +687,24 @@ public void showCoursesTab() {
                        if (l.getQuiz() == null ) {
             JOptionPane.showMessageDialog(this, "This lesson has no quiz!");
             return;
-}
-                       QuizFrame frame=new QuizFrame(l.getQuiz(),id,courseId);
-                            frame.setVisible(true);
-                            this.dispose(); 
-                            return; 
+            
+}         // Block if already passed
+                if (JsonDataBaseManager.hasPassedQuiz(id, l.getQuiz().getQuizId())) {
+                    JOptionPane.showMessageDialog(this, "You have already passed this quiz.");
+                    return;
+                }
+
+                // Block if retry limit reached
+                if (!JsonDataBaseManager.canRetry(id, l.getQuiz().getQuizId(), 3)) {
+                    JOptionPane.showMessageDialog(this, "Retry limit reached for this quiz.");
+                    return;
+                }
+
+                
+                QuizFrame frame = new QuizFrame(l.getQuiz(), id, courseId);
+                frame.setVisible(true);
+                this.dispose();
+
                    }
             }
         }

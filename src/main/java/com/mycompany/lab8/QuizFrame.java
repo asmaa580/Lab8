@@ -13,6 +13,7 @@ import javax.swing.Timer;
 public class QuizFrame extends javax.swing.JFrame {
     private Quiz quiz;
     private int score;
+     private int attemptNumber=1;
     private int currentIndex;
     private String id;
     private String courseId;
@@ -203,28 +204,61 @@ QuizFrame(Quiz quiz,String id,String courseId)
         }
        
         if(currentIndex == questions.size() - 1) {
-//              Timer timer = new Timer(1000,e-> 
-//              {scoreLabel.setText("Your Score: " + score + "/" + questions.size());
-//                hideOptions();
-//                next.setEnabled(false);});
-//                timer.setRepeats(false);
-//                timer.start();       
+              
        JOptionPane.showMessageDialog(this,"Your Score: " + score + "/" + questions.size());
-        QuizAttempt attempt=new QuizAttempt(quiz.getQuizId(),quiz.getLessonId(),score,0,answers);
+        QuizAttempt attempt=new QuizAttempt(quiz.getQuizId(),quiz.getLessonId(),score,attemptNumber,answers);
             try {
                 JsonDataBaseManager.addQuizAttempt(id,attempt,quiz,courseId);
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this,"");
             }
+            if(quiz.isPassingScore(score)){
+               JOptionPane.showMessageDialog(this,"You passed the quiz and completed the lesson" );  
             Student studentFrame = new Student(id);
             studentFrame.setVisible(true);
             this.dispose();  
-            studentFrame.showCoursesTab(); 
+            studentFrame.showCoursesTab();}
+            else
+            {
+                int choice = JOptionPane.showConfirmDialog(
+        this,
+        "You failed the quiz. Do you want to retry?",
+        "Retry Quiz",
+        JOptionPane.YES_NO_OPTION
+    );
+
+    if (choice == JOptionPane.YES_OPTION) {
+        try {
+            // Check retry policy before restarting
+            if (!JsonDataBaseManager.canRetry(id, quiz.getQuizId(), 3)) {
+                JOptionPane.showMessageDialog(this, "Retry limit reached for this quiz.");
+                Student studentFrame = new Student(id);
+                studentFrame.setVisible(true);
+                this.dispose();
+                studentFrame.showCoursesTab();
+                return;
+            }
+
+            // Restart quiz frame
+            QuizFrame retryFrame = new QuizFrame(quiz, id, courseId);
+            retryFrame.setVisible(true);
+            this.dispose();
+
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(this, "Error checking retry policy.");
+        }
+    } else {
+        // If student chooses not to retry, return to courses
+        Student studentFrame = new Student(id);
+        studentFrame.setVisible(true);
+        this.dispose();
+        studentFrame.showCoursesTab();}}
     } 
         else {
         currentIndex++;
         if(currentIndex == questions.size() - 1) {
             next.setText("Submit");
+            
         }
         Timer timer = new Timer(1000, e -> showQuestion());
     timer.setRepeats(false);

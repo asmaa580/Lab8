@@ -841,5 +841,50 @@ JSONArray users = loadJson(USERS_FILE);
     }
 
     saveJson(COURSES_FILE, courses);
+<<<<<<< Updated upstream
 }*/
+=======
+}
+public static boolean hasPassedQuiz(String studentId, String quizId) throws IOException {
+    JSONArray users = loadJson(USERS_FILE);
+
+    for (int i = 0; i < users.length(); i++) {
+        JSONObject user = users.getJSONObject(i);
+        if (user.getString("userId").equals(studentId)) {
+            if (user.has("quizAttempts")) {
+                JSONObject quizAttempts = user.getJSONObject("quizAttempts");
+                if (quizAttempts.has(quizId)) {
+                    JSONArray attempts = quizAttempts.getJSONArray(quizId);
+                    for (int j = 0; j < attempts.length(); j++) {
+                        JSONObject att = attempts.getJSONObject(j);
+                        if (att.getBoolean("passed")) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return false;
+}
+
+public static boolean canRetry(String studentId, String quizId, int maxRetries) throws IOException {
+    JSONArray users = loadJson(USERS_FILE);
+
+    for (int i = 0; i < users.length(); i++) {
+        JSONObject user = users.getJSONObject(i);
+        if (user.getString("userId").equals(studentId)) {
+            if (user.has("quizAttempts")) {
+                JSONObject quizAttempts = user.getJSONObject("quizAttempts");
+                if (quizAttempts.has(quizId)) {
+                    JSONArray attempts = quizAttempts.getJSONArray(quizId);
+                    return attempts.length() < maxRetries;
+                }
+            }
+        }
+    }
+    return true; // no attempts yet
+}
+
+>>>>>>> Stashed changes
 }
