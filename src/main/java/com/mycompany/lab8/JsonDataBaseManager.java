@@ -302,14 +302,14 @@ private static String getCourseTitleById(String courseId) throws IOException {
 private static Quiz loadQuizFromJson(JSONObject quizObj) {
     if (quizObj == null) return null;
     
-    Quiz quiz=new Quiz(quizObj.getString("lessonId"),new ArrayList<Question>());
+    //Quiz quiz=new Quiz(,quizObj.getString("lessonId"),new ArrayList<Question>());
+     Quiz quiz=new Quiz(quizObj.getString("quizId"),quizObj.getString("lessonId"),new ArrayList<Question>());
     
     // Load questions
     if (quizObj.has("questions")) {
         JSONArray questionsArray = quizObj.getJSONArray("questions");
         for (int i = 0; i < questionsArray.length(); i++) {
             JSONObject qObj = questionsArray.getJSONObject(i);
-            
             String questionText = qObj.getString("text");
             JSONArray optionsArray = qObj.getJSONArray("options");
             ArrayList<String> options = new ArrayList<>();
@@ -317,7 +317,6 @@ private static Quiz loadQuizFromJson(JSONObject quizObj) {
                 options.add(optionsArray.getString(j));
             }
             int correctIndex = qObj.getInt("correctIndex");
-            
             Question question = new Question(questionText, options, correctIndex);
             quiz.addQuestion(question);
         }

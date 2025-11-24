@@ -218,7 +218,9 @@ if (tempQuiz.getQuestions().isEmpty()) {
 JOptionPane.showMessageDialog(this, "Add at least one question before saving!");
 return;
 }
-
+ Random rand = new Random();
+ String quizId = String.valueOf(rand.nextInt(10000));
+tempQuiz.setQuizId(quizId);
 lesson.setQuiz(tempQuiz);
 
 try {
