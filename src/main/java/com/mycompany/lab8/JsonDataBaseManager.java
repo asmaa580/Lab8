@@ -332,14 +332,13 @@ public class JsonDataBaseManager {
             }
         }
         return null; // Course not found
-    }
-
+    }        
+   
     private static Quiz loadQuizFromJson(JSONObject quizObj) {
-        if (quizObj == null) {
-            return null;
-        }
+        if (quizObj == null) return null;
 
-        Quiz quiz = new Quiz(quizObj.getString("lessonId"), new ArrayList<Question>());
+
+        Quiz quiz=new Quiz(quizObj.getString("quizId"),quizObj.getString("lessonId"),new ArrayList<Question>());
         // Load questions
         if (quizObj.has("questions")) {
             JSONArray questionsArray = quizObj.getJSONArray("questions");

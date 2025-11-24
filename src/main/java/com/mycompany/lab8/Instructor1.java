@@ -747,14 +747,16 @@ new QuizBuilderFrame(lesson).setVisible(true);
             obj.put("description", c.getDescription());
             obj.put("courseId", c.getCourseId());
             obj.put("instructorId", c.getInstructorId());
-            obj.put("approval status",c.getApproval_status());
-             obj.put("students", c.getStudents());
+            obj.put("approval status", c.getApproval_status());
+            obj.put("students", c.getStudents());
 
-        JSONArray historyArray = new JSONArray();
-        for (ApprovalAction action : c.getApprovalHistory()) {
-        historyArray.put(action.toJson());
-        }
-        obj.put("approvalHistory", historyArray);
+            // approval history
+            JSONArray historyArray = new JSONArray();
+            for (ApprovalAction action : c.getApprovalHistory()) {
+                historyArray.put(action.toJson());
+            }
+            obj.put("approvalHistory", historyArray);
+
             // lessons
             JSONArray lessonsArr = new JSONArray();
             if (c.getLessons() != null) {
@@ -764,6 +766,28 @@ new QuizBuilderFrame(lesson).setVisible(true);
                     lobj.put("title", lesson.getTitle());
                     lobj.put("content", lesson.getContent());
                     lobj.put("resources", new JSONArray(lesson.getResources()));
+
+                    // ✅ Preserve quiz if it exists
+                    if (lesson.getQuiz() != null) {
+                        Quiz q = lesson.getQuiz();
+                        JSONObject quizObj = new JSONObject();
+                        quizObj.put("quizId", q.getQuizId());
+                        quizObj.put("lessonId", q.getLessonId());
+                        quizObj.put("passingScore", q.getPassingScore());
+
+                        JSONArray qList = new JSONArray();
+                        for (Question ques : q.getQuestions()) {
+                            JSONObject qJson = new JSONObject();
+                            qJson.put("text", ques.getText());
+                            qJson.put("options", ques.getOptions());
+                            qJson.put("correctIndex", ques.getCorrectAnswerIndex());
+                            qList.put(qJson);
+                        }
+
+                        quizObj.put("questions", qList);
+                        lobj.put("quiz", quizObj);
+                    }
+
                     lessonsArr.put(lobj);
                 }
             }
@@ -777,8 +801,10 @@ new QuizBuilderFrame(lesson).setVisible(true);
 
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this, "Error saving: " + e.getMessage());
+        e.printStackTrace();
+    }
 }
-}
+
     
     private void addLessonToCourse() {
     int selectedCourse = jTable1.getSelectedRow();

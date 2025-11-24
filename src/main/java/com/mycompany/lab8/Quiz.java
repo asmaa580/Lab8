@@ -26,6 +26,12 @@ public class Quiz {
         this.questions = questions;
     }
 
+    public Quiz(String quizId, String lessonId, ArrayList<Question> questions) {
+        this.quizId = quizId;
+        this.lessonId = lessonId;
+        this.questions = questions;
+    }
+    
     public Quiz(){
         questions=new ArrayList<>();
     }
