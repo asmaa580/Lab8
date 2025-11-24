@@ -18,20 +18,22 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class JsonDataBaseManager {
+
     private static final String USERS_FILE = "users.json";
     private static final String COURSES_FILE = "courses.json";
 
     public static JSONArray loadJson(String file) throws IOException {
         Path path = Paths.get(file);
 
-        
         if (!Files.exists(path)) {
             Files.writeString(path, "[]");
-            return new JSONArray(); 
+            return new JSONArray();
         }
 
         String content = Files.readString(path);
-        if (content.isEmpty()) content = "[]"; 
+        if (content.isEmpty()) {
+            content = "[]";
+        }
         return new JSONArray(content);
     }
 
@@ -50,30 +52,30 @@ public class JsonDataBaseManager {
             JSONObject obj = coursesArray.getJSONObject(i);
             String status = obj.getString("approval status");
 
-            if ("PENDING".equalsIgnoreCase(status)) {        
-            String courseId = obj.getString("courseId");
-            String title = obj.getString("title");
-            String description = obj.optString("description", "");
-            String instructorId = obj.getString("instructorId");
+            if ("PENDING".equalsIgnoreCase(status)) {
+                String courseId = obj.getString("courseId");
+                String title = obj.getString("title");
+                String description = obj.optString("description", "");
+                String instructorId = obj.getString("instructorId");
 
-            ArrayList<String> students = new ArrayList<>();
-            if (obj.has("students")) {
-                JSONArray studentsArray = obj.getJSONArray("students");
-                for (int j = 0; j < studentsArray.length(); j++) {
-                    students.add(studentsArray.getString(j));
+                ArrayList<String> students = new ArrayList<>();
+                if (obj.has("students")) {
+                    JSONArray studentsArray = obj.getJSONArray("students");
+                    for (int j = 0; j < studentsArray.length(); j++) {
+                        students.add(studentsArray.getString(j));
+                    }
                 }
-            }
 
-            ArrayList<Lesson> lessons = new ArrayList<>();
-if (obj.has("lessons")) {
-    JSONArray lessonsArray = obj.getJSONArray("lessons");
-    for (int j = 0; j < lessonsArray.length(); j++) {
-        JSONObject lessonObj = lessonsArray.getJSONObject(j);
-        Lesson lesson = new Lesson(
-            lessonObj.getString("lessonId"),
-            lessonObj.getString("title")
-        );
-        /*if (lessonObj.has("quiz")) {
+                ArrayList<Lesson> lessons = new ArrayList<>();
+                if (obj.has("lessons")) {
+                    JSONArray lessonsArray = obj.getJSONArray("lessons");
+                    for (int j = 0; j < lessonsArray.length(); j++) {
+                        JSONObject lessonObj = lessonsArray.getJSONObject(j);
+                        Lesson lesson = new Lesson(
+                                lessonObj.getString("lessonId"),
+                                lessonObj.getString("title")
+                        );
+                        /*if (lessonObj.has("quiz")) {
             JSONObject quizObj = lessonObj.getJSONObject("quiz");
             JSONArray questionsArray = quizObj.getJSONArray("questions");
 
@@ -117,18 +119,17 @@ if (obj.has("lessons")) {
                 for (int j = 0; j < studentsArray.length(); j++) {
                     students.add(studentsArray.getString(j));
                 }
-            }
 
-            ArrayList<Lesson> lessons = new ArrayList<>();
-if (obj.has("lessons")) {
-    JSONArray lessonsArray = obj.getJSONArray("lessons");
-    for (int j = 0; j < lessonsArray.length(); j++) {
-        JSONObject lessonObj = lessonsArray.getJSONObject(j);
-        Lesson lesson = new Lesson(
-            lessonObj.getString("lessonId"),
-            lessonObj.getString("title")
-        );
-        /*if (lessonObj.has("quiz")) {
+                ArrayList<Lesson> lessons = new ArrayList<>();
+                if (obj.has("lessons")) {
+                    JSONArray lessonsArray = obj.getJSONArray("lessons");
+                    for (int j = 0; j < lessonsArray.length(); j++) {
+                        JSONObject lessonObj = lessonsArray.getJSONObject(j);
+                        Lesson lesson = new Lesson(
+                                lessonObj.getString("lessonId"),
+                                lessonObj.getString("title")
+                        );
+                        /*if (lessonObj.has("quiz")) {
             JSONObject quizObj = lessonObj.getJSONObject("quiz");
             JSONArray questionsArray = quizObj.getJSONArray("questions");
 
@@ -147,8 +148,11 @@ if (obj.has("lessons")) {
             Course course = new Course(courseId, title, description, instructorId, students, lessons,s);
             approvedCourses.add(course);
         }}
-        return approvedCourses;
      }
+        return approvedCourses;
+    }
+     
+
     public static void addUser(User user) throws IOException {
         JSONArray users = loadJson(USERS_FILE);
         for (int i = 0; i < users.length(); i++) {
@@ -173,7 +177,7 @@ if (obj.has("lessons")) {
         saveJson(USERS_FILE, users);
     }
 
-   /* public static User authenticate(String email, String passwordHash) throws IOException {
+    /* public static User authenticate(String email, String passwordHash) throws IOException {
         JSONArray users = loadJson(USERS_FILE);
         for (int i = 0; i < users.length(); i++) {
             JSONObject obj = users.getJSONObject(i);
@@ -184,44 +188,76 @@ if (obj.has("lessons")) {
         }
         return null;
     }*/
-    
-   public static User authenticate(String email, String passwordHash) throws IOException {
-    JSONArray users = loadJson(USERS_FILE);
-    for (int i = 0; i < users.length(); i++) {
-        JSONObject obj = users.getJSONObject(i);
-        if (obj.getString("email").equals(email) && obj.getString("passwordHash").equals(passwordHash)) {
-            String userId = obj.getString("userId");
-            String username = obj.getString("username");
-            String role = obj.getString("role");
+    public static User authenticate(String email, String passwordHash) throws IOException {
+        JSONArray users = loadJson(USERS_FILE);
+        for (int i = 0; i < users.length(); i++) {
+            JSONObject obj = users.getJSONObject(i);
+            if (obj.getString("email").equals(email) && obj.getString("passwordHash").equals(passwordHash)) {
+                String userId = obj.getString("userId");
+                String username = obj.getString("username");
+                String role = obj.getString("role");
 
-            if (role.equals("Student")) {
-                Studentt student = new Studentt(username, email, passwordHash);
-                student.setUserId(userId); // restore stored ID
-                return student;
-            } else if(role.equalsIgnoreCase("Instructor")){
-                Instructorr instructor = new Instructorr(username, email, passwordHash);
-                instructor.setUserId(userId); // restore stored ID
-                // also restore createdCourses if present
-                if (obj.has("createdCourses")) {
-                    JSONArray courses = obj.getJSONArray("createdCourses");
-                    for (int j = 0; j < courses.length(); j++) {
-                        instructor.addCourse(courses.getString(j));
+                if (role.equals("Student")) {
+                    Studentt student = new Studentt(username, email, passwordHash);
+                    student.setUserId(userId); // restore stored ID
+                    return student;
+                } else if (role.equalsIgnoreCase("Instructor")) {
+                    Instructorr instructor = new Instructorr(username, email, passwordHash);
+                    instructor.setUserId(userId); // restore stored ID
+                    // also restore createdCourses if present
+                    if (obj.has("createdCourses")) {
+                        JSONArray courses = obj.getJSONArray("createdCourses");
+                        for (int j = 0; j < courses.length(); j++) {
+                            instructor.addCourse(courses.getString(j));
+                        }
                     }
+                    return instructor;
+                } else {
+                    Adminn admin = new Adminn(username, email, passwordHash);
+                    admin.setUserId(userId);
+                    return admin;
                 }
-                return instructor;
-            }
-            else {
-             Adminn admin= new Adminn(username,email,passwordHash);
-             admin.setUserId(userId);
-             return admin;
             }
         }
+        return null; // authentication failed
     }
-    return null; // authentication failed
-} 
+    public static User getUser(String id) throws IOException {
+        JSONArray users = loadJson(USERS_FILE);
+        for (int i = 0; i < users.length(); i++) {
+            JSONObject obj = users.getJSONObject(i);
+            if (obj.getString("userId").equals(id)) {
+                String userId = obj.getString("userId");
+                String username = obj.getString("username");
+                String role = obj.getString("role");
+                String email = obj.getString("email");
+                String passwordHash = obj.getString("passwordHash");
+
+                if (role.equals("Student")) {
+                    Studentt student = new Studentt(username, email, passwordHash);
+                    student.setUserId(userId); // restore stored ID
+                    return student;
+                } else if (role.equalsIgnoreCase("Instructor")) {
+                    Instructorr instructor = new Instructorr(username, email, passwordHash);
+                    instructor.setUserId(userId); // restore stored ID
+                    // also restore createdCourses if present
+                    if (obj.has("createdCourses")) {
+                        JSONArray courses = obj.getJSONArray("createdCourses");
+                        for (int j = 0; j < courses.length(); j++) {
+                            instructor.addCourse(courses.getString(j));
+                        }
+                    }
+                    return instructor;
+                } else {
+                    Adminn admin = new Adminn(username, email, passwordHash);
+                    admin.setUserId(userId);
+                    return admin;
+                }
+            }
+        }
+        return null; // authentication failed
+    }
 
     // ---------------- Courses ----------------
-
     public static void addCourse(Course course) throws IOException {
         JSONArray courses = loadJson(COURSES_FILE);
         JSONObject obj = new JSONObject();
@@ -231,406 +267,408 @@ if (obj.has("lessons")) {
         obj.put("instructorId", course.getInstructorId());
         obj.put("lessons", new JSONArray());
         JSONArray studentsArray = new JSONArray();
-    for (String studentId : course.getStudents()) {
-        studentsArray.put(studentId);
-    }
-    obj.put("students", studentsArray);
-        obj.put("approval status",course.getApproval_status());
+        for (String studentId : course.getStudents()) {
+            studentsArray.put(studentId);
+        }
+        obj.put("students", studentsArray);
+        obj.put("approval status", course.getApproval_status());
         JSONArray historyArray = new JSONArray();
         for (ApprovalAction action : course.getApprovalHistory()) {
-        historyArray.put(action.toJson());
+            historyArray.put(action.toJson());
         }
         obj.put("approvalHistory", historyArray);
         courses.put(obj);
         saveJson(COURSES_FILE, courses);
         updateInstructorCourses(course.getInstructorId(), course.getCourseId());
     }
-   private static void updateInstructorCourses(String instructorId, String courseId) throws IOException {
-    JSONArray users = loadJson(USERS_FILE);
-    
-    System.out.println("DEBUG: Trying to update instructor courses for ID: " + instructorId);
-    
-    // First, get the course title from courses.json
-    String courseTitle = getCourseTitleById(courseId);
-    
-    if (courseTitle == null) {
-        System.out.println("DEBUG: ERROR - Could not find course title for ID: " + courseId);
-        return;
-    }
-    
-    System.out.println("DEBUG: Found course title: " + courseTitle);
-    
-    // Find ANY instructor and add the course TITLE
-    for (int i = 0; i < users.length(); i++) {
-        JSONObject user = users.getJSONObject(i);
-        //if (user.getString("role").equals("Instructor")) 
-        if (user.getString("userId").equals(instructorId))
-        {
-            System.out.println("DEBUG: Found an instructor - ID: " + user.getString("userId"));
-            
-            JSONArray createdCourses;
-            if (user.has("createdCourses")) {
-                createdCourses = user.getJSONArray("createdCourses");
-            } else {
-                createdCourses = new JSONArray();
-            }
-            
-            
-            createdCourses.put(courseId);
-            user.put("createdCourses", createdCourses);
-            System.out.println("DEBUG: Added course TITLE to instructor: " + user.getString("email"));
-            break; // Stop after first instructor found
+
+    private static void updateInstructorCourses(String instructorId, String courseId) throws IOException {
+        JSONArray users = loadJson(USERS_FILE);
+
+        System.out.println("DEBUG: Trying to update instructor courses for ID: " + instructorId);
+
+        // First, get the course title from courses.json
+        String courseTitle = getCourseTitleById(courseId);
+
+        if (courseTitle == null) {
+            System.out.println("DEBUG: ERROR - Could not find course title for ID: " + courseId);
+            return;
         }
+
+        System.out.println("DEBUG: Found course title: " + courseTitle);
+
+        // Find ANY instructor and add the course TITLE
+        for (int i = 0; i < users.length(); i++) {
+            JSONObject user = users.getJSONObject(i);
+            //if (user.getString("role").equals("Instructor")) 
+            if (user.getString("userId").equals(instructorId)) {
+                System.out.println("DEBUG: Found an instructor - ID: " + user.getString("userId"));
+
+                JSONArray createdCourses;
+                if (user.has("createdCourses")) {
+                    createdCourses = user.getJSONArray("createdCourses");
+                } else {
+                    createdCourses = new JSONArray();
+                }
+
+                createdCourses.put(courseId);
+                user.put("createdCourses", createdCourses);
+                System.out.println("DEBUG: Added course TITLE to instructor: " + user.getString("email"));
+                break; // Stop after first instructor found
+            }
+        }
+
+        saveJson(USERS_FILE, users);
     }
-    
-    saveJson(USERS_FILE, users);
-}
 
 // ADD THIS NEW METHOD to get course title by ID
-private static String getCourseTitleById(String courseId) throws IOException {
-    JSONArray courses = loadJson(COURSES_FILE);
-    
-    for (int i = 0; i < courses.length(); i++) {
-        JSONObject course = courses.getJSONObject(i);
-        if (course.getString("courseId").equals(courseId)) {
-            return course.getString("title");
-        }
-    }
-    return null; // Course not found
-} 
+    private static String getCourseTitleById(String courseId) throws IOException {
+        JSONArray courses = loadJson(COURSES_FILE);
 
-private static Quiz loadQuizFromJson(JSONObject quizObj) {
-    if (quizObj == null) return null;
-    
-    //Quiz quiz=new Quiz(,quizObj.getString("lessonId"),new ArrayList<Question>());
-     Quiz quiz=new Quiz(quizObj.getString("quizId"),quizObj.getString("lessonId"),new ArrayList<Question>());
-    
-    // Load questions
-    if (quizObj.has("questions")) {
-        JSONArray questionsArray = quizObj.getJSONArray("questions");
-        for (int i = 0; i < questionsArray.length(); i++) {
-            JSONObject qObj = questionsArray.getJSONObject(i);
-            String questionText = qObj.getString("text");
-            JSONArray optionsArray = qObj.getJSONArray("options");
-            ArrayList<String> options = new ArrayList<>();
-            for (int j = 0; j < optionsArray.length(); j++) {
-                options.add(optionsArray.getString(j));
+        for (int i = 0; i < courses.length(); i++) {
+            JSONObject course = courses.getJSONObject(i);
+            if (course.getString("courseId").equals(courseId)) {
+                return course.getString("title");
             }
-            int correctIndex = qObj.getInt("correctIndex");
-            Question question = new Question(questionText, options, correctIndex);
-            quiz.addQuestion(question);
         }
+        return null; // Course not found
+    }        
+   
+    private static Quiz loadQuizFromJson(JSONObject quizObj) {
+        if (quizObj == null) return null;
+
+
+        Quiz quiz=new Quiz(quizObj.getString("quizId"),quizObj.getString("lessonId"),new ArrayList<Question>());
+        // Load questions
+        if (quizObj.has("questions")) {
+            JSONArray questionsArray = quizObj.getJSONArray("questions");
+            for (int i = 0; i < questionsArray.length(); i++) {
+                JSONObject qObj = questionsArray.getJSONObject(i);
+
+                String questionText = qObj.getString("text");
+                JSONArray optionsArray = qObj.getJSONArray("options");
+                ArrayList<String> options = new ArrayList<>();
+                for (int j = 0; j < optionsArray.length(); j++) {
+                    options.add(optionsArray.getString(j));
+                }
+                int correctIndex = qObj.getInt("correctIndex");
+
+                Question question = new Question(questionText, options, correctIndex);
+                quiz.addQuestion(question);
+            }
+        }
+
+        return quiz;
     }
-    
-    return quiz;
-}
 
-public static ArrayList<Course> getAllCourses1() throws IOException {
-    JSONArray coursesArray = loadJson(COURSES_FILE);
-    if (coursesArray.length() == 0) 
-        return null;
-
-    ArrayList<Course> courses = new ArrayList<>();
-
-    for (int i = 0; i < coursesArray.length(); i++) {
-        JSONObject obj = coursesArray.getJSONObject(i);
-
-        // Students
-        JSONArray studentsArray = obj.has("students") ? obj.getJSONArray("students") : new JSONArray();
-        ArrayList<String> students = new ArrayList<>();
-        for (int j = 0; j < studentsArray.length(); j++) {
-            students.add(studentsArray.getString(j));
+    public static ArrayList<Course> getAllCourses1() throws IOException {
+        JSONArray coursesArray = loadJson(COURSES_FILE);
+        if (coursesArray.length() == 0) {
+            return null;
         }
 
-        // Lessons
-        JSONArray lessonsArray = obj.has("lessons") ? obj.getJSONArray("lessons") : new JSONArray();
-        ArrayList<Lesson> lessons = new ArrayList<>();
-        
-        for (int j = 0; j < lessonsArray.length(); j++) {
-            JSONObject lessonObj = lessonsArray.getJSONObject(j);
-            Lesson lesson = new Lesson(
-                lessonObj.getString("lessonId"),
-                lessonObj.getString("title"), 
-                lessonObj.getString("content")
+        ArrayList<Course> courses = new ArrayList<>();
+
+        for (int i = 0; i < coursesArray.length(); i++) {
+            JSONObject obj = coursesArray.getJSONObject(i);
+
+            // Students
+            JSONArray studentsArray = obj.has("students") ? obj.getJSONArray("students") : new JSONArray();
+            ArrayList<String> students = new ArrayList<>();
+            for (int j = 0; j < studentsArray.length(); j++) {
+                students.add(studentsArray.getString(j));
+            }
+
+            // Lessons
+            JSONArray lessonsArray = obj.has("lessons") ? obj.getJSONArray("lessons") : new JSONArray();
+            ArrayList<Lesson> lessons = new ArrayList<>();
+
+            for (int j = 0; j < lessonsArray.length(); j++) {
+                JSONObject lessonObj = lessonsArray.getJSONObject(j);
+                Lesson lesson = new Lesson(
+                        lessonObj.getString("lessonId"),
+                        lessonObj.getString("title"),
+                        lessonObj.getString("content")
+                );
+
+                if (lessonObj.has("quiz")) {
+                    JSONObject quizObj = lessonObj.getJSONObject("quiz");
+                    lesson.setQuiz(loadQuizFromJson(quizObj));
+                }
+
+                lessons.add(lesson);
+            }
+            ArrayList<ApprovalAction> approvalHistory = new ArrayList<>();
+            if (obj.has("approvalHistory")) {
+                JSONArray historyArray = obj.getJSONArray("approvalHistory");
+                for (int j = 0; j < historyArray.length(); j++) {
+                    JSONObject actionObj = historyArray.getJSONObject(j);
+                    String action = actionObj.getString("action");
+                    String adminId = actionObj.getString("adminId");
+                    String timestamp = actionObj.getString("timestamp");
+                    String reason = actionObj.getString("reason");
+
+                    // You may want a constructor in ApprovalAction that accepts timestamp
+                    ApprovalAction actionObjParsed = new ApprovalAction(action, adminId, reason);
+                    // If you want to preserve timestamp from JSON, add a constructor like:
+                    // new ApprovalAction(action, adminId, reason, timestamp);
+                    approvalHistory.add(actionObjParsed);
+                }
+            }
+
+            // Course object
+            Course course = new Course(
+                    obj.getString("courseId"),
+                    obj.getString("title"),
+                    obj.getString("description"),
+                    obj.getString("instructorId"),
+                    students,
+                    lessons,
+                    obj.getString("approval status")
             );
-
-             if (lessonObj.has("quiz")) {
-                JSONObject quizObj = lessonObj.getJSONObject("quiz");
-                lesson.setQuiz(loadQuizFromJson(quizObj));
-            }
-
-            lessons.add(lesson);
-        }
-         ArrayList<ApprovalAction> approvalHistory = new ArrayList<>();
-        if (obj.has("approvalHistory")) {
-            JSONArray historyArray = obj.getJSONArray("approvalHistory");
-            for (int j = 0; j < historyArray.length(); j++) {
-                JSONObject actionObj = historyArray.getJSONObject(j);
-                String action = actionObj.getString("action");
-                String adminId = actionObj.getString("adminId");
-                String timestamp = actionObj.getString("timestamp");
-                String reason = actionObj.getString("reason");
-
-                // You may want a constructor in ApprovalAction that accepts timestamp
-                ApprovalAction actionObjParsed = new ApprovalAction(action, adminId, reason);
-                // If you want to preserve timestamp from JSON, add a constructor like:
-                // new ApprovalAction(action, adminId, reason, timestamp);
-                approvalHistory.add(actionObjParsed);
-            }
+            course.getApprovalHistory().addAll(approvalHistory);
+            courses.add(course);
         }
 
-        // Course object
-        Course course = new Course(
-            obj.getString("courseId"),
-            obj.getString("title"), 
-            obj.getString("description"), 
-            obj.getString("instructorId"),
-            students,
-            lessons,
-            obj.getString("approval status")    
-        );
-        course.getApprovalHistory().addAll(approvalHistory);
-        courses.add(course);
+        return courses;
     }
 
-    return courses;
-}
+    public static void enrollStudentInCourse(String studentId, String courseId) throws IOException {
+        JSONArray courses = loadJson("courses.json");
 
+        for (int i = 0; i < courses.length(); i++) {
+            JSONObject course = courses.getJSONObject(i);
 
-    
- public static void enrollStudentInCourse(String studentId, String courseId) throws IOException {
-    JSONArray courses = loadJson("courses.json");
+            if (course.getString("courseId").equals(courseId)) {
+                JSONArray students = course.getJSONArray("students");
 
-    for (int i = 0; i < courses.length(); i++) {
-        JSONObject course = courses.getJSONObject(i);
+                // prevent duplicate enrollment
+                if (!students.toList().contains(studentId)) {
+                    students.put(studentId);
+                }
 
-        if (course.getString("courseId").equals(courseId)) {
-            JSONArray students = course.getJSONArray("students");
-
-            // prevent duplicate enrollment
-            if (!students.toList().contains(studentId)) {
-                students.put(studentId);
+                saveJson("courses.json", courses);
+                break;
             }
+        }
 
-            saveJson("courses.json", courses);
-            break;
+        // Update student's enrolledCourses
+        JSONArray users = loadJson("users.json");
+        for (int i = 0; i < users.length(); i++) {
+            JSONObject user = users.getJSONObject(i);
+
+            if (user.getString("userId").equals(studentId)) {
+                JSONArray enrolled = user.getJSONArray("enrolledCourses");
+
+                if (!enrolled.toList().contains(courseId)) {
+                    enrolled.put(courseId);
+                }
+
+                saveJson("users.json", users);
+                break;
+            }
         }
     }
 
-    // Update student's enrolledCourses
-    JSONArray users = loadJson("users.json");
-    for (int i = 0; i < users.length(); i++) {
-        JSONObject user = users.getJSONObject(i);
+    public static ArrayList<Course> getEnrolledCourses(String studentId) throws IOException {
+        ArrayList<Course> result = new ArrayList<>();
 
-        if (user.getString("userId").equals(studentId)) {
-            JSONArray enrolled = user.getJSONArray("enrolledCourses");
+        ArrayList<Course> allCourses = getAllCourses1();
+        JSONArray users = loadJson("users.json");
 
-            if (!enrolled.toList().contains(courseId)) {
-                enrolled.put(courseId);
+        // Get student's enrolled course IDs
+        JSONArray enrolledIds = null;
+        for (int i = 0; i < users.length(); i++) {
+            JSONObject u = users.getJSONObject(i);
+            if (u.getString("userId").equals(studentId)) {
+                enrolledIds = u.getJSONArray("enrolledCourses");
+                break;
             }
-
-            saveJson("users.json", users);
-            break;
         }
-    }
-}
 
-public static ArrayList<Course> getEnrolledCourses(String studentId) throws IOException {
-    ArrayList<Course> result = new ArrayList<>();
-
-    ArrayList<Course> allCourses = getAllCourses1();
-    JSONArray users = loadJson("users.json");
-
-    // Get student's enrolled course IDs
-    JSONArray enrolledIds = null;
-    for (int i = 0; i < users.length(); i++) {
-        JSONObject u = users.getJSONObject(i);
-        if (u.getString("userId").equals(studentId)) {
-            enrolledIds = u.getJSONArray("enrolledCourses");
-            break;
+        if (enrolledIds == null) {
+            return result;
         }
-    }
 
-    if (enrolledIds == null)
+        // Match course IDs to Course objects
+        for (Course c : allCourses) {
+            if (enrolledIds.toList().contains(c.getCourseId())) {
+                result.add(c);
+            }
+        }
+
         return result;
-
-    // Match course IDs to Course objects
-    for (Course c : allCourses) {
-        if (enrolledIds.toList().contains(c.getCourseId())) {
-            result.add(c);
-        }
     }
-
-    return result;
-}
 
     public static ArrayList<Studentt> getStudentsForCourse(String courseId) throws IOException {
 
-    ArrayList<Studentt> result = new ArrayList<>();
+        ArrayList<Studentt> result = new ArrayList<>();
 
-    JSONArray courses = loadJson(COURSES_FILE);
-    JSONArray users = loadJson(USERS_FILE);
+        JSONArray courses = loadJson(COURSES_FILE);
+        JSONArray users = loadJson(USERS_FILE);
 
-    // find the course by ID
-    JSONObject targetCourse = null;
-    for (int i = 0; i < courses.length(); i++) {
-        JSONObject c = courses.getJSONObject(i);
-        if (c.getString("courseId").equals(courseId)) {
-            targetCourse = c;
-            break;
+        // find the course by ID
+        JSONObject targetCourse = null;
+        for (int i = 0; i < courses.length(); i++) {
+            JSONObject c = courses.getJSONObject(i);
+            if (c.getString("courseId").equals(courseId)) {
+                targetCourse = c;
+                break;
+            }
         }
-    }
 
-    if (targetCourse == null) {
-        return result; // no such course
-    }
-
-    // extract student IDs
-    JSONArray studentIds = targetCourse.getJSONArray("students");
-
-    // match each student ID with a user in users.json
-    for (int i = 0; i < users.length(); i++) {
-        JSONObject u = users.getJSONObject(i);
-
-        if (studentIds.toList().contains(u.getString("userId"))) {
-
-            result.add(new Studentt(
-                u.getString("username"),
-                u.getString("email"),
-                u.getString("passwordHash")
-            ));
+        if (targetCourse == null) {
+            return result; // no such course
         }
+
+        // extract student IDs
+        JSONArray studentIds = targetCourse.getJSONArray("students");
+
+        // match each student ID with a user in users.json
+        for (int i = 0; i < users.length(); i++) {
+            JSONObject u = users.getJSONObject(i);
+
+            if (studentIds.toList().contains(u.getString("userId"))) {
+
+                result.add(new Studentt(
+                        u.getString("username"),
+                        u.getString("email"),
+                        u.getString("passwordHash")
+                ));
+            }
+        }
+
+        return result;
     }
 
-    return result;
-}
+    public static void updateLessonInCourse(Lesson updatedLesson) throws IOException {
+        JSONArray coursesArray = loadJson(COURSES_FILE);
 
- 
- public static void updateLessonInCourse(Lesson updatedLesson) throws IOException {
-JSONArray coursesArray = loadJson(COURSES_FILE);
+        for (int i = 0; i < coursesArray.length(); i++) {
+            JSONObject courseObj = coursesArray.getJSONObject(i);
+            JSONArray lessonsArray = courseObj.has("lessons") ? courseObj.getJSONArray("lessons") : new JSONArray();
 
-for (int i = 0; i < coursesArray.length(); i++) {
-JSONObject courseObj = coursesArray.getJSONObject(i);
-JSONArray lessonsArray = courseObj.has("lessons") ? courseObj.getJSONArray("lessons") : new JSONArray();
+            for (int j = 0; j < lessonsArray.length(); j++) {
+                JSONObject lessonObj = lessonsArray.getJSONObject(j);
 
-for (int j = 0; j < lessonsArray.length(); j++) {
-JSONObject lessonObj = lessonsArray.getJSONObject(j);
-
-if (lessonObj.getString("lessonId").equals(updatedLesson.getLessonId())) {
+                if (lessonObj.getString("lessonId").equals(updatedLesson.getLessonId())) {
 // Keep original order
-lessonObj.put("resources", updatedLesson.getResources());
-lessonObj.put("title", updatedLesson.getTitle());
-lessonObj.put("content", updatedLesson.getContent());
+                    lessonObj.put("resources", updatedLesson.getResources());
+                    lessonObj.put("title", updatedLesson.getTitle());
+                    lessonObj.put("content", updatedLesson.getContent());
 
 // Add quiz if exists
-Quiz q = updatedLesson.getQuiz();
-if (q != null) {
-JSONObject quizObj = new JSONObject();
-quizObj.put("quizId", q.getQuizId());
-quizObj.put("lessonId", q.getLessonId());
-quizObj.put("passingScore", q.getPassingScore());
+                    Quiz q = updatedLesson.getQuiz();
+                    if (q != null) {
+                        JSONObject quizObj = new JSONObject();
+                        quizObj.put("quizId", q.getQuizId());
+                        quizObj.put("lessonId", q.getLessonId());
+                        quizObj.put("passingScore", q.getPassingScore());
 
-JSONArray qList = new JSONArray();
-for (Question ques : q.getQuestions()) {
-JSONObject qJson = new JSONObject();
-qJson.put("text", ques.getText());
-qJson.put("options", ques.getOptions());
-qJson.put("correctIndex", ques.getCorrectAnswerIndex());
-qList.put(qJson);
-}
+                        JSONArray qList = new JSONArray();
+                        for (Question ques : q.getQuestions()) {
+                            JSONObject qJson = new JSONObject();
+                            qJson.put("text", ques.getText());
+                            qJson.put("options", ques.getOptions());
+                            qJson.put("correctIndex", ques.getCorrectAnswerIndex());
+                            qList.put(qJson);
+                        }
 
-quizObj.put("questions", qList);
-lessonObj.put("quiz", quizObj);
-}
-updatedLesson.setQuiz(q);
+                        quizObj.put("questions", qList);
+                        lessonObj.put("quiz", quizObj);
+                    }
+                    updatedLesson.setQuiz(q);
 
 // Save JSON back
-saveJson(COURSES_FILE, coursesArray);
+                    saveJson(COURSES_FILE, coursesArray);
 
 // Return the updated lesson
 // Save back and return immediately
-saveJson(COURSES_FILE, coursesArray);
-return;
-}
-}
-}}
-
-public void updateCourse(Course updatedCourse) throws IOException {
-    // Load all courses from file
-    JSONArray coursesArray = loadJson(COURSES_FILE);
-
-    for (int i = 0; i < coursesArray.length(); i++) {
-        JSONObject obj = coursesArray.getJSONObject(i);
-
-        // Find the course by ID
-        if (obj.getString("courseId").equals(updatedCourse.getCourseId())) {
-            
-            obj.put("title", updatedCourse.getTitle());
-            obj.put("description", updatedCourse.getDescription());
-            obj.put("instructorId", updatedCourse.getInstructorId());
-
-            // Lessons
-            JSONArray lessonsArray = new JSONArray();
-            for (Lesson lesson : updatedCourse.getLessons()) {
-                JSONObject lessonObj = new JSONObject();
-                lessonObj.put("lessonId", lesson.getLessonId());
-                lessonObj.put("title", lesson.getTitle());
-                lessonObj.put("content", lesson.getContent());
-                lessonObj.put("resources", new JSONArray(lesson.getResources()));
-
-                // --- Add quiz if exists ---
-                Quiz quiz = lesson.getQuiz();
-                if (quiz != null) {
-                    JSONObject quizObj = new JSONObject();
-                    quizObj.put("quizId", quiz.getQuizId());
-                    quizObj.put("lessonId", quiz.getLessonId());
-                    quizObj.put("passingScore", quiz.getPassingScore());
-
-                    // Add questions
-                    JSONArray questionsArray = new JSONArray();
-                    for (Question q : quiz.getQuestions()) {
-                        JSONObject qObj = new JSONObject();
-                        qObj.put("text", q.getText());
-                        qObj.put("options", q.getOptions());
-                        qObj.put("correctIndex", q.getCorrectAnswerIndex());
-                        questionsArray.put(qObj);
-                    }
-                    quizObj.put("questions", questionsArray);
-
-                    // Attach quiz to lesson
-                    lessonObj.put("quiz", quizObj);
+                    saveJson(COURSES_FILE, coursesArray);
+                    return;
                 }
-
-                lessonsArray.put(lessonObj);
             }
-            obj.put("lessons", lessonsArray);
-
-            // Students
-            JSONArray studentsArray = new JSONArray();
-            for (String studentId : updatedCourse.getStudents()) {
-                studentsArray.put(studentId);
-            }
-            obj.put("students", studentsArray);
-
-            // Approval status
-            obj.put("approval status", updatedCourse.getApproval_status());
-
-            // Approval history
-            JSONArray historyArray = new JSONArray();
-            for (ApprovalAction action : updatedCourse.getApprovalHistory()) {
-                historyArray.put(action.toJson());
-            }
-            obj.put("approvalHistory", historyArray);
-
-            // Replace course object in array
-            coursesArray.put(i, obj);
-            break;
         }
     }
 
-    // Save back to file
-    saveJson(COURSES_FILE, coursesArray);
-}
+    public void updateCourse(Course updatedCourse) throws IOException {
+        // Load all courses from file
+        JSONArray coursesArray = loadJson(COURSES_FILE);
+
+        for (int i = 0; i < coursesArray.length(); i++) {
+            JSONObject obj = coursesArray.getJSONObject(i);
+
+            // Find the course by ID
+            if (obj.getString("courseId").equals(updatedCourse.getCourseId())) {
+
+                obj.put("title", updatedCourse.getTitle());
+                obj.put("description", updatedCourse.getDescription());
+                obj.put("instructorId", updatedCourse.getInstructorId());
+
+                // Lessons
+                JSONArray lessonsArray = new JSONArray();
+                for (Lesson lesson : updatedCourse.getLessons()) {
+                    JSONObject lessonObj = new JSONObject();
+                    lessonObj.put("lessonId", lesson.getLessonId());
+                    lessonObj.put("title", lesson.getTitle());
+                    lessonObj.put("content", lesson.getContent());
+                    lessonObj.put("resources", new JSONArray(lesson.getResources()));
+
+                    // --- Add quiz if exists ---
+                    Quiz quiz = lesson.getQuiz();
+                    if (quiz != null) {
+                        JSONObject quizObj = new JSONObject();
+                        quizObj.put("quizId", quiz.getQuizId());
+                        quizObj.put("lessonId", quiz.getLessonId());
+                        quizObj.put("passingScore", quiz.getPassingScore());
+
+                        // Add questions
+                        JSONArray questionsArray = new JSONArray();
+                        for (Question q : quiz.getQuestions()) {
+                            JSONObject qObj = new JSONObject();
+                            qObj.put("text", q.getText());
+                            qObj.put("options", q.getOptions());
+                            qObj.put("correctIndex", q.getCorrectAnswerIndex());
+                            questionsArray.put(qObj);
+                        }
+                        quizObj.put("questions", questionsArray);
+
+                        // Attach quiz to lesson
+                        lessonObj.put("quiz", quizObj);
+                    }
+
+                    lessonsArray.put(lessonObj);
+                }
+                obj.put("lessons", lessonsArray);
+
+                // Students
+                JSONArray studentsArray = new JSONArray();
+                for (String studentId : updatedCourse.getStudents()) {
+                    studentsArray.put(studentId);
+                }
+                obj.put("students", studentsArray);
+
+                // Approval status
+                obj.put("approval status", updatedCourse.getApproval_status());
+
+                // Approval history
+                JSONArray historyArray = new JSONArray();
+                for (ApprovalAction action : updatedCourse.getApprovalHistory()) {
+                    historyArray.put(action.toJson());
+                }
+                obj.put("approvalHistory", historyArray);
+
+                // Replace course object in array
+                coursesArray.put(i, obj);
+                break;
+            }
+        }
+
+        // Save back to file
+        saveJson(COURSES_FILE, coursesArray);
+    }
+
+
 public static HashMap<String, ArrayList<String>> getUserProgress(String studentId) throws IOException {
     HashMap<String, ArrayList<String>> progressMap = new HashMap<>();
 
@@ -682,41 +720,43 @@ public static void addQuizAttempt(String studentId, QuizAttempt attempt, Quiz qu
                     ? quizAttempts.getJSONArray(attempt.getQuizId())
                     : new JSONArray();
 
-            // Build JSON manually
-            JSONObject attObj = new JSONObject();
-            attObj.put("attemptId", attempt.getAttemptId());
-            attObj.put("quizId", attempt.getQuizId());
-            attObj.put("lessonId", attempt.getLessonId());
-            attObj.put("score", attempt.getScore());
-            attObj.put("retryCount", attempt.getRetryCount());
-            attObj.put("chosenAnswers", attempt.getChosenAnswers());
-            attObj.put("passed", attempt.isPassed(quiz));
-            attObj.put("timestamp", attempt.getTimestamp().toString());
+                // Build JSON manually
+                JSONObject attObj = new JSONObject();
+                attObj.put("attemptId", attempt.getAttemptId());
+                attObj.put("quizId", attempt.getQuizId());
+                attObj.put("lessonId", attempt.getLessonId());
+                attObj.put("score", attempt.getScore());
+                attObj.put("retryCount", attempt.getRetryCount());
+                attObj.put("chosenAnswers", attempt.getChosenAnswers());
+                attObj.put("passed", attempt.isPassed(quiz));
+                attObj.put("timestamp", attempt.getTimestamp().toString());
 
-            // Add new attempt
-            attemptsArray.put(attObj);
-            quizAttempts.put(attempt.getQuizId(), attemptsArray);
-            user.put("quizAttempts", quizAttempts);
+                // Add new attempt
+                attemptsArray.put(attObj);
+                quizAttempts.put(attempt.getQuizId(), attemptsArray);
+                user.put("quizAttempts", quizAttempts);
 
-            // --- Update progress if passed ---
-            if (attempt.isPassed(quiz)) {
-                JSONObject progress = user.has("progress") ? user.getJSONObject("progress") : new JSONObject();
+                // Update progress if passed
+                if (attempt.isPassed(quiz)) {
+                    JSONObject progress = user.has("progress") ? user.getJSONObject("progress") : new JSONObject();
 
-                // Get lessons completed for this courseId
-                JSONArray lessons = progress.has(courseId)
-                        ? progress.getJSONArray(courseId)
-                        : new JSONArray();
+                    // Get lessons completed for this course
+                    JSONArray lessons = progress.has(quiz.getLessonId())
+                            ? progress.getJSONArray(quiz.getLessonId())
+                            : new JSONArray();
 
-                if (!lessons.toList().contains(attempt.getLessonId())) {
-                    lessons.put(attempt.getLessonId());
+                    if (!lessons.toList().contains(attempt.getLessonId())) {
+                        lessons.put(attempt.getLessonId());
+                    }
+                    progress.put(quiz.getLessonId(), lessons);
+                    user.put("progress", progress);
                 }
-                progress.put(courseId, lessons);
-                user.put("progress", progress);
-            }
-            break;
         }
+        saveJson(USERS_FILE, users);
+
+        // --- Update courses.json stats ---
+        updateCourseStats(attempt.getQuizId(), attempt.getLessonId());
     }
-    saveJson(USERS_FILE, users);
 
     // --- Update courses.json stats ---
     updateCourseStats(attempt.getQuizId(), attempt.getLessonId());
@@ -786,58 +826,61 @@ JSONArray users = loadJson(USERS_FILE);
     // --- Step 1: Collect attempts from users.json ---
     JSONArray users = loadJson(USERS_FILE);
 
-    int totalScore = 0;
-    int attemptCount = 0;
-    int passedCount = 0;
+        int totalScore = 0;
+        int attemptCount = 0;
+        int passedCount = 0;
 
-    for (int i = 0; i < users.length(); i++) {
-        JSONObject user = users.getJSONObject(i);
+        for (int i = 0; i < users.length(); i++) {
+            JSONObject user = users.getJSONObject(i);
 
-        if (user.has("quizAttempts")) {
-            JSONObject quizAttempts = user.getJSONObject("quizAttempts");
+            if (user.has("quizAttempts")) {
+                JSONObject quizAttempts = user.getJSONObject("quizAttempts");
 
-            if (quizAttempts.has(quizId)) {
-                JSONArray attempts = quizAttempts.getJSONArray(quizId);
+                if (quizAttempts.has(quizId)) {
+                    JSONArray attempts = quizAttempts.getJSONArray(quizId);
 
-                for (int j = 0; j < attempts.length(); j++) {
-                    JSONObject att = attempts.getJSONObject(j);
-                    totalScore += att.getInt("score");
-                    attemptCount++;
-                    if (att.getBoolean("passed")) {
-                        passedCount++;
+                    for (int j = 0; j < attempts.length(); j++) {
+                        JSONObject att = attempts.getJSONObject(j);
+                        totalScore += att.getInt("score");
+                        attemptCount++;
+                        if (att.getBoolean("passed")) {
+                            passedCount++;
+                        }
                     }
                 }
             }
         }
-    }
 
-    double averageScore = attemptCount > 0 ? (double) totalScore / attemptCount : 0.0;
-    double completionRate = attemptCount > 0 ? (double) passedCount / attemptCount : 0.0;
+        double averageScore = attemptCount > 0 ? (double) totalScore / attemptCount : 0.0;
+        double completionRate = attemptCount > 0 ? (double) passedCount / attemptCount : 0.0;
 
-    // --- Step 2: Update courses.json ---
-    JSONArray courses = loadJson(COURSES_FILE);
+        // --- Step 2: Update courses.json ---
+        JSONArray courses = loadJson(COURSES_FILE);
 
-    for (int i = 0; i < courses.length(); i++) {
-        JSONObject course = courses.getJSONObject(i);
-        JSONArray lessons = course.getJSONArray("lessons");
+        for (int i = 0; i < courses.length(); i++) {
+            JSONObject course = courses.getJSONObject(i);
+            JSONArray lessons = course.getJSONArray("lessons");
 
-        for (int j = 0; j < lessons.length(); j++) {
-            JSONObject lesson = lessons.getJSONObject(j);
+            for (int j = 0; j < lessons.length(); j++) {
+                JSONObject lesson = lessons.getJSONObject(j);
 
-            if (lesson.getString("lessonId").equals(lessonId)) {
-                JSONObject stats = new JSONObject();
-                stats.put("averageScore", averageScore);
-                stats.put("completionRate", completionRate);
+                if (lesson.getString("lessonId").equals(lessonId)) {
+                    JSONObject stats = new JSONObject();
+                    stats.put("averageScore", averageScore);
+                    stats.put("completionRate", completionRate);
 
-                lesson.put("quizStats", stats);
-                lessons.put(j, lesson); // replace lesson object
-                break;
+                    lesson.put("quizStats", stats);
+                    lessons.put(j, lesson); // replace lesson object
+                    break;
+                }
             }
         }
+
+        saveJson(COURSES_FILE, courses);
     }
 
+}
     saveJson(COURSES_FILE, courses);
-<<<<<<< Updated upstream
 }*/
 
 public static boolean hasPassedQuiz(String studentId, String quizId) throws IOException {
@@ -880,6 +923,5 @@ public static boolean canRetry(String studentId, String quizId, int maxRetries) 
     }
     return true; // no attempts yet
 }
-
 
 }

@@ -13,6 +13,7 @@ import java.util.Random;
  * @author USER
  */
 public class QuizAttempt {
+
     private String attemptId;
     private String QuizId;
     private String LessonId;
@@ -40,8 +41,7 @@ public class QuizAttempt {
     {
         return quiz.isPassingScore(score);
     }
-    
-    
+
     public String getAttemptId() {
         return attemptId;
     }
@@ -97,7 +97,5 @@ public class QuizAttempt {
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
-    
-    
-    
+
 }

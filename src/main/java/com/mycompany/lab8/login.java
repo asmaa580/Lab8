@@ -1,4 +1,5 @@
 package com.mycompany.lab8;
+
 import javax.swing.JOptionPane;
 import com.mycompany.lab8.Student;
 import com.mycompany.lab8.Instructor1;
@@ -15,14 +16,12 @@ import java.util.ArrayList;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 /**
  *
  * @author MALAK
  */
 public class login extends javax.swing.JFrame {
 
-    
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(login.class.getName());
 
     /**
@@ -147,81 +146,67 @@ public class login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-try
-{
-    
-    String u= jComboBox1.getSelectedItem().toString();
-    String email= jTextField1.getText();
-    String password= jTextField2.getText();
- 
-    if(email.isEmpty())
-    { 
-        JOptionPane.showMessageDialog(this,"Empty email text field.Re-enter email.");
-        return;
-    }
+        try {
 
-    if(password.isEmpty())
-    {   
-        JOptionPane.showMessageDialog(this,"Empty password text field.Re-enter Password.");
-        return;
-    }
-    
-     if (!email.contains("@"))
-       {
-           JOptionPane.showMessageDialog(this,"This email is unvalid . make sure to add @");
-        return;
-       }
+            String u = jComboBox1.getSelectedItem().toString();
+            String email = jTextField1.getText();
+            String password = jTextField2.getText();
 
+            if (email.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Empty email text field.Re-enter email.");
+                return;
+            }
 
-        JsonDataBaseManager db=new JsonDataBaseManager();
+            if (password.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Empty password text field.Re-enter Password.");
+                return;
+            }
 
-        SecurityHashing passwordHash=new SecurityHashing();
-        User authenticatedUser = db.authenticate(email, passwordHash.hashPassword(password)); 
-        
+            if (!email.contains("@")) {
+                JOptionPane.showMessageDialog(this, "This email is unvalid . make sure to add @");
+                return;
+            }
 
-        if (authenticatedUser == null) {
-        JOptionPane.showMessageDialog(this, "Invalid Username or Password");
-        return;
-    }
-   String role = authenticatedUser.getRole();
+            JsonDataBaseManager db = new JsonDataBaseManager();
 
-        String s=db.authenticate(email,passwordHash.hashPassword(password)).getRole();
-      if(s.equals("Student")&&u.equals("student")) 
-      {
-        JOptionPane.showMessageDialog(this,"Login Successful");
-        
-            String id=authenticatedUser.getUserId();
-            Student studentFrame = new Student((Studentt)authenticatedUser);
-            studentFrame.setVisible(true);
-            
-            this.dispose();  
+            SecurityHashing passwordHash = new SecurityHashing();
+            User authenticatedUser = db.authenticate(email, passwordHash.hashPassword(password));
+
+            if (authenticatedUser == null) {
+                JOptionPane.showMessageDialog(this, "Invalid Username or Password");
+                return;
+            }
+            String role = authenticatedUser.getRole();
+
+            String s = db.authenticate(email, passwordHash.hashPassword(password)).getRole();
+
+            if (s.equals("Student") && u.equals("student")) {
+                JOptionPane.showMessageDialog(this, "Login Successful");
+
+                String id = authenticatedUser.getUserId();
+                Student studentFrame = new Student(id);
+                studentFrame.setVisible(true);
+
+                this.dispose();
+            } else if (role.equals("Instructor") && u.equalsIgnoreCase("instructor")) {
+                JOptionPane.showMessageDialog(this, "Login Successful");
+                Instructor1 instructorFrame = new Instructor1((Instructorr) authenticatedUser);
+                instructorFrame.setVisible(true);
+
+                this.dispose();
+            } else if (role.equals("Admin") && u.equalsIgnoreCase("admin")) {
+                JOptionPane.showMessageDialog(this, "Login Successful");
+                Admin adminframe = new Admin((Adminn) authenticatedUser);
+                adminframe.setVisible(true);
+
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Wrong choice of User");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Invalid Username or Password");
         }
-
-    else if(role.equals("Instructor") && u.equalsIgnoreCase("instructor"))
-    {
-        JOptionPane.showMessageDialog(this,"Login Successful");
-         Instructor1 instructorFrame = new Instructor1((Instructorr)authenticatedUser);
-          instructorFrame.setVisible(true);
-
-
-            this.dispose();  
-    } 
-    else if(role.equals("Admin")&& u.equalsIgnoreCase("admin"))
-    {
-         JOptionPane.showMessageDialog(this,"Login Successful");
-            Admin adminframe = new Admin((Adminn)authenticatedUser);
-            adminframe.setVisible(true);
-            
-            this.dispose(); 
-    }
-    else 
-       JOptionPane.showMessageDialog(this,"Wrong choice of User");
-}
-catch(Exception e)
-{
-JOptionPane.showMessageDialog(this,"Invalid Username or Password");
-}
-       // TODO add your handling code here:
+        // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
@@ -229,9 +214,9 @@ JOptionPane.showMessageDialog(this,"Invalid Username or Password");
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-             SignUp1 signupFrame = new SignUp1();  
-    signupFrame.setVisible(true);       
-    this.dispose();               
+        SignUp1 signupFrame = new SignUp1();
+        signupFrame.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed

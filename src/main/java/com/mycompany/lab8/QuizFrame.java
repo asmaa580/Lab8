@@ -1,4 +1,3 @@
-
 package com.mycompany.lab8;
 
 import java.io.IOException;
@@ -8,46 +7,45 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
-
-
 public class QuizFrame extends javax.swing.JFrame {
+
     private Quiz quiz;
     private int score;
      private int attemptNumber=1;
     private int currentIndex;
-    private String id;
+    private Studentt currentStudent;
     private String courseId;
+    private String id;
     private ArrayList<Integer> answers = new ArrayList<>();
-
-QuizFrame(Quiz quiz,String id,String courseId)
-{
-    this.courseId=courseId;
-    this.id=id;
-    this.quiz=quiz;
-    initComponents();
     
-   showQuestion();
-   
-}
+    public QuizFrame(Studentt student, String course, Quiz quiz) {
+        this.currentStudent = student;
+        this.id= student.getUserId();
+        this.courseId = course;
+        this.quiz = quiz;
+        this.score = 0;
+        this.currentIndex = 0;
+        initComponents();
+        showQuestion();
+    }
     
     public QuizFrame() {
         initComponents();
     }
-    
-    public void showQuestion()
-{
-    feedback.setText("");
-    scoreLabel.setText("");
-    buttonGroup1.clearSelection();
-    
-     ArrayList<Question> questions=quiz.getQuestions();
-     ArrayList<String> options=questions.get(currentIndex).getOptions();
-    text.setText(questions.get(currentIndex).getText());
-    option1.setText(options.get(0));
-    option2.setText(options.get(1));
-    option3.setText(options.get(2));
-    option4.setText(options.get(3));
-}
+
+    public void showQuestion() {
+        feedback.setText("");
+        scoreLabel.setText("");
+        buttonGroup1.clearSelection();
+
+        ArrayList<Question> questions = quiz.getQuestions();
+        ArrayList<String> options = questions.get(currentIndex).getOptions();
+        text.setText(questions.get(currentIndex).getText());
+        option1.setText(options.get(0));
+        option2.setText(options.get(1));
+        option3.setText(options.get(2));
+        option4.setText(options.get(3));
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -174,26 +172,27 @@ QuizFrame(Quiz quiz,String id,String courseId)
 
     private void nextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextActionPerformed
         // TODO add your handling code here:
-       
-        
-        ArrayList<Question> questions=quiz.getQuestions();
-        int selectedIndex=-1;
-        
-        if(option1.isSelected())
-            selectedIndex=0;
-        if(option2.isSelected())
-            selectedIndex=1;
-        if(option3.isSelected())
-            selectedIndex=2;
-        if(option4.isSelected())
-            selectedIndex=3;
-        if(selectedIndex==-1)
-        {
-            JOptionPane.showMessageDialog(this,"Cant go the next question without choosing an option");
+
+        ArrayList<Question> questions = quiz.getQuestions();
+        int selectedIndex = -1;
+
+        if (option1.isSelected()) {
+            selectedIndex = 0;
+        }
+        if (option2.isSelected()) {
+            selectedIndex = 1;
+        }
+        if (option3.isSelected()) {
+            selectedIndex = 2;
+        }
+        if (option4.isSelected()) {
+            selectedIndex = 3;
+        }
+        if (selectedIndex == -1) {
+            JOptionPane.showMessageDialog(this, "Cant go the next question without choosing an option");
             return;
         }
-        if(selectedIndex==questions.get(currentIndex).getCorrectAnswerIndex())
-        {
+        if (selectedIndex == questions.get(currentIndex).getCorrectAnswerIndex()) {
             score++;
             feedback.setText("Correct answer");
             answers.add(selectedIndex);
@@ -206,7 +205,7 @@ QuizFrame(Quiz quiz,String id,String courseId)
         }
        
         if(currentIndex == questions.size() - 1) {
-              
+           
        JOptionPane.showMessageDialog(this,"Your Score: " + score + "/" + questions.size());
         QuizAttempt attempt=new QuizAttempt(quiz.getQuizId(),quiz.getLessonId(),score,attemptNumber,answers);
             try {
@@ -216,6 +215,18 @@ QuizFrame(Quiz quiz,String id,String courseId)
             }
             if(quiz.isPassingScore(score)){
                JOptionPane.showMessageDialog(this,"You passed the quiz and completed the lesson" );  
+                  try {
+                        Certificate c = CertificateManager.generateCertificate(currentStudent, courseId);
+                        if (c != null) {
+                            JOptionPane.showMessageDialog(this,
+                                    "Congratulations! Certificate ID: " + c.getCertificateID());
+                        }
+ 
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(this, "Error generating certificate: " + ex.getMessage());
+                }
+              
             Student studentFrame = new Student(id);
             studentFrame.setVisible(true);
             this.dispose();  
@@ -242,7 +253,8 @@ QuizFrame(Quiz quiz,String id,String courseId)
             }
 
             // Restart quiz frame
-            QuizFrame retryFrame = new QuizFrame(quiz, id, courseId);
+            QuizFrame retryFrame = new QuizFrame(currentStudent, courseId, quiz);
+
             retryFrame.setVisible(true);
             this.dispose();
 
@@ -268,15 +280,16 @@ QuizFrame(Quiz quiz,String id,String courseId)
         
         }
     }//GEN-LAST:event_nextActionPerformed
-private void hideOptions() {
-    option1.setVisible(false);
-    option2.setVisible(false);
-    option3.setVisible(false);
-    option4.setVisible(false);
-    next.setVisible(false);
-    feedback.setVisible(false);
-    text.setVisible(false);
-}
+    private void hideOptions() {
+        option1.setVisible(false);
+        option2.setVisible(false);
+        option3.setVisible(false);
+        option4.setVisible(false);
+        next.setVisible(false);
+        feedback.setVisible(false);
+        text.setVisible(false);
+    }
+
     /**
      * @param args the command line arguments
      */
