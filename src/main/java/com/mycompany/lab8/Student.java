@@ -747,12 +747,6 @@ public void showCoursesTab() {
         
         String content = json.toString();
 
-//        String content = "📜Certificate of Completion\n\n"
-//                + "Certificate ID: " + certId + "\n"
-//                + "Course ID: " + courseId + "\n"
-//                + "Student ID: " + id + "\n"
-//                + "Issue Date: " + issueDate;
-
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setSelectedFile(new File("Certificate_" + certId + ".json"));
         int option = fileChooser.showSaveDialog(this);
