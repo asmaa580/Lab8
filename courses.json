@@ -1,4 +1,91 @@
-<<<<<<< Updated upstream
-[]
-=======
->>>>>>> Stashed changes
+[
+    {
+        "approval status": "APPROVED",
+        "approvalHistory": [{
+            "reason": "a",
+            "adminId": "1481",
+            "action": "APPROVED",
+            "timestamp": "24-11-2025 01:42:37"
+        }],
+        "description": "a",
+        "students": [
+            "4641",
+            "7265"
+        ],
+        "title": "a",
+        "courseId": "2481",
+        "instructorId": "4785",
+        "lessons": [
+            {
+                "quiz": {
+                    "quizId": "2191",
+                    "questions": [{
+                        "options": [
+                            "a",
+                            "a",
+                            "a",
+                            "a"
+                        ],
+                        "text": "a",
+                        "correctIndex": 0
+                    }],
+                    "lessonId": "a",
+                    "passingScore": 50
+                },
+                "lessonId": "a",
+                "resources": [],
+                "quizStats": {
+                    "completionRate": 0.5,
+                    "averageScore": 0.5
+                },
+                "title": "a",
+                "content": "a"
+            },
+            {
+                "lessonId": "c",
+                "resources": [],
+                "title": "c",
+                "content": "c"
+            }
+        ]
+    },
+    {
+        "approval status": "APPROVED",
+        "approvalHistory": [{
+            "reason": "a",
+            "adminId": "1481",
+            "action": "APPROVED",
+            "timestamp": "24-11-2025 01:42:45"
+        }],
+        "description": "b",
+        "students": ["4641"],
+        "title": "b",
+        "courseId": "7464",
+        "instructorId": "4785",
+        "lessons": [{
+            "quiz": {
+                "quizId": "89",
+                "questions": [{
+                    "options": [
+                        "b",
+                        "b",
+                        "b",
+                        "b"
+                    ],
+                    "text": "b",
+                    "correctIndex": 0
+                }],
+                "lessonId": "b",
+                "passingScore": 50
+            },
+            "lessonId": "b",
+            "resources": [],
+            "quizStats": {
+                "completionRate": 0.5,
+                "averageScore": 0.5
+            },
+            "title": "b",
+            "content": "b"
+        }]
+    }
+]

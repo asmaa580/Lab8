@@ -465,9 +465,6 @@ public static ArrayList<Course> getEnrolledCourses(String studentId) throws IOEx
     return result;
 }
 
-
-
-
     public static ArrayList<Studentt> getStudentsForCourse(String courseId) throws IOException {
 
     ArrayList<Studentt> result = new ArrayList<>();
@@ -843,8 +840,7 @@ JSONArray users = loadJson(USERS_FILE);
     saveJson(COURSES_FILE, courses);
 <<<<<<< Updated upstream
 }*/
-=======
-}
+
 public static boolean hasPassedQuiz(String studentId, String quizId) throws IOException {
     JSONArray users = loadJson(USERS_FILE);
 
@@ -886,5 +882,5 @@ public static boolean canRetry(String studentId, String quizId, int maxRetries) 
     return true; // no attempts yet
 }
 
->>>>>>> Stashed changes
+
 }

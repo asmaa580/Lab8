@@ -1,4 +1,153 @@
-<<<<<<< Updated upstream
-[]
-=======
->>>>>>> Stashed changes
+[
+    {
+        "role": "Instructor",
+        "createdCourses": [
+            "7723",
+            "1179",
+            "1642",
+            "7864",
+            "2481",
+            "7464"
+        ],
+        "userId": "4785",
+        "email": "@gmail.com",
+        "passwordHash": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+        "username": "a"
+    },
+    {
+        "role": "Admin",
+        "userId": "1481",
+        "email": "as@gmail.com",
+        "passwordHash": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+        "username": "as"
+    },
+    {
+        "role": "Student",
+        "quizAttempts": {
+            "8882": [{
+                "score": 1,
+                "quizId": "8882",
+                "retryCount": 1,
+                "chosenAnswers": [0],
+                "lessonId": "1",
+                "passed": true,
+                "attemptId": "6819",
+                "timestamp": "2025-11-24T00:51:50.447814300"
+            }],
+            "455": [{
+                "score": 1,
+                "quizId": "455",
+                "retryCount": 1,
+                "chosenAnswers": [
+                    3,
+                    0
+                ],
+                "lessonId": "2",
+                "passed": true,
+                "attemptId": "1907",
+                "timestamp": "2025-11-24T00:58:36.113220400"
+            }],
+            "3754": [
+                {
+                    "score": 0,
+                    "quizId": "3754",
+                    "retryCount": 1,
+                    "chosenAnswers": [3],
+                    "lessonId": "b",
+                    "passed": false,
+                    "attemptId": "4239",
+                    "timestamp": "2025-11-24T01:50:33.939380100"
+                },
+                {
+                    "score": 1,
+                    "quizId": "3754",
+                    "retryCount": 1,
+                    "chosenAnswers": [0],
+                    "lessonId": "b",
+                    "passed": true,
+                    "attemptId": "6246",
+                    "timestamp": "2025-11-24T01:50:41.908378200"
+                }
+            ],
+            "9938": [
+                {
+                    "score": 0,
+                    "quizId": "9938",
+                    "retryCount": 1,
+                    "chosenAnswers": [1],
+                    "lessonId": "a",
+                    "passed": false,
+                    "attemptId": "3773",
+                    "timestamp": "2025-11-24T01:43:39.617026800"
+                },
+                {
+                    "score": 0,
+                    "quizId": "9938",
+                    "retryCount": 1,
+                    "chosenAnswers": [1],
+                    "lessonId": "a",
+                    "passed": false,
+                    "attemptId": "2557",
+                    "timestamp": "2025-11-24T01:44:11.609656600"
+                },
+                {
+                    "score": 1,
+                    "quizId": "9938",
+                    "retryCount": 1,
+                    "chosenAnswers": [0],
+                    "lessonId": "a",
+                    "passed": true,
+                    "attemptId": "3635",
+                    "timestamp": "2025-11-24T01:44:17.160036"
+                }
+            ]
+        },
+        "enrolledCourses": [
+            "7723",
+            "1179",
+            "2481",
+            "7464"
+        ],
+        "progress": {
+            "7464": ["b"],
+            "1179": ["2"],
+            "7723": ["1"],
+            "2481": ["a"]
+        },
+        "userId": "4641",
+        "email": "asm@gmail.com",
+        "passwordHash": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+        "username": "asm"
+    },
+    {
+        "role": "Student",
+        "quizAttempts": {"9019": [
+            {
+                "score": 0,
+                "quizId": "9019",
+                "retryCount": 1,
+                "chosenAnswers": [1],
+                "lessonId": "a",
+                "passed": false,
+                "attemptId": "1049",
+                "timestamp": "2025-11-24T01:56:28.077699800"
+            },
+            {
+                "score": 1,
+                "quizId": "9019",
+                "retryCount": 1,
+                "chosenAnswers": [0],
+                "lessonId": "a",
+                "passed": true,
+                "attemptId": "8198",
+                "timestamp": "2025-11-24T01:56:35.909430100"
+            }
+        ]},
+        "enrolledCourses": ["2481"],
+        "progress": {"2481": ["a"]},
+        "userId": "7265",
+        "email": "k@gmail.com",
+        "passwordHash": "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3",
+        "username": "k"
+    }
+]
