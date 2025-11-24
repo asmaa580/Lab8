@@ -168,23 +168,6 @@ public class login extends javax.swing.JFrame {
             }
 
             JsonDataBaseManager db = new JsonDataBaseManager();
-        if (authenticatedUser == null) {
-        JOptionPane.showMessageDialog(this, "Invalid Username or Password");
-        return;
-    }
-   String role = authenticatedUser.getRole();
-
-        String s=db.authenticate(email,passwordHash.hashPassword(password)).getRole();
-      if(s.equals("Student")&&u.equals("student")) 
-      {
-        JOptionPane.showMessageDialog(this,"Login Successful");
-        
-            String id=authenticatedUser.getUserId();
-            Student studentFrame = new Student((Studentt)authenticatedUser);
-            studentFrame.setVisible(true);
-            
-            this.dispose();  
-        }
 
             SecurityHashing passwordHash = new SecurityHashing();
             User authenticatedUser = db.authenticate(email, passwordHash.hashPassword(password));

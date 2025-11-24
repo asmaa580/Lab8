@@ -89,11 +89,13 @@ private void loadCertificates() {
             JOptionPane.showMessageDialog(this, "Error loading certificates: " + ex.getMessage());
         }
     }
-}
+
 
       
-    public Student(User u) {
+    public Student(User u) throws IOException {
          this.id=u.userId;
+         this.student = (Studentt)JsonDataBaseManager.getUser(id);
+
         initComponents();
         jLabel1.setText(u.username);
         try{JsonDataBaseManager dbm=new JsonDataBaseManager();
@@ -124,8 +126,13 @@ private void loadCertificates() {
     }
     public Student(String id) {
          this.id=id;
+
         initComponents();
-        try{JsonDataBaseManager dbm=new JsonDataBaseManager();
+        try{
+        this.student = (Studentt)JsonDataBaseManager.getUser(id);
+        jLabel1.setText(this.student.username);
+
+        JsonDataBaseManager dbm=new JsonDataBaseManager();
         ArrayList <Course> allCourses = new ArrayList<>();
 
         allCourses=dbm.loadapprovedcourses("APPROVED");
@@ -600,7 +607,7 @@ public void showCoursesTab() {
              
             }
 
-        } catch (Exception e) {
+        }} catch (Exception e) {
             JOptionPane.showMessageDialog(this, "No courses found for this student");
         }
 
@@ -654,24 +661,14 @@ public void showCoursesTab() {
                 return;
             
 }         // Block if already passed
-                if (JsonDataBaseManager.hasPassedQuiz(id, l.getQuiz().getQuizId())) {
-                    JOptionPane.showMessageDialog(this, "You have already passed this quiz.");
-                    return;
-                }
-
-                // Block if retry limit reached
-                if (!JsonDataBaseManager.canRetry(id, l.getQuiz().getQuizId(), 3)) {
-                    JOptionPane.showMessageDialog(this, "Retry limit reached for this quiz.");
-                    return;
-                }
+               
 
                 
-                QuizFrame frame = new QuizFrame(l.getQuiz(), id, courseId);
-                frame.setVisible(true);
-                this.dispose();
+//                QuizFrame frame = new QuizFrame(l.getQuiz(), id, courseId);
+//                frame.setVisible(true);
+//                this.dispose();
 
-                   }
-            }
+            
 
             Object courseId1 = studentsTable.getValueAt(selectedrow, 0);
             String courseId = courseId1.toString().trim();
@@ -692,6 +689,17 @@ public void showCoursesTab() {
                                     JOptionPane.showMessageDialog(this, "This lesson has no quiz!");
                                     return;
                                 }
+                                
+                                 if (JsonDataBaseManager.hasPassedQuiz(id, l.getQuiz().getQuizId())) {
+                                    JOptionPane.showMessageDialog(this, "You have already passed this quiz.");
+                                    return;
+                                }
+
+                                // Block if retry limit reached
+                                if (!JsonDataBaseManager.canRetry(id, l.getQuiz().getQuizId(), 3)) {
+                                    JOptionPane.showMessageDialog(this, "Retry limit reached for this quiz.");
+                                    return;
+                                }
                                 QuizFrame frame = new QuizFrame(student,courseId,l.getQuiz());
                                 frame.setVisible(true);
                                 this.dispose();
@@ -701,9 +709,9 @@ public void showCoursesTab() {
                     }
                 }
             } catch (Exception e) {
+                System.out.println("TEESSETTT" + e.toString());
                 JOptionPane.showMessageDialog(this, "No courses found for this student");
             }
-
         }
 
 

@@ -29,7 +29,8 @@ public class Lab8 {
 
             // --- Step 2: Simulate a student attempt ---
             ArrayList<Integer> chosenAnswers = new ArrayList<>(Arrays.asList(1, 2, 0, 3, 1)); // 3 correct
-            QuizAttempt attempt = new QuizAttempt("lesson1", 0);
+            QuizAttempt attempt = new QuizAttempt(quiz.getQuizId(), "lesson1", 5, 0, chosenAnswers);
+            
             attempt.setAttemptId("att1");
             attempt.setQuizId(quiz.getQuizId());
             attempt.setLessonId("lesson1");

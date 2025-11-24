@@ -163,7 +163,7 @@ public class CertificateManager {
     }
 
     public static ArrayList<Certificate> getCertificates(Studentt student) throws IOException {
-
+        result = new ArrayList<>();
         JSONArray users = JsonDataBaseManager.loadJson(USERS_FILE);
 
         for (int i = 0; i < users.length(); i++) {

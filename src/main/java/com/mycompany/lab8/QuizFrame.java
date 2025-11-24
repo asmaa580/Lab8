@@ -14,40 +14,20 @@ public class QuizFrame extends javax.swing.JFrame {
      private int attemptNumber=1;
     private int currentIndex;
     private Studentt currentStudent;
-    private String currentCourse;
-
+    private String courseId;
+    private String id;
+    private ArrayList<Integer> answers = new ArrayList<>();
+    
     public QuizFrame(Studentt student, String course, Quiz quiz) {
         this.currentStudent = student;
-        this.currentCourse = course;
+        this.id= student.getUserId();
+        this.courseId = course;
         this.quiz = quiz;
         this.score = 0;
         this.currentIndex = 0;
         initComponents();
         showQuestion();
     }
-
-    QuizFrame(Quiz quiz) {
-        this.quiz = quiz;
-        initComponents();
-
-        showQuestion();
-
-    }
-
-    private String id;
-    private String courseId;
-    private ArrayList<Integer> answers = new ArrayList<>();
-
-QuizFrame(Quiz quiz,String id,String courseId)
-{
-    this.courseId=courseId;
-    this.id=id;
-    this.quiz=quiz;
-    initComponents();
-    
-   showQuestion();
-   
-}
     
     public QuizFrame() {
         initComponents();
@@ -234,7 +214,7 @@ QuizFrame(Quiz quiz,String id,String courseId)
             if(quiz.isPassingScore(score)){
                JOptionPane.showMessageDialog(this,"You passed the quiz and completed the lesson" );  
                   try {
-                        Certificate c = CertificateManager.generateCertificate(currentStudent, currentCourse);
+                        Certificate c = CertificateManager.generateCertificate(currentStudent, courseId);
                         if (c != null) {
                             JOptionPane.showMessageDialog(this,
                                     "Congratulations! Certificate ID: " + c.getCertificateID());
@@ -271,7 +251,8 @@ QuizFrame(Quiz quiz,String id,String courseId)
             }
 
             // Restart quiz frame
-            QuizFrame retryFrame = new QuizFrame(quiz, id, courseId);
+            QuizFrame retryFrame = new QuizFrame(currentStudent, courseId, quiz);
+
             retryFrame.setVisible(true);
             this.dispose();
 

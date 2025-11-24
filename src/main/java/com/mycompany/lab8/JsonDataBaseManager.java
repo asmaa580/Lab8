@@ -148,8 +148,10 @@ public class JsonDataBaseManager {
             Course course = new Course(courseId, title, description, instructorId, students, lessons,s);
             approvedCourses.add(course);
         }}
+     }
         return approvedCourses;
     }
+     
 
     public static void addUser(User user) throws IOException {
         JSONArray users = loadJson(USERS_FILE);
@@ -338,9 +340,6 @@ public class JsonDataBaseManager {
         }
 
         Quiz quiz = new Quiz(quizObj.getString("lessonId"), new ArrayList<Question>());
-        if (quizObj.has("passingScore")) {
-                quiz.setPassingScore(quizObj.getInt("passingScore"));
-        }
         // Load questions
         if (quizObj.has("questions")) {
             JSONArray questionsArray = quizObj.getJSONArray("questions");
@@ -670,9 +669,7 @@ public class JsonDataBaseManager {
         saveJson(COURSES_FILE, coursesArray);
     }
 
-    // Save back to file
-    saveJson(COURSES_FILE, coursesArray);
-}
+
 public static HashMap<String, ArrayList<String>> getUserProgress(String studentId) throws IOException {
     HashMap<String, ArrayList<String>> progressMap = new HashMap<>();
 
@@ -724,31 +721,6 @@ public static void addQuizAttempt(String studentId, QuizAttempt attempt, Quiz qu
                     ? quizAttempts.getJSONArray(attempt.getQuizId())
                     : new JSONArray();
 
-            // Build JSON manually
-            JSONObject attObj = new JSONObject();
-            attObj.put("attemptId", attempt.getAttemptId());
-            attObj.put("quizId", attempt.getQuizId());
-            attObj.put("lessonId", attempt.getLessonId());
-            attObj.put("score", attempt.getScore());
-            attObj.put("retryCount", attempt.getRetryCount());
-            attObj.put("chosenAnswers", attempt.getChosenAnswers());
-            attObj.put("passed", attempt.isPassed(quiz));
-            attObj.put("timestamp", attempt.getTimestamp().toString());
-
-            // Add new attempt
-            attemptsArray.put(attObj);
-            quizAttempts.put(attempt.getQuizId(), attemptsArray);
-            user.put("quizAttempts", quizAttempts);
-
-            // --- Update progress if passed ---
-            if (attempt.isPassed(quiz)) {
-                JSONObject progress = user.has("progress") ? user.getJSONObject("progress") : new JSONObject();
-
-                // Get lessons completed for this courseId
-                JSONArray lessons = progress.has(courseId)
-                        ? progress.getJSONArray(courseId)
-                        : new JSONArray();
-
                 // Build JSON manually
                 JSONObject attObj = new JSONObject();
                 attObj.put("attemptId", attempt.getAttemptId());
@@ -780,9 +752,6 @@ public static void addQuizAttempt(String studentId, QuizAttempt attempt, Quiz qu
                     progress.put(quiz.getLessonId(), lessons);
                     user.put("progress", progress);
                 }
-                progress.put(courseId, lessons);
-                user.put("progress", progress);
-            }
         }
         saveJson(USERS_FILE, users);
 
@@ -914,7 +883,7 @@ JSONArray users = loadJson(USERS_FILE);
 }
     saveJson(COURSES_FILE, courses);
 }*/
-}
+
 public static boolean hasPassedQuiz(String studentId, String quizId) throws IOException {
     JSONArray users = loadJson(USERS_FILE);
 
