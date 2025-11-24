@@ -738,25 +738,35 @@ public void showCoursesTab() {
         String certId = certificatesTable.getValueAt(selectedRow, 0).toString();
         String courseId = certificatesTable.getValueAt(selectedRow, 1).toString();
         String issueDate = certificatesTable.getValueAt(selectedRow, 2).toString();
+        
+        JSONObject json = new JSONObject();
+        json.put("certificateId", certId);
+        json.put("courseId", courseId);
+        json.put("studentId", id);
+        json.put("issueDate", issueDate);
+        
+        String content = json.toString();
 
-        String content = "📜Certificate of Completion\n\n"
-                + "Certificate ID: " + certId + "\n"
-                + "Course ID: " + courseId + "\n"
-                + "Student ID: " + id + "\n"
-                + "Issue Date: " + issueDate;
+//        String content = "📜Certificate of Completion\n\n"
+//                + "Certificate ID: " + certId + "\n"
+//                + "Course ID: " + courseId + "\n"
+//                + "Student ID: " + id + "\n"
+//                + "Issue Date: " + issueDate;
 
         JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setSelectedFile(new File("Certificate_" + certId + ".txt"));
+        fileChooser.setSelectedFile(new File("Certificate_" + certId + ".json"));
         int option = fileChooser.showSaveDialog(this);
 
         if (option == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
+            
             try (FileWriter writer = new FileWriter(file)) {
                 writer.write(content);
                 JOptionPane.showMessageDialog(this, "Certificate saved successfully.");
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this, "Error saving certificate: " + ex.getMessage());
             }
+            
         }
 
     }//GEN-LAST:event_jButton5ActionPerformed
